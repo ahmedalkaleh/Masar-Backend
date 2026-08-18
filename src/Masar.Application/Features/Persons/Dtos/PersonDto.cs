@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Masar.Application.Features.Person.Dtos
+namespace Masar.Application.Features.Persons.Dtos
 {
-    internal class PersonDto
+    public class PersonDto
     {
         public Guid PersonID { get; set; }
         public string FullName { get; set; } = string.Empty;

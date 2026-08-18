@@ -6,7 +6,7 @@ using MediatR;
 
 using Masar.Application.Features.Person.Dtos;
 
-namespace Masar.Application.Features.Person.Commands.CreatePerson
+namespace Masar.Application.Features.Persons.Commands.CreatePerson
 {
     public sealed record CreatePersonCommand(
         string FullName,

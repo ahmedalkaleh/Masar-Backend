@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using FluentValidation;
-namespace Masar.Application.Features.Person.Commands.CreatePerson
+namespace Masar.Application.Features.Persons.Commands.CreatePerson
 {
     public sealed class CreatePersonCommandValidator:AbstractValidator<CreatePersonCommand>
     {
