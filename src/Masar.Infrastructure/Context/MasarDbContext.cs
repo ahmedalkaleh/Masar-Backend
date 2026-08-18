@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Masar.Domain.Person;
+using Masar.Domain.Persons;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masar.Infrastructure.Context;
@@ -120,17 +120,13 @@ public partial class MasarDbContext : DbContext
             entity.Property(e => e.PassengerId).HasColumnName("PassengerID");
             entity.Property(e => e.PersonId).HasColumnName("PersonID");
 
-            entity.HasOne(d => d.Person).WithMany(p => p.Passengers)
-                .HasForeignKey(d => d.PersonId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Passengers_Persons");
         });
 
         modelBuilder.Entity<Person>(entity =>
         {
             entity.HasIndex(e => e.Email, "UK_Persons_Email").IsUnique();
 
-            entity.Property(e => e.PersonId).HasColumnName("PersonID");
+            entity.Property(e => e.Id).HasColumnName("PersonID");
             entity.Property(e => e.Email).HasMaxLength(150);
             entity.Property(e => e.FullName).HasMaxLength(150);
             entity.Property(e => e.PhoneNumber)

@@ -1,6 +1,6 @@
 ﻿using Masar.Domain.Common.Results;
 
-namespace Masar.Domain.Person;
+namespace Masar.Domain.Persons;
 
 public static class PersonErrors
 {

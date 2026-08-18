@@ -6,7 +6,7 @@ using System.Collections.Generic;
 using System.Net.Mail;
 using System.Text.RegularExpressions;
 
-namespace Masar.Domain.Person;
+namespace Masar.Domain.Persons;
 
 public sealed class Person : AuditableEntity
 {

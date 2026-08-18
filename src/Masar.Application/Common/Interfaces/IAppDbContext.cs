@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
-using Masar.Domain.Person;
+using Masar.Domain.Persons;
 using Masar.Infrastructure;
 using Microsoft.EntityFrameworkCore;
 
@@ -9,21 +9,24 @@ namespace Masar.Application.Common.Interfaces
 {
     public interface IAppDbContext
     {
-        DbSet<Booking> Bookings { get; }
-        DbSet<Carriage> Carriages { get; }
-        DbSet<Passenger> Passengers { get; }
-        DbSet<Person> Persons { get; }
-        DbSet<Role> Roles { get; }
-        DbSet<RouteSegment> RouteSegments { get; }
-        DbSet<SavedPassenger> SavedPassengers { get; }
-        DbSet<Seat> Seats { get; }
-        DbSet<Station> Stations { get; }
-        DbSet<SystemAuditLog> SystemAuditLogs { get; }
-        DbSet<Ticket> Tickets { get; }
-        DbSet<Train> Trains { get; }
-        DbSet<TrainLiveLocation> TrainLiveLocations { get; }
-        DbSet<Trip> Trips { get; }
-        DbSet<TripStop> TripStops { get; }
-        DbSet<User> Users { get; }
+       public DbSet<Booking> Bookings { get; }
+       public DbSet<Carriage> Carriages { get; }
+       public DbSet<Passenger> Passengers { get; }
+       public DbSet<Person> Persons { get; }
+       public DbSet<Role> Roles { get; }
+       public DbSet<RouteSegment> RouteSegments { get; }
+       public DbSet<SavedPassenger> SavedPassengers { get; }
+       public DbSet<Seat> Seats { get; }
+       public DbSet<Station> Stations { get; }
+       public DbSet<SystemAuditLog> SystemAuditLogs { get; }
+       public DbSet<Ticket> Tickets { get; }
+       public DbSet<Train> Trains { get; }
+       public DbSet<TrainLiveLocation> TrainLiveLocations { get; }
+       public DbSet<Trip> Trips { get; }
+      public  DbSet<TripStop> TripStops { get; }
+      public  DbSet<User> Users { get; }
+
+
+        Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
 }

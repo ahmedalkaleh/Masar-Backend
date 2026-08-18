@@ -1,4 +1,4 @@
-﻿using Masar.Domain.Person;
+﻿using Masar.Domain.Persons;
 using System;
 using System.Collections.Generic;
 
