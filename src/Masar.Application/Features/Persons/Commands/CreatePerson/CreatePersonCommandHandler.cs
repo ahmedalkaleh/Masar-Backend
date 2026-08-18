@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Masar.Application.Features.Person.Dtos;
+using Masar.Application.Features.Persons.Dtos;
 using Masar.Domain.Common.Results;
 using Masar.Domain.Persons;
 using Masar.Application.Features.Persons.Mappers;

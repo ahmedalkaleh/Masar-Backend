@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masar.Domain.Common.Results
 {
-    public readonly struct Error
+    public readonly record struct Error
     {
         private Error(string code,string description, ErrorKind type)
         {

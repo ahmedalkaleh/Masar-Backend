@@ -4,7 +4,7 @@ using System.Text;
 using Masar.Domain.Common.Results;
 using MediatR;
 
-using Masar.Application.Features.Person.Dtos;
+using Masar.Application.Features.Persons.Dtos;
 
 namespace Masar.Application.Features.Persons.Commands.CreatePerson
 {
