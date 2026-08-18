@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Masar.Infrastructure;
+using Masar.Domain.Person;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masar.Infrastructure.Context;

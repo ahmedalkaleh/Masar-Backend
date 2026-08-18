@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
+﻿using MediatR;
 namespace Masar.Domain.Common
 {
-    internal class DomainEvent
-    {
-    }
+    public abstract class DomainEvent : INotification;
+    
 }

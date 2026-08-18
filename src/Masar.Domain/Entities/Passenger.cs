@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Masar.Domain.Person;
+using System;
 using System.Collections.Generic;
 
 namespace Masar.Infrastructure;

@@ -4,7 +4,14 @@ using System.Text;
 
 namespace Masar.Domain.Common.Results
 {
-    internal class ErrorKinds
+    public enum ErrorKind
     {
+        Failure,
+        Unexpected,
+        Validation,
+        Conflict,
+        NotFound,
+        Unauthorized,
+        Forbidden
     }
 }
