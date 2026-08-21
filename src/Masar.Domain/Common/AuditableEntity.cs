@@ -12,11 +12,11 @@ namespace Masar.Domain.Common
         public AuditableEntity() { }
         public AuditableEntity(Guid id): base(id) { }
 
-        public DateTimeOffset CreatedAtUtc { get; set; }
+       // public DateTimeOffset CreatedAtUtc { get; set; }
 
-        public string? CreatedBy { get; set; }
-        public DateTimeOffset LastModifiedUtc { get; set; }
+        //public string? CreatedBy { get; set; }
+      //  public DateTimeOffset LastModifiedUtc { get; set; }
 
-        public string? LastModifiedBy { get; set; }
+       // public string? LastModifiedBy { get; set; }
     }
 }

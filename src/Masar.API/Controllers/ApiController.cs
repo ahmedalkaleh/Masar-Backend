@@ -31,5 +31,13 @@ namespace Masar.API.Controllers
 
             return Problem(statusCode: statusCode, title: error.Description);
         }
+        private ActionResult ValidationProblem(List<Error> errors)
+        {
+            var modelStateDictionary = new ModelStateDictionary();
+
+            errors.ForEach(error => modelStateDictionary.AddModelError(error.Code, error.Description));
+
+            return ValidationProblem(modelStateDictionary);
+        }
     }
 }

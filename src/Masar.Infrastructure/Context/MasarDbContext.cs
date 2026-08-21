@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using Masar.Domain.Persons;
 using Microsoft.EntityFrameworkCore;
-
+using Masar.Application.Common.Interfaces;
 namespace Masar.Infrastructure.Context;
 
-public partial class MasarDbContext : DbContext
+public partial class MasarDbContext : DbContext, IAppDbContext
 {
     public MasarDbContext()
     {
