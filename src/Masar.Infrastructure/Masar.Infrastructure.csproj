@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Masar.Domain\Masar.Domain.csproj" />
+    <ProjectReference Include="..\Masar.Application\Masar.Application.csproj" />
   </ItemGroup>
 
 </Project>

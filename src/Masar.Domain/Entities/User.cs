@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Masar.Domain.Persons;
+using System;
 using System.Collections.Generic;
 
 namespace Masar.Infrastructure;
@@ -7,7 +8,7 @@ public partial class User
 {
     public int UserId { get; set; }
 
-    public int PersonId { get; set; }
+    public Guid PersonId { get; set; }
 
     public string Username { get; set; } = null!;
 
