@@ -1,8 +1,24 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using Masar.Application.Common.Interfaces;
+using Masar.Domain.Bookings;
+using Masar.Domain.Carriages;
+using Masar.Domain.Common;
+using Masar.Domain.Passengers;
 using Masar.Domain.Persons;
+using Masar.Domain.Roles;
+using Masar.Domain.RouteSegments;
+using Masar.Domain.SavedPassengers;
+using Masar.Domain.Seats;
+using Masar.Domain.Stations;
+using Masar.Domain.SystemAuditLogs;
+using Masar.Domain.Tickets;
+using Masar.Domain.TrainLiveLocations;
+using Masar.Domain.Trains;
+using Masar.Domain.Trips;
+using Masar.Domain.TripStops;
+using Masar.Domain.Users;
 using Microsoft.EntityFrameworkCore;
-using Masar.Application.Common.Interfaces;
+using System;
+using System.Collections.Generic;
 namespace Masar.Infrastructure.Context;
 
 public partial class MasarDbContext : DbContext, IAppDbContext
@@ -56,17 +72,17 @@ public partial class MasarDbContext : DbContext, IAppDbContext
     {
         modelBuilder.Entity<Booking>(entity =>
         {
-            entity.HasKey(e => e.BookingId).HasName("PK__Bookings__73951ACD8A79C1D9");
+            entity.HasKey(e => e.Id).HasName("PK__Bookings__73951ACD8A79C1D9");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.HasIndex(e => e.BookingReference, "UQ__Bookings__F9B66F614220A891").IsUnique();
 
-            entity.Property(e => e.BookingId).HasColumnName("BookingID");
             entity.Property(e => e.AlightingStationId).HasColumnName("AlightingStationID");
             entity.Property(e => e.BoardingStationId).HasColumnName("BoardingStationID");
             entity.Property(e => e.BookingReference)
                 .HasMaxLength(12)
                 .IsUnicode(false);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
+            //entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.PassengerId).HasColumnName("PassengerID");
             entity.Property(e => e.PaymentStatus)
                 .HasMaxLength(20)
@@ -98,11 +114,12 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<Carriage>(entity =>
         {
-            entity.HasKey(e => e.CarriageId).HasName("PK__Carriage__17FE2DB09A454F45");
+            entity.HasKey(e => e.Id).HasName("PK__Carriage__17FE2DB09A454F45");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
+
 
             entity.HasIndex(e => new { e.TrainId, e.CarriageNumber }, "UQ_Train_Carriage").IsUnique();
 
-            entity.Property(e => e.CarriageId).HasColumnName("CarriageID");
             entity.Property(e => e.ClassType)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -115,9 +132,10 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<Passenger>(entity =>
         {
-            entity.HasKey(e => e.PassengerId).HasName("PK_Customer");
+            entity.HasKey(e => e.Id).HasName("PK_Customer");
 
-            entity.Property(e => e.PassengerId).HasColumnName("PassengerID");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
+
             entity.Property(e => e.PersonId).HasColumnName("PersonID");
 
         });
@@ -126,7 +144,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
         {
             entity.HasIndex(e => e.Email, "UK_Persons_Email").IsUnique();
 
-            entity.Property(e => e.Id).HasColumnName("PersonID");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
+
             entity.Property(e => e.Email).HasMaxLength(150);
             entity.Property(e => e.FullName).HasMaxLength(150);
             entity.Property(e => e.PhoneNumber)
@@ -136,9 +155,10 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<Role>(entity =>
         {
-            entity.Property(e => e.RoleId)
+            entity.Property(e => e.Id)
                 .ValueGeneratedNever()
-                .HasColumnName("RoleID");
+                .HasColumnName("Id");
+
             entity.Property(e => e.Description).HasMaxLength(150);
             entity.Property(e => e.Role1)
                 .HasMaxLength(50)
@@ -147,9 +167,9 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<RouteSegment>(entity =>
         {
-            entity.HasKey(e => e.SegmentId).HasName("PK__RouteSeg__C680609B5A711C10");
+            entity.HasKey(e => e.Id).HasName("PK__RouteSeg__C680609B5A711C10");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
-            entity.Property(e => e.SegmentId).HasColumnName("SegmentID");
             entity.Property(e => e.CorridorName)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -175,24 +195,29 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<SavedPassenger>(entity =>
         {
-            entity.HasNoKey();
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.Property(e => e.Fullname).HasMaxLength(150);
             entity.Property(e => e.NationalId)
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("NationalID");
-            entity.Property(e => e.SavedPassengerId).HasColumnName("SavedPassengerID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+
+            entity.HasOne(d => d.User).WithMany(p => p.SavedPassengers)
+                  .HasForeignKey(d => d.UserId);
+
         });
 
         modelBuilder.Entity<Seat>(entity =>
         {
-            entity.HasKey(e => e.SeatId).HasName("PK__Seats__311713D35FB839DB");
+            entity.HasKey(e => e.Id).HasName("PK__Seats__311713D35FB839DB");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
+
 
             entity.HasIndex(e => new { e.CarriageId, e.SeatNumber }, "UQ_Carriage_Seat").IsUnique();
 
-            entity.Property(e => e.SeatId).HasColumnName("SeatID");
             entity.Property(e => e.CarriageId).HasColumnName("CarriageID");
             entity.Property(e => e.ColumnPosition)
                 .HasMaxLength(10)
@@ -213,9 +238,9 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<Station>(entity =>
         {
-            entity.HasKey(e => e.StationId).HasName("PK__Stations__E0D8A6DDFDE3D87F");
+            entity.HasKey(e => e.Id).HasName("PK__Stations__E0D8A6DDFDE3D87F");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
-            entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Governorate).HasMaxLength(50);
             entity.Property(e => e.HasPassingLoop).HasDefaultValue(true);
@@ -232,9 +257,9 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<SystemAuditLog>(entity =>
         {
-            entity.HasKey(e => e.LogId).HasName("PK__SystemAu__5E5499A89E782156");
+            entity.HasKey(e => e.Id).HasName("PK__SystemAu__5E5499A89E782156");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
-            entity.Property(e => e.LogId).HasColumnName("LogID");
             entity.Property(e => e.Action)
                 .HasMaxLength(100)
                 .IsUnicode(false);
@@ -255,11 +280,11 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<Ticket>(entity =>
         {
-            entity.HasKey(e => e.TicketId).HasName("PK__Tickets__712CC627C667F94A");
+            entity.HasKey(e => e.Id).HasName("PK__Tickets__712CC627C667F94A");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.HasIndex(e => new { e.SeatId, e.StartStopOrder, e.EndStopOrder }, "IX_Tickets_Seat_Stops");
 
-            entity.Property(e => e.TicketId).HasColumnName("TicketID");
             entity.Property(e => e.BookingId).HasColumnName("BookingID");
             entity.Property(e => e.Fullname).HasMaxLength(150);
             entity.Property(e => e.Price).HasColumnType("decimal(18, 2)");
@@ -285,11 +310,11 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<Train>(entity =>
         {
-            entity.HasKey(e => e.TrainId).HasName("PK__Trains__8ED2725A7F2931CC");
+            entity.HasKey(e => e.Id).HasName("PK__Trains__8ED2725A7F2931CC");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.HasIndex(e => e.Code, "UQ__Trains__A25C5AA765BD0DBB").IsUnique();
 
-            entity.Property(e => e.TrainId).HasColumnName("TrainID");
             entity.Property(e => e.Code)
                 .HasMaxLength(20)
                 .IsUnicode(false);
@@ -310,11 +335,11 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<TrainLiveLocation>(entity =>
         {
-            entity.HasKey(e => e.LiveLocationId).HasName("PK__TrainLiv__A58A3418F1E17E41");
+            entity.HasKey(e => e.Id).HasName("PK__TrainLiv__A58A3418F1E17E41");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.HasIndex(e => new { e.TripId, e.LastUpdatedUtcdatetime2 }, "IX_LiveLocations_Trip");
 
-            entity.Property(e => e.LiveLocationId).HasColumnName("LiveLocationID");
             entity.Property(e => e.CurrentLatitude).HasColumnType("decimal(9, 6)");
             entity.Property(e => e.CurrentLongitude).HasColumnType("decimal(9, 6)");
             entity.Property(e => e.CurrentSegmentId).HasColumnName("CurrentSegmentID");
@@ -338,11 +363,11 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<Trip>(entity =>
         {
-            entity.HasKey(e => e.TripId).HasName("PK__Trips__51DC711E59245661");
+            entity.HasKey(e => e.Id).HasName("PK__Trips__51DC711E59245661");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.HasIndex(e => new { e.TrainId, e.DepartureTime, e.EstimatedArrivalTime, e.Status }, "IX_Trips_SafetyCheck");
 
-            entity.Property(e => e.TripId).HasColumnName("TripID");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.DestinationStationId).HasColumnName("DestinationStationID");
             entity.Property(e => e.OriginStationId).HasColumnName("OriginStationID");
@@ -370,11 +395,11 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<TripStop>(entity =>
         {
-            entity.HasKey(e => e.TripStopId).HasName("PK__TripStop__4476150D060ADD54");
+            entity.HasKey(e => e.Id).HasName("PK__TripStop__4476150D060ADD54");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.HasIndex(e => new { e.TripId, e.StopOrder }, "UQ_Trip_StopOrder").IsUnique();
 
-            entity.Property(e => e.TripStopId).HasColumnName("TripStopID");
             entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.TripId).HasColumnName("TripID");
 
@@ -390,9 +415,9 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.UserId).HasName("PK__Users__1788CCAC2F1F502E");
+            entity.HasKey(e => e.Id).HasName("PK__Users__1788CCAC2F1F502E");
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
-            entity.Property(e => e.UserId).HasColumnName("UserID");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Users__CreatedAt__693CA210");
             entity.Property(e => e.PasswordHash)
                 .HasMaxLength(256)
@@ -416,4 +441,28 @@ public partial class MasarDbContext : DbContext, IAppDbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    // entry.Entity.CreatedBy = _currentUserService.UserId; // يمكن ربطه لاحقاً
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.LastModifiedAt = DateTime.UtcNow;
+                    // entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                    break;
+            }
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
 }

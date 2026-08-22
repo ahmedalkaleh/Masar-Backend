@@ -1,12 +1,15 @@
-﻿using System;
+﻿using Masar.Domain.Bookings;
+using Masar.Domain.Common;
+using Masar.Domain.RouteSegments;
+using Masar.Domain.Trips;
+using Masar.Domain.TripStops;
+using System;
 using System.Collections.Generic;
 
-namespace Masar.Infrastructure;
+namespace Masar.Domain.Stations;
 
-public partial class Station
+public partial class Station : AuditableEntity
 {
-    public int StationId { get; set; }
-
     public string NameAr { get; set; } = null!;
 
     public string NameEn { get; set; } = null!;
@@ -40,4 +43,33 @@ public partial class Station
     public virtual ICollection<Trip> TripOriginStations { get; set; } = new List<Trip>();
 
     public virtual ICollection<TripStop> TripStops { get; set; } = new List<TripStop>();
+
+    private Station() { }
+
+
+    private Station(
+    Guid id,
+    string nameAr,
+    string nameEn,
+    string type,
+    decimal latitude,
+    decimal longitude,
+    string governorate,
+    bool hasPassingLoop,
+    int customsDelayMinutes,
+    DateTime createdAt,
+    bool isDelete)
+        :base(id)
+    {
+        NameAr = nameAr;
+        NameEn = nameEn;
+        Type = type;
+        Latitude = latitude;
+        Longitude = longitude;
+        Governorate = governorate;
+        HasPassingLoop = hasPassingLoop;
+        CustomsDelayMinutes = customsDelayMinutes;
+        CreatedAt = createdAt;
+        IsDelete = isDelete;
+    }
 }

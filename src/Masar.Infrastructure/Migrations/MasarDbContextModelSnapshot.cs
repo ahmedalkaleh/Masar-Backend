@@ -22,21 +22,18 @@ namespace Masar.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Masar.Infrastructure.Booking", b =>
+            modelBuilder.Entity("Masar.Domain.Bookings.Booking", b =>
                 {
-                    b.Property<int>("BookingId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("BookingID");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("BookingId"));
-
-                    b.Property<int>("AlightingStationId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("AlightingStationId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("AlightingStationID");
 
-                    b.Property<int>("BoardingStationId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("BoardingStationId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("BoardingStationID");
 
                     b.Property<string>("BookingReference")
@@ -46,15 +43,22 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(12)");
 
                     b.Property<DateTime>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasDefaultValueSql("(getutcdate())");
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<int>("PassengerId")
-                        .HasColumnType("int")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PassengerId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("PassengerID");
 
                     b.Property<string>("PaymentStatus")
@@ -68,11 +72,11 @@ namespace Masar.Infrastructure.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int>("TripId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("TripID");
 
-                    b.HasKey("BookingId")
+                    b.HasKey("Id")
                         .HasName("PK__Bookings__73951ACD8A79C1D9");
 
                     b.HasIndex("AlightingStationId");
@@ -89,14 +93,11 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Bookings");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Carriage", b =>
+            modelBuilder.Entity("Masar.Domain.Carriages.Carriage", b =>
                 {
-                    b.Property<int>("CarriageId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("CarriageID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CarriageId"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<int>("CarriageNumber")
                         .HasColumnType("int");
@@ -107,17 +108,29 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("TotalSeats")
                         .HasColumnType("int");
 
-                    b.Property<int>("TrainId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("TrainId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("TrainID");
 
-                    b.HasKey("CarriageId")
+                    b.HasKey("Id")
                         .HasName("PK__Carriage__17FE2DB09A454F45");
 
                     b.HasIndex(new[] { "TrainId", "CarriageNumber" }, "UQ_Train_Carriage")
@@ -126,20 +139,29 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Carriages");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Passenger", b =>
+            modelBuilder.Entity("Masar.Domain.Passengers.Passenger", b =>
                 {
-                    b.Property<int>("PassengerId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("PassengerID");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PassengerId"));
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("PersonId")
-                        .HasColumnType("int")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("PersonID");
 
-                    b.HasKey("PassengerId")
+                    b.HasKey("Id")
                         .HasName("PK_Customer");
 
                     b.HasIndex("PersonId");
@@ -147,24 +169,33 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Passengers");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Person", b =>
+            modelBuilder.Entity("Masar.Domain.Persons.Person", b =>
                 {
-                    b.Property<int>("PersonId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("PersonID");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PersonId"));
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<byte[]>("Email")
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Email")
                         .IsRequired()
                         .HasMaxLength(150)
-                        .HasColumnType("varbinary(150)");
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -172,7 +203,7 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
-                    b.HasKey("PersonId");
+                    b.HasKey("Id");
 
                     b.HasIndex(new[] { "Email" }, "UK_Persons_Email")
                         .IsUnique();
@@ -180,15 +211,27 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Persons");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Role", b =>
+            modelBuilder.Entity("Masar.Domain.Roles.Role", b =>
                 {
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int")
-                        .HasColumnName("RoleID");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Description")
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Role1")
                         .IsRequired()
@@ -196,25 +239,28 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("nvarchar(50)")
                         .HasColumnName("Role");
 
-                    b.HasKey("RoleId");
+                    b.HasKey("Id");
 
                     b.ToTable("Roles");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.RouteSegment", b =>
+            modelBuilder.Entity("Masar.Domain.RouteSegments.RouteSegment", b =>
                 {
-                    b.Property<int>("SegmentId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("SegmentID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SegmentId"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("CorridorName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("DistanceKm")
                         .HasColumnType("decimal(6, 2)")
@@ -223,15 +269,21 @@ namespace Masar.Infrastructure.Migrations
                     b.Property<int>("EstPassengerTimeMin")
                         .HasColumnType("int");
 
-                    b.Property<int>("FromStationId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("FromStationId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("FromStationID");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<int>("ToStationId")
-                        .HasColumnType("int")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("ToStationId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("ToStationID");
 
                     b.Property<string>("TrackType")
@@ -240,7 +292,7 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
-                    b.HasKey("SegmentId")
+                    b.HasKey("Id")
                         .HasName("PK__RouteSeg__C680609B5A711C10");
 
                     b.HasIndex("FromStationId");
@@ -250,12 +302,28 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("RouteSegments");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.SavedPassenger", b =>
+            modelBuilder.Entity("Masar.Domain.SavedPassengers.SavedPassenger", b =>
                 {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Fullname")
                         .IsRequired()
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("NationalId")
                         .IsRequired()
@@ -264,28 +332,25 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(10)")
                         .HasColumnName("NationalID");
 
-                    b.Property<int>("SavedPassengerId")
-                        .HasColumnType("int")
-                        .HasColumnName("SavedPassengerID");
-
-                    b.Property<int>("UserId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserID");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("SavedPassengers");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Seat", b =>
+            modelBuilder.Entity("Masar.Domain.Seats.Seat", b =>
                 {
-                    b.Property<int>("SeatId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("SeatID");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("SeatId"));
-
-                    b.Property<int>("CarriageId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("CarriageId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("CarriageID");
 
                     b.Property<string>("ColumnPosition")
@@ -294,6 +359,12 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(10)");
 
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -301,6 +372,12 @@ namespace Masar.Infrastructure.Migrations
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("RowNumber")
                         .HasColumnType("int");
@@ -319,7 +396,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(20)")
                         .HasDefaultValue("Standard");
 
-                    b.HasKey("SeatId")
+                    b.HasKey("Id")
                         .HasName("PK__Seats__311713D35FB839DB");
 
                     b.HasIndex(new[] { "CarriageId", "SeatNumber" }, "UQ_Carriage_Seat")
@@ -328,19 +405,19 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Seats");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Station", b =>
+            modelBuilder.Entity("Masar.Domain.Stations.Station", b =>
                 {
-                    b.Property<int>("StationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("StationID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("StationId"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getutcdate())");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("CustomsDelayMinutes")
                         .HasColumnType("int");
@@ -357,6 +434,12 @@ namespace Masar.Infrastructure.Migrations
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<decimal>("Latitude")
                         .HasColumnType("decimal(9, 6)");
@@ -381,26 +464,29 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(30)");
 
-                    b.HasKey("StationId")
+                    b.HasKey("Id")
                         .HasName("PK__Stations__E0D8A6DDFDE3D87F");
 
                     b.ToTable("Stations");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.SystemAuditLog", b =>
+            modelBuilder.Entity("Masar.Domain.SystemAuditLogs.SystemAuditLog", b =>
                 {
-                    b.Property<long>("LogId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("LogID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("LogId"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Action")
                         .IsRequired()
                         .HasMaxLength(100)
                         .IsUnicode(false)
                         .HasColumnType("varchar(100)");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("EntityId")
                         .HasMaxLength(50)
@@ -420,6 +506,12 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(45)")
                         .HasColumnName("IPAddress");
 
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("NewValues")
                         .HasColumnType("nvarchar(max)");
 
@@ -431,31 +523,34 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getutcdate())");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int")
+                    b.Property<Guid?>("UserId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("UserID");
 
-                    b.HasKey("LogId")
+                    b.HasKey("Id")
                         .HasName("PK__SystemAu__5E5499A89E782156");
 
                     b.ToTable("SystemAuditLogs");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Ticket", b =>
+            modelBuilder.Entity("Masar.Domain.Tickets.Ticket", b =>
                 {
-                    b.Property<int>("TicketId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("TicketID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TicketId"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime?>("BoardedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("BookingId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("BookingID");
+
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("EndStopOrder")
                         .HasColumnType("int");
@@ -468,6 +563,12 @@ namespace Masar.Infrastructure.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<decimal>("Price")
                         .HasColumnType("decimal(18, 2)");
 
@@ -478,8 +579,8 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(512)")
                         .HasColumnName("QRCodeHash");
 
-                    b.Property<int>("SeatId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("SeatId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("SeatID");
 
                     b.Property<int>("StartStopOrder")
@@ -493,7 +594,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(20)")
                         .HasDefaultValue("Valid", "DF__Tickets__Status__76969D2E");
 
-                    b.HasKey("TicketId")
+                    b.HasKey("Id")
                         .HasName("PK__Tickets__712CC627C667F94A");
 
                     b.HasIndex("BookingId");
@@ -503,14 +604,69 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Tickets");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Train", b =>
+            modelBuilder.Entity("Masar.Domain.TrainLiveLocations.TrainLiveLocation", b =>
                 {
-                    b.Property<int>("TrainId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("TrainID");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TrainId"));
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal>("CurrentLatitude")
+                        .HasColumnType("decimal(9, 6)");
+
+                    b.Property<decimal>("CurrentLongitude")
+                        .HasColumnType("decimal(9, 6)");
+
+                    b.Property<Guid?>("CurrentSegmentId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("CurrentSegmentID");
+
+                    b.Property<decimal>("CurrentSpeedKmh")
+                        .HasColumnType("decimal(5, 2)")
+                        .HasColumnName("CurrentSpeedKMH");
+
+                    b.Property<int>("DelayMinutes")
+                        .HasColumnType("int");
+
+                    b.Property<bool>("IsDelete")
+                        .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("LastUpdatedUtcdatetime2")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasColumnName("LastUpdatedUTCDatetime2")
+                        .HasDefaultValueSql("(getutcdate())");
+
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("TripID");
+
+                    b.HasKey("Id")
+                        .HasName("PK__TrainLiv__A58A3418F1E17E41");
+
+                    b.HasIndex("CurrentSegmentId");
+
+                    b.HasIndex(new[] { "TripId", "LastUpdatedUtcdatetime2" }, "IX_LiveLocations_Trip");
+
+                    b.ToTable("TrainLiveLocations");
+                });
+
+            modelBuilder.Entity("Masar.Domain.Trains.Train", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<string>("Code")
                         .IsRequired()
@@ -523,6 +679,9 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getutcdate())", "DF__Trains__CreatedA__45F365D3");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsActive")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
@@ -530,6 +689,12 @@ namespace Masar.Infrastructure.Migrations
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("MaxSpeedKmh")
                         .ValueGeneratedOnAdd()
@@ -556,7 +721,7 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
-                    b.HasKey("TrainId")
+                    b.HasKey("Id")
                         .HasName("PK__Trains__8ED2725A7F2931CC");
 
                     b.HasIndex(new[] { "Code" }, "UQ__Trains__A25C5AA765BD0DBB")
@@ -565,63 +730,66 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Trains");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.TrainLiveLocation", b =>
+            modelBuilder.Entity("Masar.Domain.TripStops.TripStop", b =>
                 {
-                    b.Property<long>("LiveLocationId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("bigint")
-                        .HasColumnName("LiveLocationID");
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("LiveLocationId"));
+                    b.Property<DateTimeOffset>("CreatedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<decimal>("CurrentLatitude")
-                        .HasColumnType("decimal(9, 6)");
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("CurrentLongitude")
-                        .HasColumnType("decimal(9, 6)");
-
-                    b.Property<int?>("CurrentSegmentId")
-                        .HasColumnType("int")
-                        .HasColumnName("CurrentSegmentID");
-
-                    b.Property<decimal>("CurrentSpeedKmh")
-                        .HasColumnType("decimal(5, 2)")
-                        .HasColumnName("CurrentSpeedKMH");
-
-                    b.Property<int>("DelayMinutes")
+                    b.Property<int>("DwellTimeMinutes")
                         .HasColumnType("int");
+
+                    b.Property<bool>("IsCustomsCheck")
+                        .HasColumnType("bit");
 
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<DateTime>("LastUpdatedUtcdatetime2")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetime2")
-                        .HasColumnName("LastUpdatedUTCDatetime2")
-                        .HasDefaultValueSql("(getutcdate())");
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
 
-                    b.Property<int>("TripId")
-                        .HasColumnType("int")
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("ScheduledArrival")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("ScheduledDeparture")
+                        .HasColumnType("datetime2");
+
+                    b.Property<Guid>("StationId")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("StationID");
+
+                    b.Property<int>("StopOrder")
+                        .HasColumnType("int");
+
+                    b.Property<Guid>("TripId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("TripID");
 
-                    b.HasKey("LiveLocationId")
-                        .HasName("PK__TrainLiv__A58A3418F1E17E41");
+                    b.HasKey("Id")
+                        .HasName("PK__TripStop__4476150D060ADD54");
 
-                    b.HasIndex("CurrentSegmentId");
+                    b.HasIndex("StationId");
 
-                    b.HasIndex(new[] { "TripId", "LastUpdatedUtcdatetime2" }, "IX_LiveLocations_Trip");
+                    b.HasIndex(new[] { "TripId", "StopOrder" }, "UQ_Trip_StopOrder")
+                        .IsUnique();
 
-                    b.ToTable("TrainLiveLocations");
+                    b.ToTable("TripStops");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Trip", b =>
+            modelBuilder.Entity("Masar.Domain.Trips.Trip", b =>
                 {
-                    b.Property<int>("TripId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("TripID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TripId"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime?>("ActualArrivalTime")
                         .HasColumnType("datetime2");
@@ -631,11 +799,14 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getutcdate())");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime>("DepartureTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("DestinationStationId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("DestinationStationId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("DestinationStationID");
 
                     b.Property<DateTime>("EstimatedArrivalTime")
@@ -644,8 +815,14 @@ namespace Masar.Infrastructure.Migrations
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
 
-                    b.Property<int>("OriginStationId")
-                        .HasColumnType("int")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("OriginStationId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("OriginStationID");
 
                     b.Property<string>("Status")
@@ -656,11 +833,11 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(20)")
                         .HasDefaultValue("Scheduled");
 
-                    b.Property<int>("TrainId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("TrainId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("TrainID");
 
-                    b.HasKey("TripId")
+                    b.HasKey("Id")
                         .HasName("PK__Trips__51DC711E59245661");
 
                     b.HasIndex("DestinationStationId");
@@ -672,68 +849,28 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Trips");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.TripStop", b =>
+            modelBuilder.Entity("Masar.Domain.Users.User", b =>
                 {
-                    b.Property<int>("TripStopId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("TripStopID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TripStopId"));
-
-                    b.Property<int>("DwellTimeMinutes")
-                        .HasColumnType("int");
-
-                    b.Property<bool>("IsCustomsCheck")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("IsDelete")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTime>("ScheduledArrival")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("ScheduledDeparture")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("StationId")
-                        .HasColumnType("int")
-                        .HasColumnName("StationID");
-
-                    b.Property<int>("StopOrder")
-                        .HasColumnType("int");
-
-                    b.Property<int>("TripId")
-                        .HasColumnType("int")
-                        .HasColumnName("TripID");
-
-                    b.HasKey("TripStopId")
-                        .HasName("PK__TripStop__4476150D060ADD54");
-
-                    b.HasIndex("StationId");
-
-                    b.HasIndex(new[] { "TripId", "StopOrder" }, "UQ_Trip_StopOrder")
-                        .IsUnique();
-
-                    b.ToTable("TripStops");
-                });
-
-            modelBuilder.Entity("Masar.Infrastructure.User", b =>
-                {
-                    b.Property<int>("UserId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasColumnName("UserID");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("UserId"));
+                    b.Property<Guid>("Id")
+                        .HasColumnType("uniqueidentifier")
+                        .HasColumnName("Id");
 
                     b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getutcdate())", "DF__Users__CreatedAt__693CA210");
 
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<bool>("IsDelete")
                         .HasColumnType("bit");
+
+                    b.Property<DateTimeOffset>("LastModifiedAt")
+                        .HasColumnType("datetimeoffset");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PasswordHash")
                         .IsRequired()
@@ -741,12 +878,12 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(256)");
 
-                    b.Property<int>("PersonId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("PersonId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("PersonID");
 
-                    b.Property<int>("RoleId")
-                        .HasColumnType("int")
+                    b.Property<Guid>("RoleId")
+                        .HasColumnType("uniqueidentifier")
                         .HasColumnName("RoleID");
 
                     b.Property<string>("Username")
@@ -754,7 +891,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.HasKey("UserId")
+                    b.HasKey("Id")
                         .HasName("PK__Users__1788CCAC2F1F502E");
 
                     b.HasIndex("PersonId");
@@ -764,27 +901,27 @@ namespace Masar.Infrastructure.Migrations
                     b.ToTable("Users");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Booking", b =>
+            modelBuilder.Entity("Masar.Domain.Bookings.Booking", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Station", "AlightingStation")
+                    b.HasOne("Masar.Domain.Stations.Station", "AlightingStation")
                         .WithMany("BookingAlightingStations")
                         .HasForeignKey("AlightingStationId")
                         .IsRequired()
                         .HasConstraintName("FK__Bookings__Alight__6FE99F9F");
 
-                    b.HasOne("Masar.Infrastructure.Station", "BoardingStation")
+                    b.HasOne("Masar.Domain.Stations.Station", "BoardingStation")
                         .WithMany("BookingBoardingStations")
                         .HasForeignKey("BoardingStationId")
                         .IsRequired()
                         .HasConstraintName("FK__Bookings__Boardi__6EF57B66");
 
-                    b.HasOne("Masar.Infrastructure.Passenger", "Passenger")
+                    b.HasOne("Masar.Domain.Passengers.Passenger", "Passenger")
                         .WithMany("Bookings")
                         .HasForeignKey("PassengerId")
                         .IsRequired()
                         .HasConstraintName("FK__Bookings__PassengerID__6D0D32F4");
 
-                    b.HasOne("Masar.Infrastructure.Trip", "Trip")
+                    b.HasOne("Masar.Domain.Trips.Trip", "Trip")
                         .WithMany("Bookings")
                         .HasForeignKey("TripId")
                         .IsRequired()
@@ -799,9 +936,9 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("Trip");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Carriage", b =>
+            modelBuilder.Entity("Masar.Domain.Carriages.Carriage", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Train", "Train")
+                    b.HasOne("Masar.Domain.Trains.Train", "Train")
                         .WithMany("Carriages")
                         .HasForeignKey("TrainId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -811,26 +948,26 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("Train");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Passenger", b =>
+            modelBuilder.Entity("Masar.Domain.Passengers.Passenger", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Person", "Person")
-                        .WithMany("Passengers")
+                    b.HasOne("Masar.Domain.Persons.Person", "Person")
+                        .WithMany()
                         .HasForeignKey("PersonId")
-                        .IsRequired()
-                        .HasConstraintName("FK_Passengers_Persons");
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
 
                     b.Navigation("Person");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.RouteSegment", b =>
+            modelBuilder.Entity("Masar.Domain.RouteSegments.RouteSegment", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Station", "FromStation")
+                    b.HasOne("Masar.Domain.Stations.Station", "FromStation")
                         .WithMany("RouteSegmentFromStations")
                         .HasForeignKey("FromStationId")
                         .IsRequired()
                         .HasConstraintName("FK__RouteSegm__FromS__3C69FB99");
 
-                    b.HasOne("Masar.Infrastructure.Station", "ToStation")
+                    b.HasOne("Masar.Domain.Stations.Station", "ToStation")
                         .WithMany("RouteSegmentToStations")
                         .HasForeignKey("ToStationId")
                         .IsRequired()
@@ -841,9 +978,20 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("ToStation");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Seat", b =>
+            modelBuilder.Entity("Masar.Domain.SavedPassengers.SavedPassenger", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Carriage", "Carriage")
+                    b.HasOne("Masar.Domain.Users.User", "User")
+                        .WithMany("SavedPassengers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Masar.Domain.Seats.Seat", b =>
+                {
+                    b.HasOne("Masar.Domain.Carriages.Carriage", "Carriage")
                         .WithMany("Seats")
                         .HasForeignKey("CarriageId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -853,16 +1001,16 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("Carriage");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Ticket", b =>
+            modelBuilder.Entity("Masar.Domain.Tickets.Ticket", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Booking", "Booking")
+                    b.HasOne("Masar.Domain.Bookings.Booking", "Booking")
                         .WithMany("Tickets")
                         .HasForeignKey("BookingId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired()
                         .HasConstraintName("FK__Tickets__Booking__74AE54BC");
 
-                    b.HasOne("Masar.Infrastructure.Seat", "Seat")
+                    b.HasOne("Masar.Domain.Seats.Seat", "Seat")
                         .WithMany("Tickets")
                         .HasForeignKey("SeatId")
                         .IsRequired()
@@ -873,14 +1021,14 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("Seat");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.TrainLiveLocation", b =>
+            modelBuilder.Entity("Masar.Domain.TrainLiveLocations.TrainLiveLocation", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.RouteSegment", "CurrentSegment")
+                    b.HasOne("Masar.Domain.RouteSegments.RouteSegment", "CurrentSegment")
                         .WithMany("TrainLiveLocations")
                         .HasForeignKey("CurrentSegmentId")
                         .HasConstraintName("FK__TrainLive__Curre__60A75C0F");
 
-                    b.HasOne("Masar.Infrastructure.Trip", "Trip")
+                    b.HasOne("Masar.Domain.Trips.Trip", "Trip")
                         .WithMany("TrainLiveLocations")
                         .HasForeignKey("TripId")
                         .IsRequired()
@@ -891,21 +1039,41 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("Trip");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Trip", b =>
+            modelBuilder.Entity("Masar.Domain.TripStops.TripStop", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Station", "DestinationStation")
+                    b.HasOne("Masar.Domain.Stations.Station", "Station")
+                        .WithMany("TripStops")
+                        .HasForeignKey("StationId")
+                        .IsRequired()
+                        .HasConstraintName("FK__TripStops__Stati__5BE2A6F2");
+
+                    b.HasOne("Masar.Domain.Trips.Trip", "Trip")
+                        .WithMany("TripStops")
+                        .HasForeignKey("TripId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("FK__TripStops__TripI__5AEE82B9");
+
+                    b.Navigation("Station");
+
+                    b.Navigation("Trip");
+                });
+
+            modelBuilder.Entity("Masar.Domain.Trips.Trip", b =>
+                {
+                    b.HasOne("Masar.Domain.Stations.Station", "DestinationStation")
                         .WithMany("TripDestinationStations")
                         .HasForeignKey("DestinationStationId")
                         .IsRequired()
                         .HasConstraintName("FK__Trips__Destinati__5441852A");
 
-                    b.HasOne("Masar.Infrastructure.Station", "OriginStation")
+                    b.HasOne("Masar.Domain.Stations.Station", "OriginStation")
                         .WithMany("TripOriginStations")
                         .HasForeignKey("OriginStationId")
                         .IsRequired()
                         .HasConstraintName("FK__Trips__OriginSta__534D60F1");
 
-                    b.HasOne("Masar.Infrastructure.Train", "Train")
+                    b.HasOne("Masar.Domain.Trains.Train", "Train")
                         .WithMany("Trips")
                         .HasForeignKey("TrainId")
                         .IsRequired()
@@ -918,35 +1086,15 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("Train");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.TripStop", b =>
+            modelBuilder.Entity("Masar.Domain.Users.User", b =>
                 {
-                    b.HasOne("Masar.Infrastructure.Station", "Station")
-                        .WithMany("TripStops")
-                        .HasForeignKey("StationId")
-                        .IsRequired()
-                        .HasConstraintName("FK__TripStops__Stati__5BE2A6F2");
-
-                    b.HasOne("Masar.Infrastructure.Trip", "Trip")
-                        .WithMany("TripStops")
-                        .HasForeignKey("TripId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired()
-                        .HasConstraintName("FK__TripStops__TripI__5AEE82B9");
-
-                    b.Navigation("Station");
-
-                    b.Navigation("Trip");
-                });
-
-            modelBuilder.Entity("Masar.Infrastructure.User", b =>
-                {
-                    b.HasOne("Masar.Infrastructure.Person", "Person")
+                    b.HasOne("Masar.Domain.Persons.Person", "Person")
                         .WithMany("Users")
                         .HasForeignKey("PersonId")
                         .IsRequired()
                         .HasConstraintName("FK_Users_Persons");
 
-                    b.HasOne("Masar.Infrastructure.Role", "Role")
+                    b.HasOne("Masar.Domain.Roles.Role", "Role")
                         .WithMany("Users")
                         .HasForeignKey("RoleId")
                         .IsRequired()
@@ -957,44 +1105,42 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("Role");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Booking", b =>
+            modelBuilder.Entity("Masar.Domain.Bookings.Booking", b =>
                 {
                     b.Navigation("Tickets");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Carriage", b =>
+            modelBuilder.Entity("Masar.Domain.Carriages.Carriage", b =>
                 {
                     b.Navigation("Seats");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Passenger", b =>
+            modelBuilder.Entity("Masar.Domain.Passengers.Passenger", b =>
                 {
                     b.Navigation("Bookings");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Person", b =>
-                {
-                    b.Navigation("Passengers");
-
-                    b.Navigation("Users");
-                });
-
-            modelBuilder.Entity("Masar.Infrastructure.Role", b =>
+            modelBuilder.Entity("Masar.Domain.Persons.Person", b =>
                 {
                     b.Navigation("Users");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.RouteSegment", b =>
+            modelBuilder.Entity("Masar.Domain.Roles.Role", b =>
+                {
+                    b.Navigation("Users");
+                });
+
+            modelBuilder.Entity("Masar.Domain.RouteSegments.RouteSegment", b =>
                 {
                     b.Navigation("TrainLiveLocations");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Seat", b =>
+            modelBuilder.Entity("Masar.Domain.Seats.Seat", b =>
                 {
                     b.Navigation("Tickets");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Station", b =>
+            modelBuilder.Entity("Masar.Domain.Stations.Station", b =>
                 {
                     b.Navigation("BookingAlightingStations");
 
@@ -1011,20 +1157,25 @@ namespace Masar.Infrastructure.Migrations
                     b.Navigation("TripStops");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Train", b =>
+            modelBuilder.Entity("Masar.Domain.Trains.Train", b =>
                 {
                     b.Navigation("Carriages");
 
                     b.Navigation("Trips");
                 });
 
-            modelBuilder.Entity("Masar.Infrastructure.Trip", b =>
+            modelBuilder.Entity("Masar.Domain.Trips.Trip", b =>
                 {
                     b.Navigation("Bookings");
 
                     b.Navigation("TrainLiveLocations");
 
                     b.Navigation("TripStops");
+                });
+
+            modelBuilder.Entity("Masar.Domain.Users.User", b =>
+                {
+                    b.Navigation("SavedPassengers");
                 });
 #pragma warning restore 612, 618
         }
