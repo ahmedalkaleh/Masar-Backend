@@ -441,4 +441,28 @@ public partial class MasarDbContext : DbContext, IAppDbContext
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
+
+
+
+    public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+    {
+        foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
+        {
+            switch (entry.State)
+            {
+                case EntityState.Added:
+                    entry.Entity.CreatedAt = DateTime.UtcNow;
+                    // entry.Entity.CreatedBy = _currentUserService.UserId; // يمكن ربطه لاحقاً
+                    break;
+
+                case EntityState.Modified:
+                    entry.Entity.LastModifiedAt = DateTime.UtcNow;
+                    // entry.Entity.LastModifiedBy = _currentUserService.UserId;
+                    break;
+            }
+        }
+
+        return base.SaveChangesAsync(cancellationToken);
+    }
+
 }
