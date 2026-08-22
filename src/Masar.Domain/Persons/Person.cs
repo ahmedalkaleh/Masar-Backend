@@ -1,6 +1,6 @@
 ﻿using Masar.Domain.Common;
 using Masar.Domain.Common.Results;
-using Masar.Infrastructure;
+using Masar.Domain.Users;
 using System;
 using System.Collections.Generic;
 using System.Net.Mail;

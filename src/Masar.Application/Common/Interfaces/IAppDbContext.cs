@@ -1,8 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text;
+using Masar.Domain.Bookings;
+using Masar.Domain.Carriages;
+using Masar.Domain.Passengers;
 using Masar.Domain.Persons;
-using Masar.Infrastructure;
+using Masar.Domain.Roles;
+using Masar.Domain.RouteSegments;
+using Masar.Domain.SavedPassengers;
+using Masar.Domain.Seats;
+using Masar.Domain.Stations;
+using Masar.Domain.SystemAuditLogs;
+using Masar.Domain.Tickets;
+using Masar.Domain.TrainLiveLocations;
+using Masar.Domain.Trains;
+using Masar.Domain.Trips;
+using Masar.Domain.TripStops;
+using Masar.Domain.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace Masar.Application.Common.Interfaces
