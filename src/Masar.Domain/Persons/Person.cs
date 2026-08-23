@@ -66,4 +66,31 @@ public sealed class Person : AuditableEntity
 
         return new Person(id, fullName, email, phoneNumber, users);
     }
+    public Result<Updated> Update(string fullName, string email, string phoneNumber)
+    {
+        if (string.IsNullOrWhiteSpace(fullName))
+        {
+            return PersonErrors.FullNameRequired;
+        }
+        if (string.IsNullOrWhiteSpace(email))
+        {
+            return PersonErrors.EmailRequired;
+        }
+        try
+        {
+            _ = new MailAddress(email);
+        }
+        catch
+        {
+            return PersonErrors.InvalidEmail;
+        }
+        if (string.IsNullOrWhiteSpace(phoneNumber) || !Regex.IsMatch(phoneNumber, @"^\+?\d{7,15}$"))
+        {
+            return PersonErrors.InvalidPhoneNumber;
+        }
+        FullName = fullName;
+        Email = email;
+        PhoneNumber = phoneNumber;
+        return Result.Updated;
+    }
 }
