@@ -91,6 +91,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TripId).HasColumnName("TripID");
 
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Bookings__IsDelete__45F365D3");
+
             entity.HasOne(d => d.AlightingStation).WithMany(p => p.BookingAlightingStations)
                 .HasForeignKey(d => d.AlightingStationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -124,6 +126,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.TrainId).HasColumnName("TrainID");
+
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Carriages__IsDelete__45F365D3");
 
             entity.HasOne(d => d.Train).WithMany(p => p.Carriages)
                 .HasForeignKey(d => d.TrainId)
@@ -182,6 +186,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__RouteSegments__IsDelete__45F365D3");
+
             entity.HasOne(d => d.FromStation).WithMany(p => p.RouteSegmentFromStations)
                 .HasForeignKey(d => d.FromStationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -231,6 +237,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .IsUnicode(false)
                 .HasDefaultValue("Standard");
 
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Seats__IsDelete__45F365D3");
+
             entity.HasOne(d => d.Carriage).WithMany(p => p.Seats)
                 .HasForeignKey(d => d.CarriageId)
                 .HasConstraintName("FK__Seats__CarriageI__4D94879B");
@@ -253,6 +261,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.Type)
                 .HasMaxLength(30)
                 .IsUnicode(false);
+
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Stations__IsDelete__45F365D3");
         });
 
         modelBuilder.Entity<SystemAuditLog>(entity =>
@@ -298,6 +308,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .IsUnicode(false)
                 .HasDefaultValue("Valid", "DF__Tickets__Status__76969D2E");
 
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Tickets__IsDelete__45F365D3");
+
             entity.HasOne(d => d.Booking).WithMany(p => p.Tickets)
                 .HasForeignKey(d => d.BookingId)
                 .HasConstraintName("FK__Tickets__Booking__74AE54BC");
@@ -319,22 +331,24 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Trains__CreatedA__45F365D3");
-            entity.Property(e => e.IsActive).HasDefaultValue(true, "DF_Trains_IsActive");
             entity.Property(e => e.MaxSpeedKmh)
                 .HasDefaultValue(120, "DF__Trains__MaxSpeed__440B1D61")
                 .HasColumnName("MaxSpeedKMH");
             entity.Property(e => e.Name).HasMaxLength(100);
             entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasDefaultValue("Active", "DF__Trains__Status__44FF419A");
+                .HasColumnName("Status")
+                .HasColumnType("tinyint")
+                .HasDefaultValue(TrainStatus.Active, "DF__Trains__Status__44FF419A")
+                .HasComment("0 -> Active, 1 -> Inactive, 2 -> Maintenance, 3 -> Cancelled.");
             entity.Property(e => e.TrainType)
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Trains__IsDelete__45E365D3");
+
             entity.HasOne(d => d.Station).WithMany(e => e.Trains)
             .HasForeignKey(d => d.CurrentStationId)
-            .HasConstraintName("FK__Trains__Curre__5EB337D6");
+            .HasConstraintName("FK__Trains__Curre__5EB337D6").IsRequired(false);
         });
 
         modelBuilder.Entity<TrainLiveLocation>(entity =>
@@ -354,6 +368,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnName("LastUpdatedUTCDatetime2");
             entity.Property(e => e.TripId).HasColumnName("TripID");
+
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__TrainLivedLocations__IsDelete__45F365D3");
 
             entity.HasOne(d => d.CurrentSegment).WithMany(p => p.TrainLiveLocations)
                 .HasForeignKey(d => d.CurrentSegmentId)
@@ -381,6 +397,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasDefaultValue("Scheduled");
             entity.Property(e => e.TrainId).HasColumnName("TrainID");
 
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Trips__IsDelete__45F365D3");
+
             entity.HasOne(d => d.DestinationStation).WithMany(p => p.TripDestinationStations)
                 .HasForeignKey(d => d.DestinationStationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -407,6 +425,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.TripId).HasColumnName("TripID");
 
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__TripStops__IsDelete__45F365D3");
+
             entity.HasOne(d => d.Station).WithMany(p => p.TripStops)
                 .HasForeignKey(d => d.StationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
@@ -429,6 +449,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.PersonId).HasColumnName("PersonID");
             entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.Username).HasMaxLength(50);
+
+            entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Users__IsDelete__45F365D3");
 
             entity.HasOne(d => d.Person).WithMany(p => p.Users)
                 .HasForeignKey(d => d.PersonId)

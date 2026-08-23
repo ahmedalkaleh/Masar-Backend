@@ -17,21 +17,19 @@ public partial class Train : AuditableEntity
 
     public int MaxSpeedKmh { get; set; }
 
-    public string Status { get; set; } = null!;
-
-    public bool IsActive { get; set; }
+    public TrainStatus Status { get; set; }
 
     public DateTime CreatedAt { get; set; }
 
     public bool IsDelete { get; set; }
 
-    public Guid CurrentStationId { get; set; }
+    public Guid? CurrentStationId { get; set; }
 
     public virtual ICollection<Carriage> Carriages { get; set; } = new List<Carriage>();
 
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
-    public virtual Station Station { get; set; } = null!;
+    public virtual Station? Station { get; set; } = null!;
 
     private Train() { }
 
@@ -42,10 +40,8 @@ public partial class Train : AuditableEntity
     string name,
     string trainType,
     int maxSpeedKmh,
-    string status,
-    bool isActive,
-    DateTime createdAt,
-    bool isDelete)
+    TrainStatus status,
+    DateTime createdAt)
         :base(id)
     {
         Code = code;
@@ -53,8 +49,6 @@ public partial class Train : AuditableEntity
         TrainType = trainType;
         MaxSpeedKmh = maxSpeedKmh;
         Status = status;
-        IsActive = isActive;
         CreatedAt = createdAt;
-        IsDelete = isDelete;
     }
 }
