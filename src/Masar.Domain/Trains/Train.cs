@@ -1,5 +1,6 @@
 ﻿using Masar.Domain.Carriages;
 using Masar.Domain.Common;
+using Masar.Domain.Stations;
 using Masar.Domain.Trips;
 using System;
 using System.Collections.Generic;
@@ -24,9 +25,13 @@ public partial class Train : AuditableEntity
 
     public bool IsDelete { get; set; }
 
+    public Guid CurrentStationId { get; set; }
+
     public virtual ICollection<Carriage> Carriages { get; set; } = new List<Carriage>();
 
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
+
+    public virtual Station Station { get; set; } = null!;
 
     private Train() { }
 

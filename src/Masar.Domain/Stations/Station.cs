@@ -1,6 +1,7 @@
 ﻿using Masar.Domain.Bookings;
 using Masar.Domain.Common;
 using Masar.Domain.RouteSegments;
+using Masar.Domain.Trains;
 using Masar.Domain.Trips;
 using Masar.Domain.TripStops;
 using System;
@@ -43,6 +44,8 @@ public partial class Station : AuditableEntity
     public virtual ICollection<Trip> TripOriginStations { get; set; } = new List<Trip>();
 
     public virtual ICollection<TripStop> TripStops { get; set; } = new List<TripStop>();
+
+    public virtual ICollection<Train> Trains { get; set; } = new List<Train>();
 
     private Station() { }
 

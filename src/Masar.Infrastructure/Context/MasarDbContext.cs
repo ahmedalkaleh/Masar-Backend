@@ -331,6 +331,10 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.TrainType)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+
+            entity.HasOne(d => d.Station).WithMany(e => e.Trains)
+            .HasForeignKey(d => d.CurrentStationId)
+            .HasConstraintName("FK__Trains__Curre__5EB337D6");
         });
 
         modelBuilder.Entity<TrainLiveLocation>(entity =>
