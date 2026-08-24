@@ -10,6 +10,10 @@
     <ProjectReference Include="..\Masar.Domain\Masar.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Trains\Commands\UpdateTrain\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
