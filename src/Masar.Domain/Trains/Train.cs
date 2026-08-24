@@ -27,12 +27,11 @@ public partial class Train : AuditableEntity
     public bool IsDelete { get; private set; }
 
     public Guid? CurrentStationId { get; private set; }
-
     public virtual ICollection<Carriage> Carriages { get; private set; } = new List<Carriage>();
 
     public virtual ICollection<Trip> Trips { get; private set; } = new List<Trip>();
 
-    public virtual Station? Station { get; private set; } = null!;
+    public virtual Station? CurrentStation { get; set; } = null!;
 
     private Train() { }
 
