@@ -19,8 +19,6 @@ public partial class Train : AuditableEntity
 
     public TrainStatus Status { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-
     public bool IsDelete { get; set; }
 
     public Guid? CurrentStationId { get; set; }
@@ -29,7 +27,7 @@ public partial class Train : AuditableEntity
 
     public virtual ICollection<Trip> Trips { get; set; } = new List<Trip>();
 
-    public virtual Station? Station { get; set; } = null!;
+    public virtual Station? CurrentStation { get; set; } = null!;
 
     private Train() { }
 

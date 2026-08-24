@@ -82,7 +82,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.BookingReference)
                 .HasMaxLength(12)
                 .IsUnicode(false);
-            //entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Bookings__CreatedAt__45F365D3");
             entity.Property(e => e.PassengerId).HasColumnName("PassengerID");
             entity.Property(e => e.PaymentStatus)
                 .HasMaxLength(20)
@@ -126,7 +126,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.TrainId).HasColumnName("TrainID");
-
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Carriages__CreatedAt__45F365D3");
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Carriages__IsDelete__45F365D3");
 
             entity.HasOne(d => d.Train).WithMany(p => p.Carriages)
@@ -139,7 +139,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.HasKey(e => e.Id).HasName("PK_Customer");
 
             entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
-
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Passengers__CreatedAt__45F365D3");
             entity.Property(e => e.PersonId).HasColumnName("PersonID");
 
         });
@@ -155,6 +155,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Persons__CreatedAt__45F365D3");
+
         });
 
         modelBuilder.Entity<Role>(entity =>
@@ -167,6 +169,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.Role1)
                 .HasMaxLength(50)
                 .HasColumnName("Role");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Roles__CreatedAt__45F365D3");
+
         });
 
         modelBuilder.Entity<RouteSegment>(entity =>
@@ -185,6 +189,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.TrackType)
                 .HasMaxLength(20)
                 .IsUnicode(false);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__RouteSegments__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__RouteSegments__IsDelete__45F365D3");
 
@@ -209,6 +214,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .IsUnicode(false)
                 .HasColumnName("NationalID");
             entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__SavedPassengers__CreatedAt__45F365D3");
 
 
             entity.HasOne(d => d.User).WithMany(p => p.SavedPassengers)
@@ -236,6 +242,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasDefaultValue("Standard");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Seats__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Seats__IsDelete__45F365D3");
 
@@ -249,9 +256,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.HasKey(e => e.Id).HasName("PK__Stations__E0D8A6DDFDE3D87F");
             entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
             entity.Property(e => e.Governorate).HasMaxLength(50);
-            entity.Property(e => e.HasPassingLoop).HasDefaultValue(true);
             entity.Property(e => e.Latitude).HasColumnType("decimal(9, 6)");
             entity.Property(e => e.Longitude).HasColumnType("decimal(9, 6)");
             entity.Property(e => e.NameAr).HasMaxLength(100);
@@ -261,6 +266,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.Type)
                 .HasMaxLength(30)
                 .IsUnicode(false);
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Stations__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Stations__IsDelete__45F365D3");
         });
@@ -285,6 +291,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .IsUnicode(false)
                 .HasColumnName("IPAddress");
             entity.Property(e => e.Timestamp).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__SystemAuditLogs__CreatedAt__45F365D3");
+
             entity.Property(e => e.UserId).HasColumnName("UserID");
         });
 
@@ -307,6 +315,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasDefaultValue("Valid", "DF__Tickets__Status__76969D2E");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Tickets__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Tickets__IsDelete__45F365D3");
 
@@ -330,7 +339,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.Code)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Trains__CreatedA__45F365D3");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Trains__CreatedAt__45F365D3");
             entity.Property(e => e.MaxSpeedKmh)
                 .HasDefaultValue(120, "DF__Trains__MaxSpeed__440B1D61")
                 .HasColumnName("MaxSpeedKMH");
@@ -340,13 +349,14 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasColumnType("tinyint")
                 .HasDefaultValue(TrainStatus.Active, "DF__Trains__Status__44FF419A")
                 .HasComment("0 -> Active, 1 -> Inactive, 2 -> Maintenance, 3 -> Cancelled.");
+            entity.ToTable(t => t.HasCheckConstraint("CK_Trains_Status", "[Status] IN (0, 1, 2, 3)"));
             entity.Property(e => e.TrainType)
                 .HasMaxLength(20)
                 .IsUnicode(false);
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Trains__IsDelete__45E365D3");
 
-            entity.HasOne(d => d.Station).WithMany(e => e.Trains)
+            entity.HasOne(d => d.CurrentStation).WithMany(e => e.Trains)
             .HasForeignKey(d => d.CurrentStationId)
             .HasConstraintName("FK__Trains__Curre__5EB337D6").IsRequired(false);
         });
@@ -368,6 +378,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasDefaultValueSql("(getutcdate())")
                 .HasColumnName("LastUpdatedUTCDatetime2");
             entity.Property(e => e.TripId).HasColumnName("TripID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__TrainLiveLocations__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__TrainLivedLocations__IsDelete__45F365D3");
 
@@ -388,7 +399,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
             entity.HasIndex(e => new { e.TrainId, e.DepartureTime, e.EstimatedArrivalTime, e.Status }, "IX_Trips_SafetyCheck");
 
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Trips__CreatedAt__45F365D3");
             entity.Property(e => e.DestinationStationId).HasColumnName("DestinationStationID");
             entity.Property(e => e.OriginStationId).HasColumnName("OriginStationID");
             entity.Property(e => e.Status)
@@ -424,6 +435,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
             entity.Property(e => e.StationId).HasColumnName("StationID");
             entity.Property(e => e.TripId).HasColumnName("TripID");
+            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__TripStops__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__TripStops__IsDelete__45F365D3");
 

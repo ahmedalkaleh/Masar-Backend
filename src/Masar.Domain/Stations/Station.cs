@@ -23,11 +23,7 @@ public partial class Station : AuditableEntity
 
     public string Governorate { get; set; } = null!;
 
-    public bool HasPassingLoop { get; set; }
-
     public int CustomsDelayMinutes { get; set; }
-
-    public DateTime CreatedAt { get; set; }
 
     public bool IsDelete { get; set; }
 
@@ -58,7 +54,6 @@ public partial class Station : AuditableEntity
     decimal latitude,
     decimal longitude,
     string governorate,
-    bool hasPassingLoop,
     int customsDelayMinutes,
     DateTime createdAt,
     bool isDelete)
@@ -70,7 +65,6 @@ public partial class Station : AuditableEntity
         Latitude = latitude;
         Longitude = longitude;
         Governorate = governorate;
-        HasPassingLoop = hasPassingLoop;
         CustomsDelayMinutes = customsDelayMinutes;
         CreatedAt = createdAt;
         IsDelete = isDelete;
