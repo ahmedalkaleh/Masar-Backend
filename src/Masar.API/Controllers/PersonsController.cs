@@ -42,11 +42,11 @@ namespace Masar.API.Controllers
         {
           
             var command = new UpdatePersonCommand(
-    id,
-    request.FullName,
-    request.Email,
-    request.PhoneNumber
-);
+             id,
+             request.FullName,
+             request.Email,
+             request.PhoneNumber
+             );
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }
