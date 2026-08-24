@@ -26,8 +26,6 @@ public partial class Trip : AuditableEntity
 
     public string Status { get; set; } = null!;
 
-    public DateTime CreatedAt { get; set; }
-
     public bool IsDelete { get; set; }
 
     public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();

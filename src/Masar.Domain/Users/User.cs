@@ -19,8 +19,6 @@ public partial class User : AuditableEntity
 
     public Guid RoleId { get; set; }
 
-    public DateTime CreatedAt { get; set; }
-
     public bool IsDelete { get; set; }
 
     public virtual Person Person { get; set; } = null!;

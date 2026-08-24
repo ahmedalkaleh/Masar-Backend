@@ -24,8 +24,6 @@ public partial class Booking : AuditableEntity
 
     public string PaymentStatus { get; set; } = null!;
 
-    public DateTime CreatedAt { get; set; }
-
     public bool IsDelete { get; set; }
 
     public virtual Station AlightingStation { get; set; } = null!;
