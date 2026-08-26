@@ -6,6 +6,7 @@ using Masar.Infrastructure.Services; // أو المكان المتواجد في�
 using MechanicShop.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -36,7 +37,18 @@ builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
 
 // 4. Identity Service
 builder.Services.AddScoped<IIdentityService, IdentityService>();
-
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Description = "أدخل الـ Token الخاص بك هنا بهذا الشكل: Bearer {your_token}"
+    });
+});
 // 5. Controllers & App Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();

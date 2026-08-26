@@ -64,9 +64,9 @@ public class TokenProvider(IConfiguration configuration, IAppDbContext context) 
 
         var issuer = jwtSettings["Issuer"]!;
         var audience = jwtSettings["Audience"]!;
-        var key = jwtSettings["Secret"]!;
+        var key = _configuration["Jwt:SecretKey"];
 
-        var expires = DateTime.UtcNow.AddMinutes(int.Parse(jwtSettings["TokenExpirationInMinutes"]!));
+        var expires = DateTime.UtcNow.AddMinutes(10);
 
         var claims = new List<Claim>
         {
