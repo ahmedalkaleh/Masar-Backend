@@ -5,7 +5,7 @@ using Masar.Domain.Bookings;
 using Masar.Domain.Carriages;
 using Masar.Domain.Passengers;
 using Masar.Domain.Persons;
-using Masar.Domain.Roles;
+using Masar.Domain.Identity;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.SavedPassengers;
 using Masar.Domain.Seats;
@@ -27,7 +27,7 @@ namespace Masar.Application.Common.Interfaces
        public DbSet<Carriage> Carriages { get; }
        public DbSet<Passenger> Passengers { get; }
        public DbSet<Person> Persons { get; }
-       public DbSet<Role> Roles { get; }
+       
        public DbSet<RouteSegment> RouteSegments { get; }
        public DbSet<SavedPassenger> SavedPassengers { get; }
        public DbSet<Seat> Seats { get; }
@@ -39,6 +39,7 @@ namespace Masar.Application.Common.Interfaces
        public DbSet<Trip> Trips { get; }
       public  DbSet<TripStop> TripStops { get; }
       public  DbSet<User> Users { get; }
+       public DbSet<RefreshToken> RefreshTokens { get; }
 
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);

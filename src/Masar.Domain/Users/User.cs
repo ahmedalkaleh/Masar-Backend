@@ -56,7 +56,7 @@ public partial class User : AuditableEntity
         }
         return new User(id, personId, username, role, isDelete);
     }
-    public static Result<Updated> Update(Guid personId, string username, Role role, bool isDelete)
+    public  Result<Updated> Update(Guid personId, string username, Role role, bool isDelete)
     {
         if (personId == Guid.Empty)
         {

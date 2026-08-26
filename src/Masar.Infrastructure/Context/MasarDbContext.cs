@@ -2,9 +2,9 @@
 using Masar.Domain.Bookings;
 using Masar.Domain.Carriages;
 using Masar.Domain.Common;
+using Masar.Domain.Identity;
 using Masar.Domain.Passengers;
 using Masar.Domain.Persons;
-using Masar.Domain.Roles;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.SavedPassengers;
 using Masar.Domain.Seats;
@@ -17,11 +17,13 @@ using Masar.Domain.Trips;
 using Masar.Domain.TripStops;
 using Masar.Domain.Users;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Masar.Infrastructure.Identity;
 using System;
 using System.Collections.Generic;
 namespace Masar.Infrastructure.Context;
 
-public partial class MasarDbContext : DbContext, IAppDbContext
+public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
 {
     public MasarDbContext()
     {
@@ -40,7 +42,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
     public virtual DbSet<Person> Persons { get; set; }
 
-    public virtual DbSet<Role> Roles { get; set; }
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
     public virtual DbSet<RouteSegment> RouteSegments { get; set; }
 
@@ -74,7 +76,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
         {
             entity.HasKey(e => e.Id).HasName("PK__Bookings__73951ACD8A79C1D9");
             entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
-
+            
             entity.HasIndex(e => e.BookingReference, "UQ__Bookings__F9B66F614220A891").IsUnique();
 
             entity.Property(e => e.AlightingStationId).HasColumnName("AlightingStationID");
@@ -151,18 +153,6 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.PhoneNumber)
                 .HasMaxLength(20)
                 .IsUnicode(false);
-        });
-
-        modelBuilder.Entity<Role>(entity =>
-        {
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("Id");
-
-            entity.Property(e => e.Description).HasMaxLength(150);
-            entity.Property(e => e.Role1)
-                .HasMaxLength(50)
-                .HasColumnName("Role");
         });
 
         modelBuilder.Entity<RouteSegment>(entity =>
@@ -419,26 +409,56 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         modelBuilder.Entity<User>(entity =>
         {
-            entity.HasKey(e => e.Id).HasName("PK__Users__1788CCAC2F1F502E");
-            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
+            // Primary Key
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id)
+                  .ValueGeneratedNever(); // لأن المفتاح يُولد بـ Guid في الـ Domain
 
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Users__CreatedAt__693CA210");
-            entity.Property(e => e.PasswordHash)
-                .HasMaxLength(256)
-                .IsUnicode(false);
-            entity.Property(e => e.PersonId).HasColumnName("PersonID");
-            entity.Property(e => e.RoleId).HasColumnName("RoleID");
-            entity.Property(e => e.Username).HasMaxLength(50);
+            // Properties
+            entity.Property(e => e.Username)
+                  .IsRequired()
+                  .HasMaxLength(50);
 
-            entity.HasOne(d => d.Person).WithMany(p => p.Users)
-                .HasForeignKey(d => d.PersonId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Users_Persons");
+            entity.Property(e => e.PersonId)
+                  .HasColumnName("PersonID")
+                  .IsRequired();
+            // حفظ الـ Enum كـ string بداخل الداتابيز (أوضح للأدمن)
+            entity.Property(u => u.Role)
+                   .HasConversion<string>()
+                   .HasMaxLength(30)
+                   .IsRequired();
 
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Users_Roles");
+            // قم بإزالة كود .HasOne(u => u.Role) بالكامل!
+
+            entity.Property(e => e.IsDelete)
+                  .HasDefaultValue(false);
+
+            // Auditable Attributes (إعادة ضبط مع معايير المشروع)
+            entity.Property(e => e.CreatedAt)
+                  .HasDefaultValueSql("GETUTCDATE()");
+
+            // Relationships
+            // 1-to-1 Relationship مع Person
+            entity.HasOne(u => u.Person)
+                  .WithOne() // أو مع .WithOne(p => p.User) إن أضفت الخاصية في Person
+                  .HasForeignKey<User>(u => u.PersonId)
+                  .OnDelete(DeleteBehavior.Restrict);
+
+            // Many-to-One Relationship مع Role
+        });
+        modelBuilder.Entity<RefreshToken>(builder =>
+        {
+            builder.ToTable("RefreshTokens");
+
+            builder.HasKey(rt => rt.Id).IsClustered(false);
+
+            builder.Property(rt => rt.Token).HasMaxLength(200);
+
+            builder.HasIndex(rt => rt.Token).IsUnique();
+
+            builder.Property(rt => rt.UserId).IsRequired();
+
+            builder.Property(rt => rt.ExpiresOnUtc).IsRequired();
         });
 
         OnModelCreatingPartial(modelBuilder);

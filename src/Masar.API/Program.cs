@@ -1,27 +1,50 @@
 using Masar.Application;
 using Masar.Application.Common.Interfaces;
 using Masar.Infrastructure.Context;
+using Masar.Infrastructure.Identity;
+using Masar.Infrastructure.Services; // أو المكان المتواجد فيه TokenProvider
+using MechanicShop.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. إضافة اتصال قاعدة البيانات
+// 1. DbContext
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+
 builder.Services.AddDbContext<MasarDbContext>(options =>
     options.UseSqlServer(connectionString));
 
 builder.Services.AddScoped<IAppDbContext>(provider =>
     provider.GetRequiredService<MasarDbContext>());
 
-// 2. تسجيل الـ Controllers وخدمات Swagger
+// 2. Auth & Token Services (حل مشكلة ITokenProvider)
+builder.Services.AddScoped<ITokenProvider, TokenProvider>();
+
+// 3. Identity configuration
+builder.Services.AddIdentity<AppUser, IdentityRole>(options =>
+{
+    options.Password.RequireDigit = false;
+    options.Password.RequireLowercase = false;
+    options.Password.RequireNonAlphanumeric = false;
+    options.Password.RequireUppercase = false;
+    options.Password.RequiredLength = 6;
+    options.User.RequireUniqueEmail = false;
+})
+.AddEntityFrameworkStores<MasarDbContext>()
+.AddDefaultTokenProviders();
+
+// 4. Identity Service
+builder.Services.AddScoped<IIdentityService, IdentityService>();
+
+// 5. Controllers & App Services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
-// ... يمكنك إضافة خدمات Application و MediatR هنا (مثل builder.Services.AddApplicationServices())
 
 var app = builder.Build();
 
-// 3. إعداد الـ Middleware
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -30,9 +53,9 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// ⚠️ توجيه الطلبات والتحقق
+app.UseAuthentication();
 app.UseAuthorization();
+
 app.MapControllers();
 
-// 🚀 تشغيل السيرفر ومنعه من الإغلاق
 app.Run();
