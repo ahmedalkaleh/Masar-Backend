@@ -1,7 +1,8 @@
 ﻿using Masar.Domain.Bookings;
 using Masar.Domain.Common;
+using Masar.Domain.Common.Results;
 using Masar.Domain.Persons;
-using Masar.Domain.Roles;
+using Masar.Domain.Identity;
 using Masar.Domain.SavedPassengers;
 using System;
 using System.Collections.Generic;
@@ -15,15 +16,11 @@ public partial class User : AuditableEntity
 
     public string Username { get; set; } = null!;
 
-    public string PasswordHash { get; set; } = null!;
-
-    public Guid RoleId { get; set; }
-
     public bool IsDelete { get; set; }
 
     public virtual Person Person { get; set; } = null!;
 
-    public virtual Role Role { get; set; } = null!;
+    public virtual Role Role { get; set; } 
 
     public virtual ICollection<SavedPassenger> SavedPassengers { get; set; } = new List<SavedPassenger>();
 
@@ -34,18 +31,41 @@ public partial class User : AuditableEntity
     Guid id,
     Guid personId,
     string username,
-    string passwordHash,
-    Guid roleId,
-    DateTime createdAt,
+    Role role,
     bool isDelete)
         :base(id)
     {
         PersonId = personId;
         Username = username;
-        PasswordHash = passwordHash;
-        RoleId = roleId;
-        CreatedAt = createdAt;
+        Role = role;
         IsDelete = isDelete;
     }
-
+    public static Result<User> Create(Guid id, Guid personId, string username, Role role, bool isDelete)
+    {
+        if (id == Guid.Empty)
+        {
+            return UserError.UserNotFound;
+        }
+        if (personId == Guid.Empty)
+        {
+            return UserError.PersonIdRequired;
+        }
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            return UserError.UsernameRequired;
+        }
+        return new User(id, personId, username, role, isDelete);
+    }
+    public  Result<Updated> Update(Guid personId, string username, Role role, bool isDelete)
+    {
+        if (personId == Guid.Empty)
+        {
+            return UserError.PersonIdRequired;
+        }
+        if (string.IsNullOrWhiteSpace(username))
+        {
+            return UserError.UsernameRequired;
+        }
+        return Result.Updated;
+    }
 }

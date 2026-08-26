@@ -2,9 +2,9 @@
 using Masar.Domain.Bookings;
 using Masar.Domain.Carriages;
 using Masar.Domain.Common;
+using Masar.Domain.Identity;
 using Masar.Domain.Passengers;
 using Masar.Domain.Persons;
-using Masar.Domain.Roles;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.SavedPassengers;
 using Masar.Domain.Seats;
@@ -16,12 +16,15 @@ using Masar.Domain.Trains;
 using Masar.Domain.Trips;
 using Masar.Domain.TripStops;
 using Masar.Domain.Users;
+using Masar.Infrastructure.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+
 namespace Masar.Infrastructure.Context;
 
-public partial class MasarDbContext : DbContext, IAppDbContext
+public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
 {
     public MasarDbContext()
     {
@@ -39,8 +42,6 @@ public partial class MasarDbContext : DbContext, IAppDbContext
     public virtual DbSet<Passenger> Passengers { get; set; }
 
     public virtual DbSet<Person> Persons { get; set; }
-
-    public virtual DbSet<Role> Roles { get; set; }
 
     public virtual DbSet<RouteSegment> RouteSegments { get; set; }
 
@@ -62,7 +63,11 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
     public virtual DbSet<TripStop> TripStops { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
+    public virtual DbSet<Masar.Domain.Users.User> Users { get; set; }
+
+    public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
+
+    DbSet<Masar.Domain.Users.User> IAppDbContext.Users => Users;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
 #warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see https://go.microsoft.com/fwlink/?LinkId=723263.
@@ -70,6 +75,8 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.ApplyConfigurationsFromAssembly(typeof(MasarDbContext).Assembly);
         modelBuilder.Entity<Booking>(entity =>
         {
             entity.HasKey(e => e.Id).HasName("PK__Bookings__73951ACD8A79C1D9");
@@ -159,18 +166,19 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         });
 
-        modelBuilder.Entity<Role>(entity =>
+        modelBuilder.Entity<RefreshToken>(entity =>
         {
-            entity.Property(e => e.Id)
-                .ValueGeneratedNever()
-                .HasColumnName("Id");
+            entity.ToTable("RefreshTokens");
 
-            entity.Property(e => e.Description).HasMaxLength(150);
-            entity.Property(e => e.Role1)
-                .HasMaxLength(50)
-                .HasColumnName("Role");
-            entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Roles__CreatedAt__45F365D3");
+            entity.HasKey(rt => rt.Id);
 
+            entity.Property(rt => rt.Token).HasMaxLength(200);
+
+            entity.HasIndex(rt => rt.Token).IsUnique();
+
+            entity.Property(rt => rt.UserId).IsRequired();
+
+            entity.Property(rt => rt.ExpiresOnUtc).IsRequired();
         });
 
         modelBuilder.Entity<RouteSegment>(entity =>
@@ -455,12 +463,13 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Users__CreatedAt__693CA210");
-            entity.Property(e => e.PasswordHash)
-                .HasMaxLength(256)
-                .IsUnicode(false);
             entity.Property(e => e.PersonId).HasColumnName("PersonID");
-            entity.Property(e => e.RoleId).HasColumnName("RoleID");
             entity.Property(e => e.Username).HasMaxLength(50);
+
+            // تحويل الـ Enum إلى String عند التخزين في قاعدة البيانات (أو يمكنك حذف Conversion للتخزين كـ int)
+            entity.Property(e => e.Role)
+                .HasConversion<string>()
+                .HasMaxLength(20);
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Users__IsDelete__45F365D3");
 
@@ -468,19 +477,12 @@ public partial class MasarDbContext : DbContext, IAppDbContext
                 .HasForeignKey(d => d.PersonId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Users_Persons");
-
-            entity.HasOne(d => d.Role).WithMany(p => p.Users)
-                .HasForeignKey(d => d.RoleId)
-                .OnDelete(DeleteBehavior.ClientSetNull)
-                .HasConstraintName("FK_Users_Roles");
         });
 
         OnModelCreatingPartial(modelBuilder);
     }
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
-
-
 
     public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
     {
@@ -490,7 +492,7 @@ public partial class MasarDbContext : DbContext, IAppDbContext
             {
                 case EntityState.Added:
                     entry.Entity.CreatedAt = DateTime.UtcNow;
-                    // entry.Entity.CreatedBy = _currentUserService.UserId; // يمكن ربطه لاحقاً
+                    // entry.Entity.CreatedBy = _currentUserService.UserId;
                     break;
 
                 case EntityState.Modified:
@@ -502,5 +504,4 @@ public partial class MasarDbContext : DbContext, IAppDbContext
 
         return base.SaveChangesAsync(cancellationToken);
     }
-
 }
