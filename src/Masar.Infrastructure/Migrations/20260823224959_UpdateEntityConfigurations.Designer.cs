@@ -4,6 +4,7 @@ using Masar.Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Masar.Infrastructure.Migrations
 {
     [DbContext(typeof(MasarDbContext))]
-    partial class MasarDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260823224959_UpdateEntityConfigurations")]
+    partial class UpdateEntityConfigurations
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -42,10 +45,8 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(12)");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Bookings__CreatedAt__45F365D3");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -55,7 +56,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Bookings__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -113,9 +114,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Carriages__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -125,7 +124,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Carriages__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -154,14 +153,12 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Passengers__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -186,9 +183,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Persons__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -203,7 +198,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -230,9 +225,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Roles__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -241,7 +234,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -271,9 +264,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__RouteSegments__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -294,7 +285,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__RouteSegments__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -327,9 +318,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__SavedPassengers__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -339,7 +328,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasMaxLength(150)
                         .HasColumnType("nvarchar(150)");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -380,9 +369,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(10)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Seats__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -397,7 +384,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Seats__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -435,10 +422,10 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Stations__CreatedAt__45F365D3");
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getutcdate())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -451,12 +438,17 @@ namespace Masar.Infrastructure.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<bool>("HasPassingLoop")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<bool>("IsDelete")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Stations__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -504,9 +496,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(100)");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__SystemAuditLogs__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -529,7 +519,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("varchar(45)")
                         .HasColumnName("IPAddress");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -570,9 +560,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnName("BookingID");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Tickets__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -590,7 +578,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Tickets__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -638,9 +626,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__TrainLiveLocations__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -667,7 +653,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__TrainLivedLocations__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -705,10 +691,10 @@ namespace Masar.Infrastructure.Migrations
                         .IsUnicode(false)
                         .HasColumnType("varchar(20)");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Trains__CreatedAt__45F365D3");
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getutcdate())", "DF__Trains__CreatedA__45F365D3");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -721,7 +707,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Trains__IsDelete__45E365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -759,10 +745,7 @@ namespace Masar.Infrastructure.Migrations
                     b.HasIndex(new[] { "Code" }, "UQ__Trains__A25C5AA765BD0DBB")
                         .IsUnique();
 
-                    b.ToTable("Trains", t =>
-                        {
-                            t.HasCheckConstraint("CK_Trains_Status", "[Status] IN (0, 1, 2, 3)");
-                        });
+                    b.ToTable("Trains");
                 });
 
             modelBuilder.Entity("Masar.Domain.TripStops.TripStop", b =>
@@ -772,9 +755,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnName("Id");
 
                     b.Property<DateTimeOffset>("CreatedAt")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__TripStops__CreatedAt__45F365D3");
+                        .HasColumnType("datetimeoffset");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -790,7 +771,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__TripStops__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -833,10 +814,10 @@ namespace Masar.Infrastructure.Migrations
                     b.Property<DateTime?>("ActualArrivalTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
-                        .HasDefaultValueSql("(getutcdate())", "DF__Trips__CreatedAt__45F365D3");
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("(getutcdate())");
 
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
@@ -856,7 +837,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Trips__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -896,9 +877,9 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("Id");
 
-                    b.Property<DateTimeOffset>("CreatedAt")
+                    b.Property<DateTime>("CreatedAt")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("datetimeoffset")
+                        .HasColumnType("datetime2")
                         .HasDefaultValueSql("(getutcdate())", "DF__Users__CreatedAt__693CA210");
 
                     b.Property<string>("CreatedBy")
@@ -909,7 +890,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("bit")
                         .HasDefaultValue(false, "DF__Users__IsDelete__45F365D3");
 
-                    b.Property<DateTimeOffset?>("LastModifiedAt")
+                    b.Property<DateTimeOffset>("LastModifiedAt")
                         .HasColumnType("datetimeoffset");
 
                     b.Property<string>("LastModifiedBy")
@@ -1084,12 +1065,12 @@ namespace Masar.Infrastructure.Migrations
 
             modelBuilder.Entity("Masar.Domain.Trains.Train", b =>
                 {
-                    b.HasOne("Masar.Domain.Stations.Station", "CurrentStation")
+                    b.HasOne("Masar.Domain.Stations.Station", "Station")
                         .WithMany("Trains")
                         .HasForeignKey("CurrentStationId")
                         .HasConstraintName("FK__Trains__Curre__5EB337D6");
 
-                    b.Navigation("CurrentStation");
+                    b.Navigation("Station");
                 });
 
             modelBuilder.Entity("Masar.Domain.TripStops.TripStop", b =>
