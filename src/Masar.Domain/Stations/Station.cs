@@ -1,5 +1,6 @@
 ﻿using Masar.Domain.Bookings;
 using Masar.Domain.Common;
+using Masar.Domain.Common.Results;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.Trains;
 using Masar.Domain.Trips;
@@ -11,37 +12,37 @@ namespace Masar.Domain.Stations;
 
 public partial class Station : AuditableEntity
 {
-    public string NameAr { get; set; } = null!;
+    public string NameAr { get; private set; } = null!;
 
-    public string NameEn { get; set; } = null!;
+    public string NameEn { get; private set; } = null!;
 
-    public string Type { get; set; } = null!;
+    public StationType Type { get; private set; }
 
-    public decimal Latitude { get; set; }
+    public decimal Latitude { get; private set; }
 
-    public decimal Longitude { get; set; }
+    public decimal Longitude { get; private set; }
 
-    public string Governorate { get; set; } = null!;
+    public string Governorate { get; private set; } = null!;
 
-    public int CustomsDelayMinutes { get; set; }
+    public int CustomsDelayMinutes { get; private set; }
 
-    public bool IsDelete { get; set; }
+    public bool IsDelete { get; private set; }
 
-    public virtual ICollection<Booking> BookingAlightingStations { get; set; } = new List<Booking>();
+    public virtual ICollection<Booking> BookingAlightingStations { get; private set; } = new List<Booking>();
 
-    public virtual ICollection<Booking> BookingBoardingStations { get; set; } = new List<Booking>();
+    public virtual ICollection<Booking> BookingBoardingStations { get; private set; } = new List<Booking>();
 
-    public virtual ICollection<RouteSegment> RouteSegmentFromStations { get; set; } = new List<RouteSegment>();
+    public virtual ICollection<RouteSegment> RouteSegmentFromStations { get; private set; } = new List<RouteSegment>();
 
-    public virtual ICollection<RouteSegment> RouteSegmentToStations { get; set; } = new List<RouteSegment>();
+    public virtual ICollection<RouteSegment> RouteSegmentToStations { get; private set; } = new List<RouteSegment>();
 
-    public virtual ICollection<Trip> TripDestinationStations { get; set; } = new List<Trip>();
+    public virtual ICollection<Trip> TripDestinationStations { get; private set; } = new List<Trip>();
 
-    public virtual ICollection<Trip> TripOriginStations { get; set; } = new List<Trip>();
+    public virtual ICollection<Trip> TripOriginStations { get; private set; } = new List<Trip>();
 
-    public virtual ICollection<TripStop> TripStops { get; set; } = new List<TripStop>();
+    public virtual ICollection<TripStop> TripStops { get; private set; } = new List<TripStop>();
 
-    public virtual ICollection<Train> Trains { get; set; } = new List<Train>();
+    public virtual ICollection<Train> Trains { get; private set; } = new List<Train>();
 
     private Station() { }
 
@@ -50,13 +51,11 @@ public partial class Station : AuditableEntity
     Guid id,
     string nameAr,
     string nameEn,
-    string type,
+    StationType type,
     decimal latitude,
     decimal longitude,
     string governorate,
-    int customsDelayMinutes,
-    DateTime createdAt,
-    bool isDelete)
+    int customsDelayMinutes)
         :base(id)
     {
         NameAr = nameAr;
@@ -66,7 +65,150 @@ public partial class Station : AuditableEntity
         Longitude = longitude;
         Governorate = governorate;
         CustomsDelayMinutes = customsDelayMinutes;
-        CreatedAt = createdAt;
-        IsDelete = isDelete;
+
+
+        IsDelete = false;
     }
+
+
+    public static Result<Station> Create(
+    Guid id,
+    string nameAr,
+    string nameEn,
+    StationType type,
+    decimal latitude,
+    decimal longitude,
+    string governorate,
+    int customsDelayMinutes)
+    {
+        var errorsList = new List<Error>();
+
+        if (string.IsNullOrWhiteSpace(nameAr))
+        {
+            errorsList.Add(StationErrors.NameArRequired);
+        }
+
+        if(nameAr.Count() > 100)
+        {
+            errorsList.Add(StationErrors.InvalidNameAr);
+        }
+
+        if (string.IsNullOrWhiteSpace(nameEn))
+        {
+            errorsList.Add(StationErrors.NameEnRequired);
+        }
+
+        if (nameEn.Count() > 100)
+        {
+            errorsList.Add(StationErrors.InvalidNameEn);
+        }
+
+        if (latitude < -90 || latitude > 90)
+        {
+            errorsList.Add(StationErrors.InvalidLatitude);
+        }
+
+        if (longitude < -180 || longitude > 180)
+        {
+            errorsList.Add(StationErrors.InvalidLongitude);
+        }
+
+        if (string.IsNullOrWhiteSpace(governorate))
+        {
+            errorsList.Add(StationErrors.GovernorateRequired);
+        }
+
+        if (governorate.Count() > 100)
+        {
+            errorsList.Add(StationErrors.InvalidGovernorate);
+        }
+
+        if (customsDelayMinutes < 0)
+        {
+            errorsList.Add(StationErrors.InvalidCustomsDelayMinutes);
+        }
+
+        if(errorsList.Count > 0)
+        {
+            return errorsList;
+        }
+
+        return new Station(id, nameAr, nameEn, type, latitude, longitude, governorate, customsDelayMinutes);
+
+    }
+
+    public Result<Updated> Update(
+    string nameAr,
+    string nameEn,
+    StationType type,
+    decimal latitude,
+    decimal longitude,
+    string governorate,
+    int customsDelayMinutes)
+    {
+        var errorsList = new List<Error>();
+
+        if (string.IsNullOrWhiteSpace(nameAr))
+        {
+            errorsList.Add(StationErrors.NameArRequired);
+        }
+
+        if (nameAr.Count() > 100)
+        {
+            errorsList.Add(StationErrors.InvalidNameAr);
+        }
+
+        if (string.IsNullOrWhiteSpace(nameEn))
+        {
+            errorsList.Add(StationErrors.NameEnRequired);
+        }
+
+        if (nameEn.Count() > 100)
+        {
+            errorsList.Add(StationErrors.InvalidNameEn);
+        }
+
+        if (latitude < -90 || latitude > 90)
+        {
+            errorsList.Add(StationErrors.InvalidLatitude);
+        }
+
+        if (longitude < -180 || longitude > 180)
+        {
+            errorsList.Add(StationErrors.InvalidLongitude);
+        }
+
+        if (string.IsNullOrWhiteSpace(governorate))
+        {
+            errorsList.Add(StationErrors.GovernorateRequired);
+        }
+
+        if (governorate.Count() > 100)
+        {
+            errorsList.Add(StationErrors.InvalidGovernorate);
+        }
+
+        if (customsDelayMinutes < 0)
+        {
+            errorsList.Add(StationErrors.InvalidCustomsDelayMinutes);
+        }
+
+        if (errorsList.Count > 0)
+        {
+            return errorsList;
+        }
+
+        NameAr = nameAr;
+        NameEn = nameEn;
+        Type = type;
+        Latitude = latitude;
+        Longitude = longitude;
+        Governorate = governorate;
+        CustomsDelayMinutes = customsDelayMinutes;
+
+        return Result.Updated;
+
+
+    }
+
 }

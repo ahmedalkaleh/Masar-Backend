@@ -271,9 +271,13 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.Property(e => e.NameEn)
                 .HasMaxLength(100)
                 .IsUnicode(false);
+
+
             entity.Property(e => e.Type)
-                .HasMaxLength(30)
-                .IsUnicode(false);
+                .HasConversion< string>()
+                .HasMaxLength(30);
+
+
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Stations__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Stations__IsDelete__45F365D3");
