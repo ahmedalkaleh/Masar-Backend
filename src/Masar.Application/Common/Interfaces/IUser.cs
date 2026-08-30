@@ -1,4 +1,4 @@
-namespace MechanicShop.Application.Common.Interfaces;
+namespace Masar.Application.Common.Interfaces;
 
 public interface IUser
 {

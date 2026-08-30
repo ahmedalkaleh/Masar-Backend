@@ -8,13 +8,14 @@ using Masar.Application.Features.Persons.Dtos;
 using Masar.Domain.Common.Results;
 using Masar.Domain.Persons;
 using Masar.Application.Features.Persons.Mappers;
+using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Persons.Commands.CreatePerson
 {
-    public class CreatePersonCommandHandler(IAppDbContext context):IRequestHandler<CreatePersonCommand , Result<PersonDto>>
+    public class CreatePersonCommandHandler(IAppDbContext context) :IRequestHandler<CreatePersonCommand , Result<PersonDto>>
     {
         private readonly IAppDbContext _context = context;
-
+        
         public async Task<Result<PersonDto>> Handle(CreatePersonCommand command, CancellationToken cancellationToken)
         {
         
