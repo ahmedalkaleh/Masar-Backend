@@ -38,7 +38,7 @@ namespace Masar.API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [EndpointSummary("Updates an existing person.")]
         [EndpointDescription("Updates the details of an existing person in the system.")]
-        [Authorize(Roles = "Manager")]
+        [AllowAnonymous]
         [EndpointName("UpdatePerson")]
         public async Task<IActionResult> UpdatePerson( Guid id, [FromBody] UpdatePersonCommand request, CancellationToken cancellationToken)
         {
