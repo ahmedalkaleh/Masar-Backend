@@ -1,5 +1,6 @@
 ﻿using Masar.Domain.Carriages;
 using Masar.Domain.Common;
+using Masar.Domain.Common.Results;
 using Masar.Domain.Tickets;
 using System;
 using System.Collections.Generic;
@@ -12,11 +13,11 @@ public partial class Seat : AuditableEntity
 
     public string SeatNumber { get; set; } = null!;
 
-    public int RowNumber { get; set; }
+    public string RowNumber { get; set; } = null!;
 
-    public string ColumnPosition { get; set; } = null!;
+    public byte ColumnNumber { get; set; } 
 
-    public string SeatType { get; set; } = null!;
+    public SeatType SeatType { get; set; }
 
     public bool IsActive { get; set; }
 
@@ -32,20 +33,19 @@ public partial class Seat : AuditableEntity
     private Seat(
     Guid id,
     Guid carriageId,
-    string seatNumber,
-    int rowNumber,
-    string columnPosition,
-    string seatType,
-    bool isActive,
-    bool isDelete)
+    string rowNumber,
+    byte columnNumber,
+    SeatType seatType)
         :base(id)
     {
-        CarriageId = carriageId;
-        SeatNumber = seatNumber;
+        CarriageId = carriageId;       
         RowNumber = rowNumber;
-        ColumnPosition = columnPosition;
+        ColumnNumber = columnNumber;
         SeatType = seatType;
-        IsActive = isActive;
-        IsDelete = isDelete;
+
+        SeatNumber = rowNumber.Trim() + ColumnNumber.ToString();
+        IsActive = true;
+        IsDelete = false;
     }
+    
 }
