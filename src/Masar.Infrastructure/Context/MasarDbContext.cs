@@ -194,12 +194,19 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasColumnName("DistanceKM");
             entity.Property(e => e.FromStationId).HasColumnName("FromStationID");
             entity.Property(e => e.ToStationId).HasColumnName("ToStationID");
-            entity.Property(e => e.TrackType)
-                .HasMaxLength(20)
-                .IsUnicode(false);
+            entity.Property(e => e.TrackType).HasConversion<string>()
+                .HasDefaultValue(TrackType.Single, "DF__RouteSegments__TrackType__47FF419A")
+                .HasMaxLength(15);
+
+            entity.HasIndex(x => new { x.FromStationId, x.ToStationId }).IsUnique();
+
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__RouteSegments__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__RouteSegments__IsDelete__45F365D3");
+
+            entity.ToTable(t => t.HasCheckConstraint("CK_RouteSegments_TrackType", "[TrackType] IN ('Single', 'Double')"));
+
+            entity.HasIndex(rt => rt.CorridorName).IsUnique();
 
             entity.HasOne(d => d.FromStation).WithMany(p => p.RouteSegmentFromStations)
                 .HasForeignKey(d => d.FromStationId)
