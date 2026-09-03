@@ -237,19 +237,17 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
 
 
             entity.HasIndex(e => new { e.CarriageId, e.SeatNumber }, "UQ_Carriage_Seat").IsUnique();
+            entity.HasIndex(e => new { e.CarriageId, e.RowNumber, e.ColumnNumber }, "UQ_Carriage_Seat_1").IsUnique();
 
             entity.Property(e => e.CarriageId).HasColumnName("CarriageID");
-            entity.Property(e => e.ColumnPosition)
-                .HasMaxLength(10)
-                .IsUnicode(false);
+            entity.Property(e => e.RowNumber).HasMaxLength(2).IsUnicode(false);
+            entity.Property(e => e.ColumnNumber).HasColumnType("tinyint");
             entity.Property(e => e.IsActive).HasDefaultValue(true);
             entity.Property(e => e.SeatNumber)
                 .HasMaxLength(10)
                 .IsUnicode(false);
-            entity.Property(e => e.SeatType)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasDefaultValue("Standard");
+            entity.Property(e => e.SeatType).HasConversion<string>()
+            .HasMaxLength(15).HasDefaultValue(SeatType.Normal, "DF__Seats__SeatType__45A365D3"); ;
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Seats__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Seats__IsDelete__45F365D3");

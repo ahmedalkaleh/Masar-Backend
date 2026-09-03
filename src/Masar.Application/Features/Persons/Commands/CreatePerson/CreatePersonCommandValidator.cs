@@ -11,7 +11,8 @@ namespace Masar.Application.Features.Persons.Commands.CreatePerson
         RuleFor(x=>x.Email).NotEmpty().WithMessage("Email is required.");
             RuleFor(x => x.PhoneNumber)
          .NotEmpty().WithMessage("Phone number is required.")
-         .Matches(@"^\+?\d{7,15}$").WithMessage("Phone number must be 7–15 digits and may start with '#'.");
+         .Matches(@"^\+?\d{7,15}$").WithMessage("Phone number must be 7–15 digits and may start with '+'.");
+
         }
     }
 }
