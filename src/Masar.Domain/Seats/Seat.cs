@@ -78,7 +78,7 @@ public partial class Seat : AuditableEntity
             errorsList.Add(SeatErrors.InvalidColumnNumber);
         }
 
-        if((int)seatType < 0 || (int)seatType > 1)
+        if(!Enum.IsDefined(typeof(SeatType), seatType))
         {
             errorsList.Add(SeatErrors.InvalidSeatType);
         }
