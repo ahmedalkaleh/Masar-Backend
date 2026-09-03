@@ -1,29 +1,31 @@
 ﻿using Masar.Application.Common.Interfaces;
-using Masar.Application.Features.Trains.Commands.UpdateTrain;
+
 using Masar.Domain.Common.Results;
 using Masar.Domain.Trains;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Text;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
+using Microsoft.Extensions.Logging;
+
 
 namespace Masar.Application.Features.Trains.Commands.UpdateTrain
 {
-    public class UpdateTrainCommandHandler(IAppDbContext context) : IRequestHandler<UpdateTrainCommand, Result<Updated>>
+    public class UpdateTrainCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<UpdateTrainCommand, Result<Updated>>
     {
         private readonly IAppDbContext _context = context;
+        private readonly ILogger _logger = logger;
+
         public async Task<Result<Updated>> Handle(UpdateTrainCommand request, CancellationToken cancellationToken)
         {
             var Train = await _context.Trains.FirstOrDefaultAsync(p => p.Id == request.TrainID, cancellationToken);
             if (Train is null)
             {
+                _logger.LogWarning("Train update aborted. Train with id {TrainId} not found.", request.TrainID);
                 return TrainErrors.TrainNotFound;
             }
 
             if (_context.Trains.Any(x => x.Code == request.Code && Train.Code != request.Code))
             {
+                _logger.LogWarning("Train update aborted. Train with code {TrainCode} already exists.", request.Code);
                 return TrainErrors.CodeAlreadyExists;
             }
 
@@ -42,6 +44,7 @@ namespace Masar.Application.Features.Trains.Commands.UpdateTrain
             var updatedTrain = updatedTrainResult.Value;
 
             await _context.SaveChangesAsync(cancellationToken);
+            _logger.LogInformation("Train with id {TrainId} updated successfully.", request.TrainID);
             return Result.Updated;
         }
     }

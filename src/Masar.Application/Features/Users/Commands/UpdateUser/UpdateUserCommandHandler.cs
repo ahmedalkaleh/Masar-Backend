@@ -8,15 +8,18 @@ using Masar.Domain.Common.Results;
 using Masar.Domain.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Users.Commands.UpdateUser
 {
     public class UpdateUserCommandHandler(
         IAppDbContext context,
-        IIdentityService identityService) : IRequestHandler<UpdateUserCommand, Result<UserDto>>
+        IIdentityService identityService,
+        ILogger logger) : IRequestHandler<UpdateUserCommand, Result<UserDto>>
     {
         private readonly IAppDbContext _context = context;
         private readonly IIdentityService _identityService = identityService;
+        private readonly ILogger _logger = logger;
 
         public async Task<Result<UserDto>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
         {
@@ -26,6 +29,7 @@ namespace Masar.Application.Features.Users.Commands.UpdateUser
 
             if (user is null)
             {
+                _logger.LogWarning("User update aborted. User with ID {UserId} was not found.", command.Id);
                 return Error.NotFound("User_Not_Found", $"User with ID {command.Id} was not found.");
             }
 
@@ -35,6 +39,7 @@ namespace Masar.Application.Features.Users.Commands.UpdateUser
 
             if (!personExists)
             {
+                _logger.LogWarning("User update aborted. Person with ID {PersonId} was not found.", command.PersonId);
                 return Error.NotFound("Person_Not_Found", $"Person with ID {command.PersonId} was not found.");
             }
 
@@ -63,7 +68,8 @@ namespace Masar.Application.Features.Users.Commands.UpdateUser
 
             // 5. حفظ التعديلات في قاعدة البيانات
             await _context.SaveChangesAsync(cancellationToken);
-
+            
+            _logger.LogInformation("User with ID {UserId} updated successfully.", command.Id);
             return user.ToDto();
         }
     }
