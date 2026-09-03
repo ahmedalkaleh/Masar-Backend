@@ -11,10 +11,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Stations.Commands.UpdateStation
 {
-    public class UpdateStationCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<UpdateStationCommand, Result<Updated>>
+    public class UpdateStationCommandHandler(IAppDbContext context, ILogger<UpdateStationCommandHandler> logger) : IRequestHandler<UpdateStationCommand, Result<Updated>>
     {
         private readonly IAppDbContext _context = context;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<UpdateStationCommandHandler> _logger = logger;
 
         public async Task<Result<Updated>> Handle(UpdateStationCommand request, CancellationToken cancellationToken)
         {

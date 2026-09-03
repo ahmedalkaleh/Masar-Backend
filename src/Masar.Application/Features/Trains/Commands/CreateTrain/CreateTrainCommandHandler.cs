@@ -12,10 +12,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Trains.Commands.CreateTrain
 {
-    public class CreateTrainCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<CreateTrainCommand, Result<TrainDto>>
+    public class CreateTrainCommandHandler(IAppDbContext context, ILogger<CreateTrainCommandHandler> logger) : IRequestHandler<CreateTrainCommand, Result<TrainDto>>
     {
         private readonly IAppDbContext _context = context;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<CreateTrainCommandHandler> _logger = logger;
 
         public async Task<Result<TrainDto>> Handle(CreateTrainCommand command, CancellationToken cancellationToken)
         {

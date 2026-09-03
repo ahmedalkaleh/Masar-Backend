@@ -15,11 +15,11 @@ namespace Masar.Application.Features.Users.Commands.CreateUser
     public class CreateUserCommandHandler(
         IAppDbContext context,
         IIdentityService identityService,
-        ILogger logger) : IRequestHandler<CreateUserCommand, Result<UserDto>>
+        ILogger<CreateUserCommandHandler> logger) : IRequestHandler<CreateUserCommand, Result<UserDto>>
     {
         private readonly IAppDbContext _context = context;
         private readonly IIdentityService _identityService = identityService;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<CreateUserCommandHandler> _logger = logger;
 
         public async Task<Result<UserDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {

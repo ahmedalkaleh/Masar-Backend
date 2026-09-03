@@ -9,10 +9,10 @@ using System.Text;
 using Microsoft.Extensions.Logging;
 namespace Masar.Application.Features.Stations.Commands.CreateStation
 {
-    public class CreateStationCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<CreateStationCommand, Result<StationDto>>
+    public class CreateStationCommandHandler(IAppDbContext context, ILogger<CreateStationCommandHandler> logger) : IRequestHandler<CreateStationCommand, Result<StationDto>>
     {
         private readonly IAppDbContext _context = context;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<CreateStationCommandHandler> _logger = logger;
 
         public async Task<Result<StationDto>> Handle(CreateStationCommand command,CancellationToken cancellationToken)
         {
