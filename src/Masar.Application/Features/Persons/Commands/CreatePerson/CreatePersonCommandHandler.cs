@@ -12,10 +12,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Persons.Commands.CreatePerson
 {
-    public class CreatePersonCommandHandler(IAppDbContext context, ILogger logger) :IRequestHandler<CreatePersonCommand , Result<PersonDto>>
+    public class CreatePersonCommandHandler(IAppDbContext context, ILogger<CreatePersonCommandHandler> logger) :IRequestHandler<CreatePersonCommand , Result<PersonDto>>
     {
         private readonly IAppDbContext _context = context;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<CreatePersonCommandHandler> _logger = logger;
 
         public async Task<Result<PersonDto>> Handle(CreatePersonCommand command, CancellationToken cancellationToken)
         {

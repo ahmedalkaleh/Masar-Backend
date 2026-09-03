@@ -11,14 +11,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Identity.Queries.RefreshTokens;
 
-public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbContext context, ITokenProvider tokenProvider, ILogger logger)
+public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbContext context, ITokenProvider tokenProvider, ILogger<RefreshTokenQueryHandler>  logger)
     : IRequestHandler<RefreshTokenQuery, Result<TokenResponse>>
 {
    
     private readonly IIdentityService _identityService = identityService;
     private readonly IAppDbContext _context = context;
     private readonly ITokenProvider _tokenProvider = tokenProvider;
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<RefreshTokenQueryHandler> _logger = logger;
 
     public async Task<Result<TokenResponse>> Handle(RefreshTokenQuery request, CancellationToken ct)
     {

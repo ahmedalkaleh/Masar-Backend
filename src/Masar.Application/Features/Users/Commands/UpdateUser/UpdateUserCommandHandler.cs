@@ -15,11 +15,11 @@ namespace Masar.Application.Features.Users.Commands.UpdateUser
     public class UpdateUserCommandHandler(
         IAppDbContext context,
         IIdentityService identityService,
-        ILogger logger) : IRequestHandler<UpdateUserCommand, Result<UserDto>>
+        ILogger<UpdateUserCommandHandler> logger) : IRequestHandler<UpdateUserCommand, Result<UserDto>>
     {
         private readonly IAppDbContext _context = context;
         private readonly IIdentityService _identityService = identityService;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<UpdateUserCommandHandler> _logger = logger;
 
         public async Task<Result<UserDto>> Handle(UpdateUserCommand command, CancellationToken cancellationToken)
         {

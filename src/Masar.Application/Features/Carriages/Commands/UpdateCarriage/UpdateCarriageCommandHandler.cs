@@ -11,10 +11,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Carriages.Commands.UpdateCarriage
 {
-    public class UpdateCarriageCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<UpdateCarriageCommand, Result<Updated>>
+    public class UpdateCarriageCommandHandler(IAppDbContext context, ILogger<UpdateCarriageCommandHandler> logger) : IRequestHandler<UpdateCarriageCommand, Result<Updated>>
     {
         private readonly IAppDbContext _context = context;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<UpdateCarriageCommandHandler> _logger = logger;
 
         public async Task<Result<Updated>> Handle(UpdateCarriageCommand request, CancellationToken cancellationToken)
         {
