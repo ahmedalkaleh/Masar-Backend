@@ -12,7 +12,8 @@ public static class DependencyInjection
         // تسجيل MediatR والبحث عن كل الـ Handlers في طبقة الـ Application
         services.AddMediatR(cfg => {
             cfg.RegisterServicesFromAssembly(typeof(DependencyInjection).Assembly);
-            //cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenBehavior(typeof(ValidationBehavior<,>));
+            cfg.AddOpenRequestPreProcessor(typeof(LoggingBehaviour<>));
         });
 
         // تسجيل FluentValidation أو أي مكتبات أخرى هنا لاحقاً
