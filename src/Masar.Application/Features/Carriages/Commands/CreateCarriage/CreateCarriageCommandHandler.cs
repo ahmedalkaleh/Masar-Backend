@@ -12,10 +12,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Carriages.Commands.CreateCarriage
 {
-    public class CreateCarriageCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<CreateCarriageCommand, Result<CarriageDto>>
+    public class CreateCarriageCommandHandler(IAppDbContext context, ILogger<CreateCarriageCommandHandler> logger) : IRequestHandler<CreateCarriageCommand, Result<CarriageDto>>
     {
         private readonly IAppDbContext _context = context;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<CreateCarriageCommandHandler> _logger = logger;
 
         public async Task<Result<CarriageDto>> Handle(CreateCarriageCommand command, CancellationToken cancellationToken)
         {

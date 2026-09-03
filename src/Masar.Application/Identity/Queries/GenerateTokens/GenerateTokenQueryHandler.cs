@@ -7,13 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Identity.Queries.GenerateTokens;
 
-public class GenerateTokenQueryHandler( IIdentityService identityService, ITokenProvider tokenProvider, ILogger logger)
+public class GenerateTokenQueryHandler( IIdentityService identityService, ITokenProvider tokenProvider, ILogger<GenerateTokenQueryHandler> logger)
     : IRequestHandler<GenerateTokenQuery, Result<TokenResponse>>
 {
 
     private readonly IIdentityService _identityService = identityService;
     private readonly ITokenProvider _tokenProvider = tokenProvider;
-    private readonly ILogger _logger = logger;
+    private readonly ILogger<GenerateTokenQueryHandler>  _logger = logger;
 
     public async Task<Result<TokenResponse>> Handle(GenerateTokenQuery query, CancellationToken ct)
     {

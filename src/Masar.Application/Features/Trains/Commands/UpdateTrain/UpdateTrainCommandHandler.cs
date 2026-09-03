@@ -9,10 +9,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Trains.Commands.UpdateTrain
 {
-    public class UpdateTrainCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<UpdateTrainCommand, Result<Updated>>
+    public class UpdateTrainCommandHandler(IAppDbContext context, ILogger<UpdateTrainCommandHandler> logger) : IRequestHandler<UpdateTrainCommand, Result<Updated>>
     {
         private readonly IAppDbContext _context = context;
-        private readonly ILogger _logger = logger;
+        private readonly ILogger<UpdateTrainCommandHandler> _logger = logger;
 
         public async Task<Result<Updated>> Handle(UpdateTrainCommand request, CancellationToken cancellationToken)
         {
