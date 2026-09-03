@@ -7,22 +7,27 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using Microsoft.Extensions.Logging;
+
 
 namespace Masar.Application.Features.Carriages.Commands.CreateCarriage
 {
-    public class CreateCarriageCommandHandler(IAppDbContext context) : IRequestHandler<CreateCarriageCommand, Result<CarriageDto>>
+    public class CreateCarriageCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<CreateCarriageCommand, Result<CarriageDto>>
     {
         private readonly IAppDbContext _context = context;
+        private readonly ILogger _logger = logger;
 
         public async Task<Result<CarriageDto>> Handle(CreateCarriageCommand command, CancellationToken cancellationToken)
         {
             if(_context.Carriages.Any(x => x.CarriageNumber == command.CarriageNumber))
             {
+                _logger.LogWarning("Carriage Creation aborted.Carriage with number {CarriageNumber} already exists.", command.CarriageNumber);
                 return CarriageErrors.CarriageNumberAlreadyExists;
             }
 
             if(!_context.Trains.Any(x => x.Id == command.TrainId))
             {
+                _logger.LogWarning("Carriage Creation aborted.Train with id {TrainId} not found.", command.TrainId);
                 return CarriageErrors.TrainNotFound;
             }
 
@@ -38,7 +43,7 @@ namespace Masar.Application.Features.Carriages.Commands.CreateCarriage
             await _context.SaveChangesAsync(cancellationToken);
 
             var carriage = createCarriageResult.Value;
-
+            _logger.LogInformation("Carriage with id {CarriageId} created successfully.", carriage.Id);
             return carriage.ToDto();
         }
 

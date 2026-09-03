@@ -11,13 +11,14 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Identity.Queries.RefreshTokens;
 
-public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbContext context, ITokenProvider tokenProvider)
+public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbContext context, ITokenProvider tokenProvider, ILogger logger)
     : IRequestHandler<RefreshTokenQuery, Result<TokenResponse>>
 {
    
     private readonly IIdentityService _identityService = identityService;
     private readonly IAppDbContext _context = context;
     private readonly ITokenProvider _tokenProvider = tokenProvider;
+    private readonly ILogger _logger = logger;
 
     public async Task<Result<TokenResponse>> Handle(RefreshTokenQuery request, CancellationToken ct)
     {
@@ -25,7 +26,7 @@ public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbCo
 
         if (principal is null)
         {
-            
+            _logger.LogWarning("Token refresh failed. Expired access token is invalid.");
             return ApplicationErrors.ExpiredAccessTokenInvalid;
         }
 
@@ -33,7 +34,7 @@ public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbCo
 
         if (userId is null)
         {
-           
+            _logger.LogWarning("Token refresh failed. User ID claim is invalid.");
             return ApplicationErrors.UserIdClaimInvalid;
         }
 
@@ -48,7 +49,7 @@ public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbCo
 
         if (refreshToken is null || refreshToken.ExpiresOnUtc < DateTime.UtcNow)
         {
-            
+            _logger.LogWarning("Token refresh failed. Refresh token is invalid or expired for user ID {UserId}.", userId);
             return ApplicationErrors.RefreshTokenExpired;
         }
 
@@ -59,7 +60,7 @@ public class RefreshTokenQueryHandler(IIdentityService identityService, IAppDbCo
           
             return generateTokenResult.Errors;
         }
-
+        _logger.LogInformation("Token refresh successful for user ID {UserId}.", userId);
         return generateTokenResult.Value;
     }
 }

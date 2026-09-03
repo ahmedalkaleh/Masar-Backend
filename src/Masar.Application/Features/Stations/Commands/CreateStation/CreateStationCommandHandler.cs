@@ -6,12 +6,13 @@ using MediatR;
 using System;
 using System.Collections.Generic;
 using System.Text;
-
+using Microsoft.Extensions.Logging;
 namespace Masar.Application.Features.Stations.Commands.CreateStation
 {
-    public class CreateStationCommandHandler(IAppDbContext context) : IRequestHandler<CreateStationCommand, Result<StationDto>>
+    public class CreateStationCommandHandler(IAppDbContext context, ILogger logger) : IRequestHandler<CreateStationCommand, Result<StationDto>>
     {
         private readonly IAppDbContext _context = context;
+        private readonly ILogger _logger = logger;
 
         public async Task<Result<StationDto>> Handle(CreateStationCommand command,CancellationToken cancellationToken)
         {
@@ -26,7 +27,8 @@ namespace Masar.Application.Features.Stations.Commands.CreateStation
             await _context.Stations.AddAsync(createStationResult.Value);
 
             await _context.SaveChangesAsync(cancellationToken);
-
+            
+            _logger.LogInformation("Station created successfully. Id: {StationId}", createStationResult.Value.Id);
             return createStationResult.Value.ToDto();
 
         }

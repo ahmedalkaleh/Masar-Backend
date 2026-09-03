@@ -8,15 +8,18 @@ using Masar.Domain.Common.Results;
 using Masar.Domain.Users;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Users.Commands.CreateUser
 {
     public class CreateUserCommandHandler(
         IAppDbContext context,
-        IIdentityService identityService) : IRequestHandler<CreateUserCommand, Result<UserDto>>
+        IIdentityService identityService,
+        ILogger logger) : IRequestHandler<CreateUserCommand, Result<UserDto>>
     {
         private readonly IAppDbContext _context = context;
         private readonly IIdentityService _identityService = identityService;
+        private readonly ILogger _logger = logger;
 
         public async Task<Result<UserDto>> Handle(CreateUserCommand command, CancellationToken cancellationToken)
         {
@@ -24,6 +27,7 @@ namespace Masar.Application.Features.Users.Commands.CreateUser
             var personExists = await _context.Persons.AnyAsync(p => p.Id == command.PersonId, cancellationToken);
             if (!personExists)
             {
+                _logger.LogWarning("User creation aborted. Person with ID {PersonId} was not found.", command.PersonId);
                 return Error.NotFound("Person_Not_Found", $"Person with ID {command.PersonId} was not found.");
             }
 
@@ -31,6 +35,7 @@ namespace Masar.Application.Features.Users.Commands.CreateUser
             var userExists = await _context.Users.AnyAsync(u => u.PersonId == command.PersonId, cancellationToken);
             if (userExists)
             {
+                _logger.LogWarning("User creation aborted. A user account already exists for the person with ID {PersonId}.", command.PersonId);
                 return Error.Conflict("User_Already_Exists", "A user account already exists for this person.");
             }
 
@@ -68,11 +73,12 @@ namespace Masar.Application.Features.Users.Commands.CreateUser
             }
             catch
             {
-                // التراجع وحذف حساب Identity عبر الخدمة في حال حدوث استثناء أثناء الحفظ
+                _logger.LogWarning("Failed to save the new user with ID {UserId} to the database. Rolling back Identity creation.", newGuid);
                 await _identityService.DeleteUserAsync(newGuid.ToString());
                 throw;
             }
-
+            
+            _logger.LogInformation("User with ID {UserId} created successfully.", newGuid);
             return createUserResult.Value.ToDto();
         }
     }

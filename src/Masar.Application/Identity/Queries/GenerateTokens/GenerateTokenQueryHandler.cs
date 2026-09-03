@@ -7,12 +7,13 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Identity.Queries.GenerateTokens;
 
-public class GenerateTokenQueryHandler( IIdentityService identityService, ITokenProvider tokenProvider)
+public class GenerateTokenQueryHandler( IIdentityService identityService, ITokenProvider tokenProvider, ILogger logger)
     : IRequestHandler<GenerateTokenQuery, Result<TokenResponse>>
 {
 
     private readonly IIdentityService _identityService = identityService;
     private readonly ITokenProvider _tokenProvider = tokenProvider;
+    private readonly ILogger _logger = logger;
 
     public async Task<Result<TokenResponse>> Handle(GenerateTokenQuery query, CancellationToken ct)
     {
@@ -30,7 +31,7 @@ public class GenerateTokenQueryHandler( IIdentityService identityService, IToken
             
             return generateTokenResult.Errors;
         }
-
+        _logger.LogInformation("Token generated successfully for user {UserName}", query.UserName);
         return generateTokenResult.Value;
     }
 }

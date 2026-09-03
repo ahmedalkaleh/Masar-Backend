@@ -12,10 +12,11 @@ using Microsoft.Extensions.Logging;
 
 namespace Masar.Application.Features.Persons.Commands.CreatePerson
 {
-    public class CreatePersonCommandHandler(IAppDbContext context) :IRequestHandler<CreatePersonCommand , Result<PersonDto>>
+    public class CreatePersonCommandHandler(IAppDbContext context, ILogger logger) :IRequestHandler<CreatePersonCommand , Result<PersonDto>>
     {
         private readonly IAppDbContext _context = context;
-        
+        private readonly ILogger _logger = logger;
+
         public async Task<Result<PersonDto>> Handle(CreatePersonCommand command, CancellationToken cancellationToken)
         {
         
@@ -30,6 +31,8 @@ namespace Masar.Application.Features.Persons.Commands.CreatePerson
             await _context.SaveChangesAsync(cancellationToken);
 
             var person = createPersonResult.Value;
+            _logger.LogInformation("Person created successfully. Id: {PersonId}", createPersonResult.Value.Id);
+
             return person.ToDto();
         }
     }
