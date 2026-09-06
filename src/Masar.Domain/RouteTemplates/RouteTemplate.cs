@@ -34,6 +34,7 @@ namespace Masar.Domain.RouteTemplates
         }
 
         public static Result<RouteTemplate> Create(
+            Guid id,
             string templateName,
             Guid startStationId,
             Guid endStationId
@@ -41,23 +42,23 @@ namespace Masar.Domain.RouteTemplates
         {
             if (string.IsNullOrEmpty(templateName))
             {
-                return RoutTemplateErrors.TemplateNameRequired;
+                return RouteTemplateErrors.TemplateNameRequired;
             }
             if(startStationId == Guid.Empty)
             {
-                return RoutTemplateErrors.StartStationRequired;
+                return RouteTemplateErrors.StartStationRequired;
             }
             if(endStationId == Guid.Empty)
             {
-                return RoutTemplateErrors.EndStationRequired;
+                return RouteTemplateErrors.EndStationRequired;
             }
             if(startStationId == endStationId)
             {
-                return RoutTemplateErrors.EndStationEqualStartStation;
+                return RouteTemplateErrors.EndStationEqualStartStation;
             }
 
             return new RouteTemplate(
-                Guid.NewGuid(),
+                id,
                 templateName,
                 startStationId,
                 endStationId
@@ -73,19 +74,19 @@ namespace Masar.Domain.RouteTemplates
         {
             if (string.IsNullOrEmpty(templateName))
             {
-                return RoutTemplateErrors.TemplateNameRequired;
+                return RouteTemplateErrors.TemplateNameRequired;
             }
             if (startStationId == Guid.Empty)
             {
-                return RoutTemplateErrors.StartStationRequired;
+                return RouteTemplateErrors.StartStationRequired;
             }
             if (endStationId == Guid.Empty)
             {
-                return RoutTemplateErrors.EndStationRequired;
+                return RouteTemplateErrors.EndStationRequired;
             }
             if (startStationId == endStationId)
             {
-                return RoutTemplateErrors.EndStationEqualStartStation;
+                return RouteTemplateErrors.EndStationEqualStartStation;
             }
             TemplateName = templateName;
             StartStationId = startStationId;

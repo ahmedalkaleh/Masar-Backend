@@ -5,7 +5,7 @@ using System.Text;
 using Masar.Domain.Common.Results;
 namespace Masar.Domain.RouteTemplates
 {
-    public static class RoutTemplateErrors
+    public static class RouteTemplateErrors
     {
         public static Error TemplateNameRequired=> Error.Validation("RouteTemplate.TemplateNameRequired", "Template name is required.");
 
