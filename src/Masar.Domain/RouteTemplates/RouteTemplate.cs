@@ -1,6 +1,7 @@
-﻿using Masar.Domain.Common.Results;
+﻿using Masar.Domain.Carriages;
 using Masar.Domain.Common;
-
+using Masar.Domain.Common.Results;
+using Masar.Domain.RoutTemplateStops;
 using Masar.Domain.Stations;
 using System;
 using System.Collections.Generic;
@@ -17,7 +18,9 @@ namespace Masar.Domain.RouteTemplates
         public Station StartStation { get; private set; } = null!;
 
         public Station EndStation { get; private set; } = null!;
-        
+
+        public virtual ICollection<RouteTemplateStop> RouteTemplateStops { get; private set; } = new List<RouteTemplateStop>();
+
         public RouteTemplate() { }
 
         private RouteTemplate(

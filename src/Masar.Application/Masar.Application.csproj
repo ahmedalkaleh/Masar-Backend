@@ -12,6 +12,10 @@
     <ProjectReference Include="..\Masar.Domain\Masar.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="Features\RouteTemplates\Commands\CreateRouteTemplate\CreateRouteTemplateCommandHandler.cs" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

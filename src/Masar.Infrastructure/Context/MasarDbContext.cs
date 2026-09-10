@@ -6,6 +6,8 @@ using Masar.Domain.Identity;
 using Masar.Domain.Passengers;
 using Masar.Domain.Persons;
 using Masar.Domain.RouteSegments;
+using Masar.Domain.RouteTemplates;
+using Masar.Domain.RoutTemplateStops;
 using Masar.Domain.SavedPassengers;
 using Masar.Domain.Seats;
 using Masar.Domain.Stations;
@@ -67,6 +69,9 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
 
     public virtual DbSet<RefreshToken> RefreshTokens { get; set; }
 
+    public virtual DbSet<RouteTemplate> RouteTemplates { get; set; }
+
+    public virtual DbSet<RouteTemplateStop> RouteTemplateStops { get; set; }
     DbSet<Masar.Domain.Users.User> IAppDbContext.Users => Users;
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -218,6 +223,48 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__RouteSegm__ToSta__3D5E1FD2");
         });
+        modelBuilder.Entity<RouteTemplate>(entity =>
+        {
+            
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
+            entity.Property(e => e.TemplateName)
+                .HasMaxLength(100)
+                .IsUnicode(false);
+            entity.Property(e => e.StartStationId).HasColumnName("StartStationID");
+            entity.Property(e => e.EndStationId).HasColumnName("EndStationID");
+            entity.HasOne(e=>e.StartStation).WithMany(s => s.RouteTemplatesStartStations)
+                .HasForeignKey(e => e.StartStationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__RouteTempl__Start__4BAC3F29");
+
+            entity.HasOne(e=>e.EndStation).WithMany(s => s.RouteTemplatesEndStations)
+                .HasForeignKey(e => e.EndStationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__RouteTempl__End__4C906362");
+
+        });
+
+        modelBuilder.Entity<RouteTemplateStop>(entity =>
+        {
+            
+            entity.Property(e => e.Id).HasColumnName("Id").ValueGeneratedNever();
+            entity.Property(e => e.RouteTemplateId).HasColumnName("RouteTemplateID");
+            entity.Property(e => e.StationId).HasColumnName("StationID");
+            entity.Property(e => e.StopOrder).IsRequired();
+            entity.HasOne(e=>e.Station).WithMany(s => s.RouteTemplateStops)
+                .HasForeignKey(e => e.StationId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__RouteTemp__Stati__4D94879B");
+            entity.HasOne(d => d.RouteTemplate).WithMany(p => p.RouteTemplateStops)
+                .HasForeignKey(d => d.RouteTemplateId)
+                .OnDelete(DeleteBehavior.ClientSetNull)
+                .HasConstraintName("FK__RouteTemp__Route__4E88ABD4");
+            entity.HasIndex(e => new { e.RouteTemplateId, e.StopOrder })
+          .IsUnique()
+          .HasDatabaseName("IX_RouteTemplateStop_RouteId_StopOrder");
+        });
+
+
 
         modelBuilder.Entity<SavedPassenger>(entity =>
         {

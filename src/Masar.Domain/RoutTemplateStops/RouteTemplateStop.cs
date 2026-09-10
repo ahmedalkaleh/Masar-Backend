@@ -10,7 +10,7 @@ namespace Masar.Domain.RoutTemplateStops
 {
     public sealed class RouteTemplateStop : AuditableEntity
     {
-        public Guid RoutTemplateId { get; private set; }
+        public Guid RouteTemplateId { get; private set; }
         public Guid StationId { get; private set; }
 
         public int StopOrder { get; private set; }
@@ -22,7 +22,7 @@ namespace Masar.Domain.RoutTemplateStops
         private RouteTemplateStop() { }
         private RouteTemplateStop(Guid id, Guid routTemplateId, Guid stationId, int stopOrder) : base(id)
         {
-            RoutTemplateId = routTemplateId;
+            RouteTemplateId = routTemplateId;
             StationId = stationId;
             StopOrder = stopOrder;
         }
@@ -57,7 +57,7 @@ namespace Masar.Domain.RoutTemplateStops
             {
                 return RouteTemplateStopErrors.StopOrderMustBeGreaterThanZero;
             }
-            RoutTemplateId = routTemplateId;
+            RouteTemplateId = routTemplateId;
             StationId = stationId;
             StopOrder = stopOrder;
             return Result.Updated;
