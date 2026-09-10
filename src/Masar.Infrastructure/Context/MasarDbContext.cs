@@ -7,7 +7,7 @@ using Masar.Domain.Passengers;
 using Masar.Domain.Persons;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.RouteTemplates;
-using Masar.Domain.RoutTemplateStops;
+using Masar.Domain.RouteTemplateStops;
 using Masar.Domain.SavedPassengers;
 using Masar.Domain.Seats;
 using Masar.Domain.Stations;

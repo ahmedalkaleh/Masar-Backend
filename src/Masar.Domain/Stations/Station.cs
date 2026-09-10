@@ -3,7 +3,7 @@ using Masar.Domain.Common;
 using Masar.Domain.Common.Results;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.RouteTemplates;
-using Masar.Domain.RoutTemplateStops;
+using Masar.Domain.RouteTemplateStops;
 using Masar.Domain.Trains;
 using Masar.Domain.Trips;
 using Masar.Domain.TripStops;
