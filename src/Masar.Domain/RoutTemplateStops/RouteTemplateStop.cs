@@ -6,7 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Masar.Domain.RoutTemplateStops
+namespace Masar.Domain.RouteTemplateStops
 {
     public sealed class RouteTemplateStop : AuditableEntity
     {
@@ -20,19 +20,16 @@ namespace Masar.Domain.RoutTemplateStops
         public Station Station { get; private set; } = null!;
 
         private RouteTemplateStop() { }
-        private RouteTemplateStop(Guid id, Guid routTemplateId, Guid stationId, int stopOrder) : base(id)
+        private RouteTemplateStop(Guid id, Guid stationId, int stopOrder) : base(id)
         {
-            RouteTemplateId = routTemplateId;
+          
             StationId = stationId;
             StopOrder = stopOrder;
         }
 
-        public static Result<RouteTemplateStop> Create(Guid id, Guid routTemplateId, Guid stationId, int stopOrder)
+        public static Result<RouteTemplateStop> Create(Guid id, Guid stationId, int stopOrder)
         {
-            if (routTemplateId == Guid.Empty)
-            {
-                return RouteTemplateStopErrors.RoutTemplateIdRequired;
-            }
+           
             if (stationId == Guid.Empty)
             {
                 return RouteTemplateStopErrors.StationIdRequired;
@@ -41,7 +38,7 @@ namespace Masar.Domain.RoutTemplateStops
             {
                 return RouteTemplateStopErrors.StopOrderMustBeGreaterThanZero;
             }
-            return new RouteTemplateStop(id, routTemplateId, stationId, stopOrder);
+            return new RouteTemplateStop(id, stationId, stopOrder);
         }
         public Result<Updated> Update(Guid routTemplateId, Guid stationId, int stopOrder)
         {

@@ -7,6 +7,6 @@ using System.Text;
 
 namespace Masar.Application.Features.RouteTemplates.Commands.CreateRouteTemplate
 {
-    public record CreateRouteTemplateCommand(string TemplateName, Guid StartStationId, Guid EndStationId, List<CreateRouteTemplateStopCommand> RouteTemplateStops) : IRequest<Result<RouteTemplateDto>>;
+    public sealed record CreateRouteTemplateStopCommand(Guid StationId, int StopOrder) : IRequest<Result<RouteTemplateStopDto>>;
    
 }

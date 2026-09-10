@@ -17,6 +17,8 @@ namespace Masar.Domain.RouteTemplates
 
         public static Error EndStationNotFound => Error.NotFound("RouteTemplate.EndStationNotFound", "End station with the specified ID was not found.");
 
+        public static Error RouteTemplateExists => Error.Conflict("RouteTemplate.RouteTemplateExists", "A route template with the same name already exists.");
+
         public static Error EndStationEqualStartStation => Error.Conflict("RouteTemplate.EndStationEqualStartStation","End Station must be different from Start Station");
 
     }

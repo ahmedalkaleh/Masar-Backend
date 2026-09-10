@@ -1,7 +1,7 @@
 ﻿using Masar.Domain.Carriages;
 using Masar.Domain.Common;
 using Masar.Domain.Common.Results;
-using Masar.Domain.RoutTemplateStops;
+using Masar.Domain.RouteTemplateStops;
 using Masar.Domain.Stations;
 using System;
 using System.Collections.Generic;
@@ -40,7 +40,8 @@ namespace Masar.Domain.RouteTemplates
             Guid id,
             string templateName,
             Guid startStationId,
-            Guid endStationId
+            Guid endStationId,
+            List<RouteTemplateStop> routeTemplateStops
             )
         {
             if (string.IsNullOrEmpty(templateName))
