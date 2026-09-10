@@ -77,22 +77,25 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
                 _logger.LogWarning("RouteTemplate creation aborted: Inconsistent stop orders found.");
                 return RouteTemplateStopErrors.InconsistentStopOrders;
             }
-            if (routeTemplateStops.Count > 0 && !_context.RouteSegments.Any(rs => rs.FromStationId == command.StartStationId && rs.ToStationId == routeTemplateStops[0].StationId))
+            if (routeTemplateStops.Count > 0 && !_context.RouteSegments.Any(rs => rs.FirstStationId == command.StartStationId && rs.SecondStationId == routeTemplateStops[0].StationId|| 
+                                                                                 rs.FirstStationId == routeTemplateStops[0].StationId && rs.SecondStationId == command.StartStationId))
             {
                 _logger.LogWarning("RouteTemplate creation aborted: Route segment from  station ID '{StartStationId}' to  station ID '{EndStationId}' does not exist.", command.StartStationId, routeTemplateStops[0].StationId);
                 return RouteTemplateStopErrors.RouteSegmentNotFound;
             }
             for(int i = 0; i < routeTemplateStops.Count - 1; i++)
             {
-                if (!_context.RouteSegments.Any(rs => rs.FromStationId == routeTemplateStops[i].StationId && rs.ToStationId == routeTemplateStops[i + 1].StationId))
+                if (!_context.RouteSegments.Any(rs => rs.FirstStationId == routeTemplateStops[i].StationId && rs.SecondStationId == routeTemplateStops[i + 1].StationId|| 
+                                                                                 rs.FirstStationId == routeTemplateStops[i + 1].StationId && rs.SecondStationId == routeTemplateStops[i].StationId))
                 {
-                    _logger.LogWarning("RouteTemplate creation aborted: Route segment from station ID '{FromStationId}' to station ID '{ToStationId}' does not exist.", routeTemplateStops[i].StationId, routeTemplateStops[i + 1].StationId);
+                    _logger.LogWarning("RouteTemplate creation aborted: Route segment from station ID '{FirstStationId}' to station ID '{SecondStationId}' does not exist.", routeTemplateStops[i].StationId, routeTemplateStops[i + 1].StationId);
                     return RouteTemplateStopErrors.RouteSegmentNotFound;
                 }
             }
-            if(routeTemplateStops.Count > 0 && !_context.RouteSegments.Any(rs => rs.FromStationId == routeTemplateStops[routeTemplateStops.Count - 1].StationId && rs.ToStationId == command.EndStationId))
+            if(routeTemplateStops.Count > 0 && !_context.RouteSegments.Any(rs => rs.FirstStationId == routeTemplateStops[routeTemplateStops.Count - 1].StationId && rs.SecondStationId == command.EndStationId|| 
+                                                                                 rs.FirstStationId == command.EndStationId && rs.SecondStationId == routeTemplateStops[routeTemplateStops.Count - 1].StationId))
             {
-                _logger.LogWarning("RouteTemplate creation aborted: Route segment from station ID '{FromStationId}' to station ID '{ToStationId}' does not exist.", routeTemplateStops[routeTemplateStops.Count - 1].StationId, command.EndStationId);
+                _logger.LogWarning("RouteTemplate creation aborted: Route segment from station ID '{FirstStationId}' to station ID '{SecondStationId}' does not exist.", routeTemplateStops[routeTemplateStops.Count - 1].StationId, command.EndStationId);
                 return RouteTemplateStopErrors.RouteSegmentNotFound;
             }
 

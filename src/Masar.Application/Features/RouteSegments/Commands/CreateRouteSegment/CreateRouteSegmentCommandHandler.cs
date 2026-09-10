@@ -22,21 +22,21 @@ namespace Masar.Application.Features.RouteSegments.Commands.CreateRouteSegment
 
         public async Task<Result<RouteSegmentDto>> Handle(CreateRouteSegmentCommand command, CancellationToken cancellationToken)
         {
-            if(!(await _context.Stations.AnyAsync(x => x.Id == command.FromStationId, cancellationToken)))
+            if(!(await _context.Stations.AnyAsync(x => x.Id == command.FirstStationId, cancellationToken)))
             {
-                _logger.LogWarning("RouteSegment Creation aborted.FromStation with id {FromStationId} not found.", command.FromStationId);
-                return RouteSegmentErrors.FromStationIdNotFound;
+                _logger.LogWarning("RouteSegment Creation aborted.FromStation with id {FirstStationId} not found.", command.FirstStationId);
+                return RouteSegmentErrors.FirstStationIdNotFound;
             }
 
-            if (!(await _context.Stations.AnyAsync(x => x.Id == command.ToStationId, cancellationToken)))
+            if (!(await _context.Stations.AnyAsync(x => x.Id == command.SecondStationId, cancellationToken)))
             {
-                _logger.LogWarning("RouteSegment Creation aborted.ToStation with id {ToStationId} not found.", command.ToStationId);
-                return RouteSegmentErrors.ToStationIdNotFound;
+                _logger.LogWarning("RouteSegment Creation aborted.SecondStation with id {SecondStationId} not found.", command.SecondStationId);
+                return RouteSegmentErrors.SecondStationIdNotFound;
             }
 
-            if (await _context.RouteSegments.AnyAsync(x => x.FromStationId == command.FromStationId && x.ToStationId == command.ToStationId, cancellationToken))
+            if (await _context.RouteSegments.AnyAsync(x => x.FirstStationId == command.FirstStationId && x.SecondStationId == command.SecondStationId, cancellationToken))
             {
-                _logger.LogWarning("RouteSegment Creation aborted.RouteSegment with FromStationId {FromStationId} and ToStationId {ToStationId} already exists.", command.FromStationId , command.ToStationId);
+                _logger.LogWarning("RouteSegment Creation aborted.RouteSegment with FirstStationId {FirstStationId} and SecondStationId {SecondStationId} already exists.", command.FirstStationId , command.SecondStationId);
                 return RouteSegmentErrors.RouteSegmentAlreadyExists;
             }
 
@@ -49,7 +49,7 @@ namespace Masar.Application.Features.RouteSegments.Commands.CreateRouteSegment
 
 
             var createRouteSegmentResult = Masar.Domain.RouteSegments.RouteSegment.Create(
-                Guid.NewGuid(), command.FromStationId, command.ToStationId, command.TrackType,
+                Guid.NewGuid(), command.FirstStationId, command.SecondStationId, command.TrackType,
                 command.DistanceKm, command.EstPassengerTimeMin, command.CorridorName);
 
             if(createRouteSegmentResult.IsError)

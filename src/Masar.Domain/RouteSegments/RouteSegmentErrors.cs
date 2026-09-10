@@ -7,15 +7,15 @@ namespace Masar.Domain.RouteSegments
 {
     public static class RouteSegmentErrors
     {
-        public static Error FromStationIdRequired =>
+        public static Error FirstStationIdRequired =>
             Error.Validation(
-                "RouteSegment.FromStationIdRequired",
-                "FromStationID is required.");
+                "RouteSegment.FirstStationIdRequired",
+                "FirstStationID is required.");
 
-        public static Error ToStationIdRequired =>
+        public static Error SecondStationIdRequired =>
             Error.Validation(
-                "RouteSegment.ToStationIdRequired",
-                "ToStationID is required.");
+                "RouteSegment.SecondStationIdRequired",
+                "SecondStationID is required.");
 
         public static Error CorridorNameRequired =>
             Error.Validation(
@@ -48,15 +48,15 @@ namespace Masar.Domain.RouteSegments
                 "RouteSegment.NotFound",
                 "RouteSegment with the specified ID was not found.");
 
-        public static Error FromStationIdNotFound =>
+        public static Error FirstStationIdNotFound =>
             Error.NotFound(
                 "RouteSegment.StationNotFound",
-                "FromStation with the specified ID was not found.");
+                "FirstStation with the specified ID was not found.");
 
-        public static Error ToStationIdNotFound =>
+        public static Error SecondStationIdNotFound =>
             Error.NotFound(
                 "RouteSegment.StationNotFound",
-                "ToStation with the specified ID was not found.");
+                "SecondStation with the specified ID was not found.");
 
         public static Error CorridorNameAlreadyExists =>
             Error.Conflict(
@@ -66,7 +66,7 @@ namespace Masar.Domain.RouteSegments
         public static Error SameDepartureAndArrivalStation =>
             Error.Validation(
                 "RouteSegment.SameDepartureAndArrivalStation",
-                "The origin station (FromStationId) and destination station (ToStationId) must be different");
+                "The origin station (FirstStationId) and destination station (SecondStationId) must be different");
 
         public static Error RouteSegmentAlreadyExists =>
             Error.Conflict(

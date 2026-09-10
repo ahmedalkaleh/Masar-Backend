@@ -9,8 +9,8 @@ using System.Text;
 namespace Masar.Application.Features.RouteSegments.Commands.CreateRouteSegment
 {
     public sealed record CreateRouteSegmentCommand(       
-    Guid FromStationId,
-    Guid ToStationId,
+    Guid FirstStationId,
+    Guid SecondStationId,
     TrackType TrackType,
     decimal DistanceKm,
     int EstPassengerTimeMin,

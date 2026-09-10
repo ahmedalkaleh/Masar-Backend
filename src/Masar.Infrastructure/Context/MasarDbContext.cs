@@ -197,13 +197,13 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.Property(e => e.DistanceKm)
                 .HasColumnType("decimal(6, 2)")
                 .HasColumnName("DistanceKM");
-            entity.Property(e => e.FromStationId).HasColumnName("FromStationID");
-            entity.Property(e => e.ToStationId).HasColumnName("ToStationID");
+            entity.Property(e => e.FirstStationId).HasColumnName("FromStationID");
+            entity.Property(e => e.SecondStationId).HasColumnName("ToStationID");
             entity.Property(e => e.TrackType).HasConversion<string>()
                 .HasDefaultValue(TrackType.Single, "DF__RouteSegments__TrackType__47FF419A")
                 .HasMaxLength(15);
 
-            entity.HasIndex(x => new { x.FromStationId, x.ToStationId }).IsUnique();
+            entity.HasIndex(x => new { x.FirstStationId, x.SecondStationId }).IsUnique();
 
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__RouteSegments__CreatedAt__45F365D3");
 
@@ -213,13 +213,13 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
 
             entity.HasIndex(rt => rt.CorridorName).IsUnique();
 
-            entity.HasOne(d => d.FromStation).WithMany(p => p.RouteSegmentFromStations)
-                .HasForeignKey(d => d.FromStationId)
+            entity.HasOne(d => d.FirstStation).WithMany(p => p.RouteSegmentFromStations)
+                .HasForeignKey(d => d.FirstStationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__RouteSegm__FromS__3C69FB99");
 
-            entity.HasOne(d => d.ToStation).WithMany(p => p.RouteSegmentToStations)
-                .HasForeignKey(d => d.ToStationId)
+            entity.HasOne(d => d.SecondStation).WithMany(p => p.RouteSegmentToStations)
+                .HasForeignKey(d => d.SecondStationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__RouteSegm__ToSta__3D5E1FD2");
         });

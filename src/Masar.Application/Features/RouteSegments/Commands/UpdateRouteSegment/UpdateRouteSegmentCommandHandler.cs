@@ -27,21 +27,21 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
                 return RouteSegmentErrors.RouteSegmentNotFound;
             }
 
-            if (!(await _context.Stations.AnyAsync(x => x.Id == request.FromStationId, cancellationToken)))
+            if (!(await _context.Stations.AnyAsync(x => x.Id == request.FirstStationId, cancellationToken)))
             {
-                _logger.LogWarning("RouteSegment update aborted.FromStation with id {FromStationId} not found.", request.FromStationId);
-                return RouteSegmentErrors.FromStationIdNotFound;
+                _logger.LogWarning("RouteSegment update aborted.FirstStation with id {FirstStationId} not found.", request.FirstStationId);
+                return RouteSegmentErrors.FirstStationIdNotFound;
             }
 
-            if (!(await _context.Stations.AnyAsync(x => x.Id == request.ToStationId, cancellationToken)))
+            if (!(await _context.Stations.AnyAsync(x => x.Id == request.SecondStationId, cancellationToken)))
             {
-                _logger.LogWarning("RouteSegment update aborted.ToStation with id {ToStationId} not found.", request.ToStationId);
-                return RouteSegmentErrors.ToStationIdNotFound;
+                _logger.LogWarning("RouteSegment update aborted.SecondStation with id {SecondStationId} not found.", request.SecondStationId);
+                return RouteSegmentErrors.SecondStationIdNotFound;
             }
 
-            if (await _context.RouteSegments.AnyAsync(x => x.FromStationId == request.FromStationId && x.ToStationId == request.ToStationId && x.Id != routeSegment.Id, cancellationToken))
+            if (await _context.RouteSegments.AnyAsync(x => x.FirstStationId == request.FirstStationId && x.SecondStationId == request.SecondStationId && x.Id != routeSegment.Id, cancellationToken))
             {
-                _logger.LogWarning("RouteSegment update aborted.RouteSegment with FromStationId {FromStationId} and ToStationId {ToStationId} already exists.", request.FromStationId, request.ToStationId);
+                _logger.LogWarning("RouteSegment update aborted.RouteSegment with FirstStationId {FirstStationId} and SecondStationId {SecondStationId} already exists.", request.FirstStationId, request.SecondStationId);
                 return RouteSegmentErrors.RouteSegmentAlreadyExists;
             }
 
@@ -52,8 +52,8 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
             }
 
             var updateRouteSegmentResult = routeSegment.Update(
-                request.FromStationId,
-                request.ToStationId,
+                request.FirstStationId,
+                request.SecondStationId,
                 request.TrackType,
                 request.DistanceKm,
                 request.EstPassengerTimeMin,

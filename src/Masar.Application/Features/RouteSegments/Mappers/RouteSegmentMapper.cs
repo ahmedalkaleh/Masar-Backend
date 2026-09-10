@@ -13,8 +13,8 @@ namespace Masar.Application.Features.RouteSegments.Mappers
             return new RouteSegmentDto
             {
                 RouteSegmentID = routeSegment.Id,
-                FromStationId = routeSegment.FromStationId,
-                ToStationId = routeSegment.ToStationId,
+                FirstStationId = routeSegment.FirstStationId,
+                SecondStationId = routeSegment.SecondStationId,
                 TrackType = routeSegment.TrackType,
                 DistanceKm = routeSegment.DistanceKm,
                 EstPassengerTimeMin = routeSegment.EstPassengerTimeMin,

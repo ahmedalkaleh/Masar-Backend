@@ -9,13 +9,13 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
     {
         public UpdateRouteSegmentCommandValidator() 
         {
-            RuleFor(x => x.FromStationId)
+            RuleFor(x => x.FirstStationId)
                 .NotEmpty()
-                .WithMessage("FromStationId is required.");
+                .WithMessage("FirstStationId is required.");
 
-            RuleFor(x => x.ToStationId)
+            RuleFor(x => x.SecondStationId)
             .NotEmpty()
-            .WithMessage("ToStationId is required.");
+            .WithMessage("SecondStationId is required.");
 
             RuleFor(x => x.TrackType)
                 .IsInEnum()
@@ -35,9 +35,9 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
                 .MaximumLength(100)
                 .WithMessage("Corridor Name must not exceed 100 characters.");
 
-            RuleFor(x => x.FromStationId)
-                .NotEqual(x => x.ToStationId)
-                .WithMessage("The origin station (FromStationId) and destination station (ToStationId) must be different");
+            RuleFor(x => x.FirstStationId)
+                .NotEqual(x => x.SecondStationId)
+                .WithMessage("The origin station (FirstStationId) and destination station (SecondStationId) must be different");
 
         }
     }

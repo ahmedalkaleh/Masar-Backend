@@ -38,7 +38,7 @@ namespace Masar.API.Controllers
 
             var command = new UpdateRouteSegmentCommand(
              id,
-             request.FromStationId, request.ToStationId, request.TrackType, request.DistanceKm,
+             request.FirstStationId, request.SecondStationId, request.TrackType, request.DistanceKm,
              request.EstPassengerTimeMin, request.CorridorName);
 
 

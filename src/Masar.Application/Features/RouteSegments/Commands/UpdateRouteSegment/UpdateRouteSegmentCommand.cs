@@ -10,8 +10,8 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
 {
     public sealed record UpdateRouteSegmentCommand(
     Guid RouteSegmentID,
-    Guid FromStationId,
-    Guid ToStationId,
+    Guid FirstStationId,
+    Guid SecondStationId,
     TrackType TrackType,
     decimal DistanceKm,
     int EstPassengerTimeMin,

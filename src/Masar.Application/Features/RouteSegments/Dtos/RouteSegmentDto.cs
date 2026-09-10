@@ -9,9 +9,9 @@ namespace Masar.Application.Features.RouteSegments.Dtos
     {
         public Guid RouteSegmentID { get; set; }
 
-        public Guid FromStationId { get; set; }
+        public Guid FirstStationId { get; set; }
 
-        public Guid ToStationId { get; set; }
+        public Guid SecondStationId { get; set; }
 
         public TrackType TrackType { get; set; }
 

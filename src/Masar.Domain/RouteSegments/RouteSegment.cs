@@ -10,9 +10,9 @@ namespace Masar.Domain.RouteSegments;
 
 public partial class RouteSegment : AuditableEntity
 {
-    public Guid FromStationId { get; private set; }
+    public Guid FirstStationId { get; private set; }
 
-    public Guid ToStationId { get; private set; }
+    public Guid SecondStationId { get; private set; }
 
     public TrackType TrackType { get; private set; }
 
@@ -24,9 +24,9 @@ public partial class RouteSegment : AuditableEntity
 
     public bool IsDelete { get; private set; }
 
-    public virtual Station FromStation { get; private set; } = null!;
+    public virtual Station FirstStation { get; private set; } = null!;
 
-    public virtual Station ToStation { get; private set; } = null!;
+    public virtual Station SecondStation { get; private set; } = null!;
 
     public virtual ICollection<TrainLiveLocation> TrainLiveLocations { get; private set; } = new List<TrainLiveLocation>();
 
@@ -42,8 +42,8 @@ public partial class RouteSegment : AuditableEntity
     string corridorName)
         :base(id)
     {
-        FromStationId = fromStationId;
-        ToStationId = toStationId;
+        FirstStationId = fromStationId;
+        SecondStationId = toStationId;
         TrackType = trackType;
         DistanceKm = distanceKm;
         EstPassengerTimeMin = estPassengerTimeMin;
@@ -67,12 +67,12 @@ public partial class RouteSegment : AuditableEntity
 
         if (fromStationId == Guid.Empty)
         {
-            errorsList.Add(RouteSegmentErrors.FromStationIdRequired);
+            errorsList.Add(RouteSegmentErrors.FirstStationIdRequired);
         }
 
         if (toStationId == Guid.Empty)
         {
-            errorsList.Add(RouteSegmentErrors.ToStationIdRequired);
+            errorsList.Add(RouteSegmentErrors.SecondStationIdRequired);
         }
 
         if (!Enum.IsDefined(typeof(TrackType), trackType))
@@ -116,12 +116,12 @@ public partial class RouteSegment : AuditableEntity
 
         if (fromStationId == Guid.Empty)
         {
-            errorsList.Add(RouteSegmentErrors.FromStationIdRequired);
+            errorsList.Add(RouteSegmentErrors.FirstStationIdRequired);
         }
 
         if (toStationId == Guid.Empty)
         {
-            errorsList.Add(RouteSegmentErrors.ToStationIdRequired);
+            errorsList.Add(RouteSegmentErrors.SecondStationIdRequired);
         }
 
         if (!Enum.IsDefined(typeof(TrackType), trackType))
@@ -154,8 +154,8 @@ public partial class RouteSegment : AuditableEntity
             return errorsList;
         }
 
-        FromStationId = fromStationId;
-        ToStationId = toStationId;
+        FirstStationId = fromStationId;
+        SecondStationId = toStationId;
         TrackType = trackType;
         DistanceKm = distanceKm;
         EstPassengerTimeMin = estPassengerTimeMin;

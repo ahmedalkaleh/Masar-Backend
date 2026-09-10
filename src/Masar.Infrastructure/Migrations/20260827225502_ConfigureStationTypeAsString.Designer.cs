@@ -291,7 +291,7 @@ namespace Masar.Infrastructure.Migrations
                     b.Property<int>("EstPassengerTimeMin")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("FromStationId")
+                    b.Property<Guid>("FirstStationId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("FromStationID");
 
@@ -306,7 +306,7 @@ namespace Masar.Infrastructure.Migrations
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("ToStationId")
+                    b.Property<Guid>("SecondStationId")
                         .HasColumnType("uniqueidentifier")
                         .HasColumnName("ToStationID");
 
@@ -319,9 +319,9 @@ namespace Masar.Infrastructure.Migrations
                     b.HasKey("Id")
                         .HasName("PK__RouteSeg__C680609B5A711C10");
 
-                    b.HasIndex("FromStationId");
+                    b.HasIndex("FirstStationId");
 
-                    b.HasIndex("ToStationId");
+                    b.HasIndex("SecondStationId");
 
                     b.ToTable("RouteSegments");
                 });
@@ -1202,13 +1202,13 @@ namespace Masar.Infrastructure.Migrations
                 {
                     b.HasOne("Masar.Domain.Stations.Station", "FromStation")
                         .WithMany("RouteSegmentFromStations")
-                        .HasForeignKey("FromStationId")
+                        .HasForeignKey("FirstStationId")
                         .IsRequired()
                         .HasConstraintName("FK__RouteSegm__FromS__3C69FB99");
 
                     b.HasOne("Masar.Domain.Stations.Station", "ToStation")
                         .WithMany("RouteSegmentToStations")
-                        .HasForeignKey("ToStationId")
+                        .HasForeignKey("SecondStationId")
                         .IsRequired()
                         .HasConstraintName("FK__RouteSegm__ToSta__3D5E1FD2");
 
