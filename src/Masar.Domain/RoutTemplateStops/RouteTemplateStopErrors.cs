@@ -15,6 +15,7 @@ namespace Masar.Domain.RouteTemplateStops
         public static Error DuplicateStop => Error.Conflict("RouteTemplateStop.DuplicateStop", "Duplicate Stop Station for the same Route Template is not allowed.");
         public static Error StopOrderMustBeGreaterThanZero => Error.Validation("RoutTemplateStop.StopOrderMustBeGreaterThanZero", "Stop Order Must Be Greater Than Zero");
 
+        public static Error InconsistentStopOrders => Error.Validation("RoutTemplateStop.InconsistentStopOrders", "Inconsistent Stop Orders: Stop orders must be unique and sequential starting from 1.");
         public static Error RouteSegmentNotFound => Error.NotFound("RouteTemplateStop.RouteSegmentNotFound", "Route segment from the specified stations was not found.");
     }
 }

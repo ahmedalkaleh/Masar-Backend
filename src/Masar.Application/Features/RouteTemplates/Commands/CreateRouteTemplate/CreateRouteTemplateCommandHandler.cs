@@ -72,6 +72,11 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
             }
 
             routeTemplateStops.Sort((a, b) => a.StopOrder.CompareTo(b.StopOrder));
+            if (routeTemplateStops.Count > 0&& routeTemplateStops.Count != routeTemplateStops[routeTemplateStops.Count-1].StopOrder)
+            {
+                _logger.LogWarning("RouteTemplate creation aborted: Inconsistent stop orders found.");
+                return RouteTemplateStopErrors.InconsistentStopOrders;
+            }
             if (routeTemplateStops.Count > 0 && !_context.RouteSegments.Any(rs => rs.FromStationId == command.StartStationId && rs.ToStationId == routeTemplateStops[0].StationId))
             {
                 _logger.LogWarning("RouteTemplate creation aborted: Route segment from  station ID '{StartStationId}' to  station ID '{EndStationId}' does not exist.", command.StartStationId, routeTemplateStops[0].StationId);
