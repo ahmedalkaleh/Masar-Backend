@@ -2,6 +2,8 @@
 using Masar.Domain.Common;
 using Masar.Domain.Common.Results;
 using Masar.Domain.RouteSegments;
+using Masar.Domain.RouteTemplates;
+using Masar.Domain.RoutTemplateStops;
 using Masar.Domain.Trains;
 using Masar.Domain.Trips;
 using Masar.Domain.TripStops;
@@ -43,6 +45,11 @@ public partial class Station : AuditableEntity
     public virtual ICollection<TripStop> TripStops { get; private set; } = new List<TripStop>();
 
     public virtual ICollection<Train> Trains { get; private set; } = new List<Train>();
+
+    public virtual ICollection<RouteTemplate> RouteTemplatesStartStations { get; private set; } = new List<RouteTemplate>();
+
+    public virtual ICollection<RouteTemplate> RouteTemplatesEndStations { get; private set; } = new List<RouteTemplate>();
+    public virtual ICollection<RouteTemplateStop> RouteTemplateStops { get; private set; } = new List<RouteTemplateStop>();
 
     private Station() { }
 

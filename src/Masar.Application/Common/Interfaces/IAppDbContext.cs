@@ -18,29 +18,31 @@ using Masar.Domain.Trips;
 using Masar.Domain.TripStops;
 using Masar.Domain.Users;
 using Microsoft.EntityFrameworkCore;
+using Masar.Domain.RouteTemplates;
+using Masar.Domain.RouteTemplateStops;
 
 namespace Masar.Application.Common.Interfaces
 {
     public interface IAppDbContext
     {
-       public DbSet<Booking> Bookings { get; }
-       public DbSet<Carriage> Carriages { get; }
-       public DbSet<Passenger> Passengers { get; }
-       public DbSet<Person> Persons { get; }
-       
-       public DbSet<RouteSegment> RouteSegments { get; }
-       public DbSet<SavedPassenger> SavedPassengers { get; }
-       public DbSet<Seat> Seats { get; }
-       public DbSet<Station> Stations { get; }
-       public DbSet<SystemAuditLog> SystemAuditLogs { get; }
-       public DbSet<Ticket> Tickets { get; }
-       public DbSet<Train> Trains { get; }
-       public DbSet<TrainLiveLocation> TrainLiveLocations { get; }
-       public DbSet<Trip> Trips { get; }
-      public  DbSet<TripStop> TripStops { get; }
-      public  DbSet<User> Users { get; }
-       public DbSet<RefreshToken> RefreshTokens { get; }
-
+        public DbSet<Booking> Bookings { get; }
+        public DbSet<Carriage> Carriages { get; }
+        public DbSet<Passenger> Passengers { get; }
+        public DbSet<Person> Persons { get; }
+        public DbSet<RouteSegment> RouteSegments { get; }
+        public DbSet<SavedPassenger> SavedPassengers { get; }
+        public DbSet<Seat> Seats { get; }
+        public DbSet<Station> Stations { get; }
+        public DbSet<SystemAuditLog> SystemAuditLogs { get; }
+        public DbSet<Ticket> Tickets { get; }
+        public DbSet<Train> Trains { get; }
+        public DbSet<TrainLiveLocation> TrainLiveLocations { get; }
+        public DbSet<Trip> Trips { get; }
+        public DbSet<TripStop> TripStops { get; }
+        public DbSet<User> Users { get; }
+        public DbSet<RefreshToken> RefreshTokens { get; }
+        public DbSet<RouteTemplate> RouteTemplates { get; }
+        public DbSet<RouteTemplateStop> RouteTemplateStops { get; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken);
     }
