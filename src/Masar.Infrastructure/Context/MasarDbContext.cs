@@ -275,12 +275,12 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasMaxLength(10)
                 .IsUnicode(false)
                 .HasColumnName("NationalID");
-            entity.Property(e => e.UserId).HasColumnName("UserID");
+            entity.Property(e => e.PassengerId).HasColumnName("PassengerId");
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__SavedPassengers__CreatedAt__45F365D3");
 
 
-            entity.HasOne(d => d.User).WithMany(p => p.SavedPassengers)
-                  .HasForeignKey(d => d.UserId);
+            entity.HasOne(d => d.Passenger).WithMany(p => p.SavedPassengers)
+                  .HasForeignKey(d => d.PassengerId);
 
         });
 
