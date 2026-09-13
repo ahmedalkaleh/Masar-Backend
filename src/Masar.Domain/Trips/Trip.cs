@@ -1,44 +1,48 @@
 ﻿using Masar.Domain.Bookings;
 using Masar.Domain.Common;
+using Masar.Domain.Common.Results;
+using Masar.Domain.RouteSegments;
+using Masar.Domain.Seats;
 using Masar.Domain.Stations;
 using Masar.Domain.TrainLiveLocations;
 using Masar.Domain.Trains;
 using Masar.Domain.TripStops;
 using System;
 using System.Collections.Generic;
+using System.Xml.Linq;
 
 namespace Masar.Domain.Trips;
 
 public partial class Trip : AuditableEntity
 {
 
-    public Guid TrainId { get; set; }
+    public Guid TrainId { get; private set; }
 
-    public Guid OriginStationId { get; set; }
+    public Guid OriginStationId { get; private set; }
 
-    public Guid DestinationStationId { get; set; }
+    public Guid DestinationStationId { get; private set; }
 
-    public DateTime DepartureTime { get; set; }
+    public DateTime DepartureTime { get; private set; }
 
-    public DateTime EstimatedArrivalTime { get; set; }
+    public DateTime EstimatedArrivalTime { get; private set; }
 
-    public DateTime? ActualArrivalTime { get; set; }
+    public DateTime? ActualArrivalTime { get; private set; }
 
-    public string Status { get; set; } = null!;
+    public TripStatus Status { get;  set; }
 
-    public bool IsDelete { get; set; }
+    public bool IsDelete { get; private set; }
 
-    public virtual ICollection<Booking> Bookings { get; set; } = new List<Booking>();
+    public virtual ICollection<Booking> Bookings { get; private set; } = new List<Booking>();
+     
+    public virtual Station DestinationStation { get; private set; } = null!;
 
-    public virtual Station DestinationStation { get; set; } = null!;
+    public virtual Station OriginStation { get; private set; } = null!;
 
-    public virtual Station OriginStation { get; set; } = null!;
+    public virtual Train Train { get; private set; } = null!;
 
-    public virtual Train Train { get; set; } = null!;
+    public virtual ICollection<TrainLiveLocation> TrainLiveLocations { get; private set; } = new List<TrainLiveLocation>();
 
-    public virtual ICollection<TrainLiveLocation> TrainLiveLocations { get; set; } = new List<TrainLiveLocation>();
-
-    public virtual ICollection<TripStop> TripStops { get; set; } = new List<TripStop>();
+    public virtual ICollection<TripStop> TripStops { get; private set; } = new List<TripStop>();
 
     private Trip() { }
 
@@ -49,11 +53,7 @@ public partial class Trip : AuditableEntity
     Guid originStationId,
     Guid destinationStationId,
     DateTime departureTime,
-    DateTime estimatedArrivalTime,
-    DateTime? actualArrivalTime,
-    string status,
-    DateTime createdAt,
-    bool isDelete)
+    DateTime estimatedArrivalTime)
         :base(id)
     {
         TrainId = trainId;
@@ -61,9 +61,120 @@ public partial class Trip : AuditableEntity
         DestinationStationId = destinationStationId;
         DepartureTime = departureTime;
         EstimatedArrivalTime = estimatedArrivalTime;
-        ActualArrivalTime = actualArrivalTime;
-        Status = status;
-        CreatedAt = createdAt;
-        IsDelete = isDelete;
+        ActualArrivalTime = null;
+        Status = TripStatus.Scheduled;
+        IsDelete = false;
     }
+
+
+    public static Result<Trip> Create(
+    Guid id,
+    Guid trainId,
+    Guid originStationId,
+    Guid destinationStationId,
+    DateTime departureTime,
+    DateTime estimatedArrivalTime)
+    {
+        if (trainId == Guid.Empty)
+        {
+            return TripErrors.TrainIdRequired;
+        }
+
+        if (originStationId == Guid.Empty)
+        {
+            return TripErrors.OriginStationIdRequired;
+        }
+
+        if (destinationStationId == Guid.Empty)
+        {
+            return TripErrors.DestinationStationIdRequired;
+        }
+
+        if(originStationId == destinationStationId)
+        {
+            return TripErrors.SameOriginAndDestination;
+        }
+
+        if (departureTime < DateTime.UtcNow)
+        {
+            return TripErrors.DepartureTimeInPast;
+        }
+
+        if (estimatedArrivalTime <= departureTime)
+        {
+            return TripErrors.EstimatedArrivalBeforeDeparture;
+        }
+
+        return new Trip(id, trainId, originStationId, destinationStationId, departureTime, estimatedArrivalTime);
+    }
+
+
+    public Result<Updated> Update(Guid trainId,Guid originStationId,Guid destinationStationId,
+    DateTime departureTime,DateTime estimatedArrivalTime,TripStatus status,DateTime? actualArrivalTime)
+    {
+        if (trainId == Guid.Empty)
+        {
+            return TripErrors.TrainIdRequired;
+        }
+
+        if (originStationId == Guid.Empty)
+        {
+            return TripErrors.OriginStationIdRequired;
+        }
+
+        if (destinationStationId == Guid.Empty)
+        {
+            return TripErrors.DestinationStationIdRequired;
+        }
+
+        if (originStationId == destinationStationId)
+        {
+            return TripErrors.SameOriginAndDestination;
+        }
+
+        if (departureTime < DateTime.UtcNow)
+        {
+            return TripErrors.DepartureTimeInPast;
+        }
+
+        if (estimatedArrivalTime <= departureTime)
+        {
+            return TripErrors.EstimatedArrivalBeforeDeparture;
+        }
+
+        if (!Enum.IsDefined(typeof(TripStatus), status))
+        {
+            return TripErrors.InvalidStatus;
+        }
+
+        if(actualArrivalTime <= departureTime)
+        {
+            return TripErrors.ActualArrivalBeforeDeparture;
+        }
+
+        if(actualArrivalTime > DateTime.UtcNow)
+        {
+            return TripErrors.ActualArrivalTimeInFuture;
+        }
+
+        if(actualArrivalTime != null && status != TripStatus.Completed)
+        {
+            return TripErrors.ActualArrivalTimeNotAllowedForStatus;
+        }
+        
+
+        TrainId = trainId;
+        OriginStationId = originStationId;
+        DestinationStationId = destinationStationId;
+        DepartureTime = departureTime;
+        EstimatedArrivalTime = estimatedArrivalTime;
+        Status = status;
+        ActualArrivalTime = actualArrivalTime;
+
+        return Result.Updated;
+    }
+
+
+
+
 }
