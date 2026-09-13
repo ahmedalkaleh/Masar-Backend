@@ -466,13 +466,16 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Trips__CreatedAt__45F365D3");
             entity.Property(e => e.DestinationStationId).HasColumnName("DestinationStationID");
             entity.Property(e => e.OriginStationId).HasColumnName("OriginStationID");
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasDefaultValue("Scheduled");
             entity.Property(e => e.TrainId).HasColumnName("TrainID");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Trips__IsDelete__45F365D3");
+
+            entity.Property(e => e.Status).HasConversion<string>()
+            .HasDefaultValue(TripStatus.Scheduled, "DF__Trips__Status__87FF419A")
+            .HasMaxLength(15);
+
+            entity.ToTable(t => t.HasCheckConstraint("CK_Trips_Status", "[Status] IN ('Scheduled','OnTheWay','Completed','Cancelled')"));
+
 
             entity.HasOne(d => d.DestinationStation).WithMany(p => p.TripDestinationStations)
                 .HasForeignKey(d => d.DestinationStationId)
