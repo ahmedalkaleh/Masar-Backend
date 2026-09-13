@@ -20,8 +20,6 @@ public partial class TripStop : AuditableEntity
 
     public int DwellTimeMinutes { get; set; }
 
-    public bool IsCustomsCheck { get; set; }
-
     public bool IsDelete { get; set; }
 
     public virtual Station Station { get; set; } = null!;
@@ -39,7 +37,6 @@ public partial class TripStop : AuditableEntity
     DateTime scheduledArrival,
     DateTime scheduledDeparture,
     int dwellTimeMinutes,
-    bool isCustomsCheck,
     bool isDelete)
         :base(id)
     {
@@ -49,7 +46,6 @@ public partial class TripStop : AuditableEntity
         ScheduledArrival = scheduledArrival;
         ScheduledDeparture = scheduledDeparture;
         DwellTimeMinutes = dwellTimeMinutes;
-        IsCustomsCheck = isCustomsCheck;
         IsDelete = isDelete;
     }
 }

@@ -1,6 +1,7 @@
 ﻿using Masar.Domain.Bookings;
 using Masar.Domain.Common;
 using Masar.Domain.Persons;
+using Masar.Domain.SavedPassengers;
 using System;
 using System.Collections.Generic;
 
@@ -14,6 +15,7 @@ public partial class Passenger : AuditableEntity
 
     public virtual Person Person { get; set; } = null!;
 
+    public virtual ICollection<SavedPassenger> SavedPassengers { get; set; } = new List<SavedPassenger>();
     private Passenger() { }
 
 

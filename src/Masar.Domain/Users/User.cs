@@ -22,8 +22,6 @@ public partial class User : AuditableEntity
 
     public virtual Role Role { get; set; } 
 
-    public virtual ICollection<SavedPassenger> SavedPassengers { get; set; } = new List<SavedPassenger>();
-
 
     private User() { }
 

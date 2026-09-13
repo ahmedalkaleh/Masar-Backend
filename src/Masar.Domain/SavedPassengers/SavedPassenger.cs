@@ -1,5 +1,5 @@
 ﻿using Masar.Domain.Common;
-using Masar.Domain.Users;
+using Masar.Domain.Passengers;
 using System;
 using System.Collections.Generic;
 
@@ -7,13 +7,13 @@ namespace Masar.Domain.SavedPassengers;
 
 public partial class SavedPassenger : AuditableEntity
 {
-    public Guid UserId { get; set; }
+    public Guid PassengerId { get; set; }
 
     public string Fullname { get; set; } = null!;
 
     public string NationalId { get; set; } = null!;
 
-    public User User { get; set; }
+    public Passenger Passenger { get; set; }
 
     private SavedPassenger() { }
 
@@ -25,7 +25,7 @@ public partial class SavedPassenger : AuditableEntity
     string nationalId)
         :base(id)
     {
-        UserId = userId;
+        PassengerId = userId;
         Fullname = fullname;
         NationalId = nationalId;
     }
