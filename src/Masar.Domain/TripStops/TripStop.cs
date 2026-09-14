@@ -34,19 +34,17 @@ public partial class TripStop : AuditableEntity
 
     private TripStop(
     Guid id,
-    Guid tripId,
     Guid stationId,
     int stopOrder,
     DateTime scheduledArrival,
+    DateTime schedluedDeparture,
     int dwellTimeMinutes)
         :base(id)
     {
-        TripId = tripId;
         StationId = stationId;
         StopOrder = stopOrder;
         ScheduledArrival = scheduledArrival;
         DwellTimeMinutes = dwellTimeMinutes;
-
         ScheduledDeparture = scheduledArrival.AddMinutes(dwellTimeMinutes);
         IsDelete = false;
 
@@ -55,16 +53,12 @@ public partial class TripStop : AuditableEntity
 
     public static Result<TripStop> Create(
     Guid id,
-    Guid tripId,
     Guid stationId,
     int stopOrder,
     DateTime scheduledArrival,
     int dwellTimeMinutes)
     {
-        if (tripId == Guid.Empty)
-        {
-            return TripStopErrors.TripIdRequired;
-        }
+        
 
         if (stationId == Guid.Empty)
         {
@@ -81,7 +75,7 @@ public partial class TripStop : AuditableEntity
             return TripStopErrors.NegativeDwellTimeMinutes;
         }
 
-        return new TripStop(id, tripId, stationId, stopOrder, scheduledArrival, dwellTimeMinutes);
+        return new TripStop(id, stationId, stopOrder, scheduledArrival, dwellTimeMinutes);
     }
 
 
