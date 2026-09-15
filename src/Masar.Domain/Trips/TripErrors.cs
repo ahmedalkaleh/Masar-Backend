@@ -88,5 +88,9 @@ namespace Masar.Domain.Trips
             Error.Conflict(
                 "Trip.TrainScheduleOverlap",
                 "The selected train is already scheduled for another trip during this time frame.");
+        public static Error TemporalCollisionDetected =>
+            Error.Conflict(
+                "Trip.TemporalCollisionDetected",
+                "The new trip's schedule overlaps with an existing trip on the same route segment.");
     }
 }

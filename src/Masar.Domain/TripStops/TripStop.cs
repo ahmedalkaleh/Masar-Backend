@@ -37,7 +37,6 @@ public partial class TripStop : AuditableEntity
     Guid stationId,
     int stopOrder,
     DateTime scheduledArrival,
-    DateTime schedluedDeparture,
     int dwellTimeMinutes)
         :base(id)
     {
