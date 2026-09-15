@@ -16,6 +16,10 @@
     <None Include="Features\RouteTemplates\Commands\CreateRouteTemplate\CreateRouteTemplateCommandHandler.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Features\Trips\Mappers\" />
+  </ItemGroup>
+
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>

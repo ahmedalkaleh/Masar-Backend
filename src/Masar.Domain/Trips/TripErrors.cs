@@ -16,7 +16,14 @@ namespace Masar.Domain.Trips
             Error.Validation(
                 "Trip.OriginStationIdRequired",
                 "OriginStationID is required.");
-
+        public static Error SegmentNotFound =>
+            Error.NotFound(
+                "Trip.SegmentNotFound",
+                "Route segment between the specified stations was not found.");
+        public static Error RouteTemplateNotFound =>
+            Error.NotFound(
+                "Trip.RoutTemplateNotFound",
+                "Route template with the specified ID was not found.");
         public static Error DestinationStationIdRequired =>
             Error.Validation(
                 "Trip.DestinationStationIdRequired",
@@ -81,5 +88,9 @@ namespace Masar.Domain.Trips
             Error.Conflict(
                 "Trip.TrainScheduleOverlap",
                 "The selected train is already scheduled for another trip during this time frame.");
+        public static Error TemporalCollisionDetected =>
+            Error.Conflict(
+                "Trip.TemporalCollisionDetected",
+                "The new trip's schedule overlaps with an existing trip on the same route segment.");
     }
 }

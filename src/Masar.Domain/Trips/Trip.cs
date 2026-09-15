@@ -53,7 +53,8 @@ public partial class Trip : AuditableEntity
     Guid originStationId,
     Guid destinationStationId,
     DateTime departureTime,
-    DateTime estimatedArrivalTime)
+    DateTime estimatedArrivalTime,
+    List<TripStop> tripStops)
         :base(id)
     {
         TrainId = trainId;
@@ -73,7 +74,8 @@ public partial class Trip : AuditableEntity
     Guid originStationId,
     Guid destinationStationId,
     DateTime departureTime,
-    DateTime estimatedArrivalTime)
+    DateTime estimatedArrivalTime,
+    List<TripStop> tripStops)
     {
         if (trainId == Guid.Empty)
         {
@@ -105,7 +107,7 @@ public partial class Trip : AuditableEntity
             return TripErrors.EstimatedArrivalBeforeDeparture;
         }
 
-        return new Trip(id, trainId, originStationId, destinationStationId, departureTime, estimatedArrivalTime);
+        return new Trip(id, trainId, originStationId, destinationStationId, departureTime, estimatedArrivalTime, tripStops);
     }
 
 
