@@ -27,7 +27,8 @@ namespace Masar.Domain.RouteTemplates
             Guid id,
             string templateName,
             Guid startStationId,
-            Guid endStationId
+            Guid endStationId,
+            List<RouteTemplateStop> routeTemplateStops
             )
             : base(id)
         {
@@ -65,7 +66,8 @@ namespace Masar.Domain.RouteTemplates
                 id,
                 templateName,
                 startStationId,
-                endStationId
+                endStationId,
+                routeTemplateStops
                 );
         }
 

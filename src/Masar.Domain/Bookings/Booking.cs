@@ -51,7 +51,8 @@ public partial class Booking : AuditableEntity
     Guid boardingStationId,
     Guid alightingStationId,
     decimal totalPrice,
-    DateTime expiresAt)
+    DateTime expiresAt,
+    List<Ticket> tickets)
         : base(id)
     {
         BookingReference = bookingReference;
@@ -65,5 +66,143 @@ public partial class Booking : AuditableEntity
         IsDelete = false;
         PaymentStatus = PaymentStatus.Pending;
     }
+
+    public static Result<Booking> Create(
+    Guid id,
+    string bookingReference,
+    Guid passengerId,
+    Guid tripId,
+    Guid boardingStationId,
+    Guid alightingStationId,
+    decimal totalPrice,
+    DateTime expiresAt,
+    List<Ticket> tickets)
+    {
+        if (string.IsNullOrWhiteSpace(bookingReference))
+        {
+            return BookingErrors.BookingReferenceRequired;
+        }
+
+        if (passengerId == Guid.Empty)
+        {
+            return BookingErrors.PassengerIdRequired;
+        }
+
+        if (tripId == Guid.Empty)
+        {
+            return BookingErrors.TripIdRequired;
+        }
+
+        if (boardingStationId == Guid.Empty)
+        {
+            return BookingErrors.BoardingStationIdRequired;
+        }
+
+        if (alightingStationId == Guid.Empty)
+        {
+            return BookingErrors.AlightingStationIdRequired;
+        }
+
+        if (boardingStationId == alightingStationId)
+        {
+            return BookingErrors.SameBoardingAndAlightingStation;
+        }
+
+        if (totalPrice <= 0)
+        {
+            return BookingErrors.TotalPriceMustBePositive;
+        }
+
+        if (decimal.Remainder(totalPrice * 100, 1) != 0)
+        {
+            return BookingErrors.TotalPriceTooManyDecimalPlaces;
+        }
+
+        if (totalPrice > 9999999999999999.99m)
+        {
+            return BookingErrors.TotalPriceExceedsLimit;
+        }
+
+        if (expiresAt <= DateTime.UtcNow)
+        {
+            return BookingErrors.ExpiresAtInPast;
+        }
+
+
+        return new Booking(id, bookingReference, passengerId, tripId, boardingStationId, alightingStationId, totalPrice, expiresAt, tickets);
+
+    }
+
+    public Result<Updated> Update(
+    string bookingReference,
+    Guid tripId,
+    Guid boardingStationId,
+    Guid alightingStationId,
+    decimal totalPrice,
+    DateTime expiresAt)
+    {
+
+        if (PaymentStatus != PaymentStatus.Pending)
+        {
+            return BookingErrors.CannotUpdateNonPendingBooking;
+        }
+
+        if (string.IsNullOrWhiteSpace(bookingReference))
+        {
+            return BookingErrors.BookingReferenceRequired;
+        }
+
+        if (tripId == Guid.Empty)
+        {
+            return BookingErrors.TripIdRequired;
+        }
+
+        if (boardingStationId == Guid.Empty)
+        {
+            return BookingErrors.BoardingStationIdRequired;
+        }
+
+        if (alightingStationId == Guid.Empty)
+        {
+            return BookingErrors.AlightingStationIdRequired;
+        }
+
+        if (boardingStationId == alightingStationId)
+        {
+            return BookingErrors.SameBoardingAndAlightingStation;
+        }
+
+        if (totalPrice <= 0)
+        {
+            return BookingErrors.TotalPriceMustBePositive;
+        }
+
+        if (decimal.Remainder(totalPrice * 100, 1) != 0)
+        {
+            return BookingErrors.TotalPriceTooManyDecimalPlaces;
+        }
+
+        if (totalPrice > 9999999999999999.99m)
+        {
+            return BookingErrors.TotalPriceExceedsLimit;
+        }
+
+        if (expiresAt <= DateTime.UtcNow)
+        {
+            return BookingErrors.ExpiresAtInPast;
+        }
+
+
+        BookingReference = bookingReference;
+        TripId = tripId;
+        BoardingStationId = boardingStationId;
+        AlightingStationId = alightingStationId;
+        TotalPrice = totalPrice;
+        ExpiresAt = expiresAt;
+
+        return Result.Updated;
+
+    }
+
 
 }
