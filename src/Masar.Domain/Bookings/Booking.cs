@@ -1,4 +1,5 @@
 ﻿using Masar.Domain.Common;
+using Masar.Domain.Common.Results;
 using Masar.Domain.Passengers;
 using Masar.Domain.Stations;
 using Masar.Domain.Tickets;
@@ -10,33 +11,35 @@ namespace Masar.Domain.Bookings;
 
 public partial class Booking : AuditableEntity
 {
-    public string BookingReference { get; set; } = null!;
+    public string BookingReference { get; private set; } = null!;
 
-    public Guid PassengerId { get; set; }
+    public Guid PassengerId { get; private set; }
 
-    public Guid TripId { get; set; }
+    public Guid TripId { get; private set; }
 
-    public Guid BoardingStationId { get; set; }
+    public Guid BoardingStationId { get; private set; }
 
-    public Guid AlightingStationId { get; set; }
+    public Guid AlightingStationId { get; private set; }
 
-    public decimal TotalPrice { get; set; }
+    public decimal TotalPrice { get; private set; }
 
-    public string PaymentStatus { get; set; } = null!;
+    public PaymentStatus PaymentStatus { get; private set; }
 
-    public bool IsDelete { get; set; }
+    public DateTime? PaidAt { get; private set; }
 
-    public virtual Station AlightingStation { get; set; } = null!;
+    public DateTime ExpiresAt { get; private set; }
 
-    public virtual Station BoardingStation { get; set; } = null!;
+    public bool IsDelete { get; private set; }
 
-    public virtual Passenger Passenger { get; set; } = null!;
+    public virtual Station AlightingStation { get; private set; } = null!;
 
-    public virtual ICollection<Ticket> Tickets { get; set; } = new List<Ticket>();
+    public virtual Station BoardingStation { get; private set; } = null!;
 
-    public virtual Trip Trip { get; set; } = null!;
+    public virtual Passenger Passenger { get; private set; } = null!;
 
+    public virtual ICollection<Ticket> Tickets { get; private set; } = new List<Ticket>();
 
+    public virtual Trip Trip { get; private set; } = null!;
 
     private Booking() { }
 
@@ -48,9 +51,7 @@ public partial class Booking : AuditableEntity
     Guid boardingStationId,
     Guid alightingStationId,
     decimal totalPrice,
-    string paymentStatus,
-    DateTime createdAt,
-    bool isDelete)
+    DateTime expiresAt)
         : base(id)
     {
         BookingReference = bookingReference;
@@ -59,8 +60,10 @@ public partial class Booking : AuditableEntity
         BoardingStationId = boardingStationId;
         AlightingStationId = alightingStationId;
         TotalPrice = totalPrice;
-        PaymentStatus = paymentStatus;
-        CreatedAt = createdAt;
-        IsDelete = isDelete;
+        ExpiresAt = expiresAt;
+
+        IsDelete = false;
+        PaymentStatus = PaymentStatus.Pending;
     }
+
 }

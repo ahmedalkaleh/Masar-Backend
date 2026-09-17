@@ -96,12 +96,16 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .IsUnicode(false);
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Bookings__CreatedAt__45F365D3");
             entity.Property(e => e.PassengerId).HasColumnName("PassengerID");
-            entity.Property(e => e.PaymentStatus)
-                .HasMaxLength(20)
+            entity.Property(e => e.PaymentStatus).HasConversion<string>()
+                .HasMaxLength(15)
                 .IsUnicode(false)
-                .HasDefaultValue("Pending");
+                .HasDefaultValue(PaymentStatus.Pending);
             entity.Property(e => e.TotalPrice).HasColumnType("decimal(18, 2)");
             entity.Property(e => e.TripId).HasColumnName("TripID");
+
+            entity.Property(e => e.ExpiresAt).HasDefaultValueSql("DATEADD(minute,10,GETUTCDATE())", "DF__Bookings__ExpiresAt__45F365D3");
+
+            entity.ToTable(t => t.HasCheckConstraint("CK_Bookings_PaymentStatus", "[PaymentStatus] IN ('Pending', 'Paid', 'Failed', 'Expired')"));
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Bookings__IsDelete__45F365D3");
 
@@ -375,11 +379,16 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .IsUnicode(false)
                 .HasColumnName("QRCodeHash");
             entity.Property(e => e.SeatId).HasColumnName("SeatID");
-            entity.Property(e => e.Status)
-                .HasMaxLength(20)
+            entity.Property(e => e.Status).HasConversion<string>()
+                .HasMaxLength(15)
                 .IsUnicode(false)
-                .HasDefaultValue("Valid", "DF__Tickets__Status__76969D2E");
+                .HasDefaultValue(TicketStatus.Pending, "DF__Tickets__Status__76969D2E");
+
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Tickets__CreatedAt__45F365D3");
+
+            entity.Property(e => e.IsUsed).HasDefaultValue(false);
+
+            entity.ToTable(t => t.HasCheckConstraint("CK_Tickets_Status", "[Status] IN ('Pending', 'Confirmed', 'Used', 'Expired', 'Cancelled')"));
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Tickets__IsDelete__45F365D3");
 

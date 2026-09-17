@@ -22,7 +22,9 @@ public partial class Ticket : AuditableEntity
 
     public string QrcodeHash { get; set; } = null!;
 
-    public string Status { get; set; } = null!;
+    public TicketStatus Status { get; set; }
+
+    public bool IsUsed { get; set; }
 
     public DateTime? BoardedAt { get; set; }
 
@@ -44,7 +46,7 @@ public partial class Ticket : AuditableEntity
     int endStopOrder,
     decimal price,
     string qrcodeHash,
-    string status,
+    TicketStatus status,
     DateTime? boardedAt,
     bool isDelete)
         :base(id)
