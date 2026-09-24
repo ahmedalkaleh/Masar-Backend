@@ -32,18 +32,6 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
                 return BookingErrors.PassengerNotFound;
             }
 
-            if (!_context.Stations.Any(x => x.Id == command.BoardingStationId))
-            {
-                _logger.LogWarning("Booking creation aborted: Boarding station with ID '{BoardingStationId}' not found.", command.BoardingStationId);
-                return BookingErrors.BoardingStationNotFound;
-            }
-
-            if (!_context.Stations.Any(x => x.Id == command.AlightingStationId))
-            {
-                _logger.LogWarning("Booking creation aborted: Alighting station with ID '{AlightingStationId}' not found.", command.AlightingStationId);
-                return BookingErrors.AlightingStationNotFound;
-            }
-
             if (command.BoardingStationId == command.AlightingStationId)
             {
                 _logger.LogWarning("Booking creation aborted: Boarding station ID '{BoardingStationId}' is the same as alighting station ID '{AlightingStationId}'.", command.BoardingStationId, command.AlightingStationId);
@@ -91,16 +79,20 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
             Guid prevStationId = Guid.Empty;
             Guid currentStationId = Guid.Empty;
 
-            for(int i = startStop + 1; i <= endStop; i++)
+            var allStationIDs = sortedStops.Select(x => x.StationId);
+
+            var routSegments = await _context.RouteSegments.Where(x => allStationIDs.Contains(x.FirstStationId) && allStationIDs.Contains(x.SecondStationId)).ToArrayAsync(cancellationToken);
+
+            for (int i = startStop; i <= endStop; i++)
             {
-                prevStationId = (i - 1) == 0 ? command.BoardingStationId : sortedStops[i - 1].StationId;
+                prevStationId = (i - 1) == -1 ? command.BoardingStationId : sortedStops[i - 1].StationId;
                 
                 currentStationId = sortedStops[i].StationId;
 
                 if(i == endStop)
                     currentStationId = (endStop > sortedStops.Count()) ? command.AlightingStationId : currentStationId = sortedStops[i].StationId;
 
-                var existRoutSegment = await _context.RouteSegments.FirstOrDefaultAsync(x =>
+                var existRoutSegment = routSegments.FirstOrDefault(x =>
                     (prevStationId == x.FirstStationId && currentStationId == x.SecondStationId) ||
                     (prevStationId == x.SecondStationId && currentStationId == x.FirstStationId));
 
