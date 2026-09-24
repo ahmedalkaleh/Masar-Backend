@@ -56,6 +56,7 @@ builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicationServices();
 builder.Services.AddScoped<IUser, CurrentUser>();
+builder.Services.AddScoped<ITripCollisionChecker, TripCollisionChecker>();
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
