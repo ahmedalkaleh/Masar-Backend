@@ -4,7 +4,7 @@ using System.Text;
 
 namespace Masar.Application.Features.Trips.Dtos
 {
-    public class TripDto()
+    public class TripDto
     {
         public Guid TripId { get; set; }
         public Guid originStationId { get; set; }
