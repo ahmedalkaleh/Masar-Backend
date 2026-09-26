@@ -21,7 +21,7 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> CreateSeat([FromBody] CreateSeatCommand request, CancellationToken cancellationToken)
         {
             var result = await sender.Send(request, cancellationToken);
-            return result.Match(response => CreatedAtRoute("GetSeatById", new { id = response.SeatID }, response), Problem);
+            return result.Match(response => StatusCode(StatusCodes.Status201Created, response), Problem);
         }
 
         [HttpPut("{id:guid}")]

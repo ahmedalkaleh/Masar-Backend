@@ -23,7 +23,7 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> CreateRouteSegment([FromBody] CreateRouteSegmentCommand request, CancellationToken cancellationToken)
         {
             var result = await sender.Send(request, cancellationToken);
-            return result.Match(response => CreatedAtRoute("GetRouteSegmentById", new { id = response.RouteSegmentID }, response), Problem);
+            return result.Match(response => StatusCode(StatusCodes.Status201Created, response), Problem);
         }
 
         [HttpPut("{id:guid}")]
