@@ -28,5 +28,10 @@ namespace Masar.Domain.Trains
         public static Error StatusRequired =>
             Error.Validation("Train.StatusRequired","Train status is required.");
 
+        public static Error CurrentStationNotFound =>
+            Error.NotFound("Trip.CurrentStationNotFound", "Current station with the specified ID was not found.");
+
+
+
     }
 }

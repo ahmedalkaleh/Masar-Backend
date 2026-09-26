@@ -5,6 +5,7 @@ using Masar.Domain.Trains;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 
 namespace Masar.Application.Features.Trains.Commands.UpdateTrain
@@ -23,7 +24,9 @@ namespace Masar.Application.Features.Trains.Commands.UpdateTrain
                 return TrainErrors.TrainNotFound;
             }
 
-            if (_context.Trains.Any(x => x.Code == request.Code && Train.Code != request.Code))
+            var code = request.Code.Trim();
+
+            if (await _context.Trains.AnyAsync(x => x.Code == code && Train.Code.Trim() != code, cancellationToken))
             {
                 _logger.LogWarning("Train update aborted. Train with code {TrainCode} already exists.", request.Code);
                 return TrainErrors.CodeAlreadyExists;
@@ -31,7 +34,7 @@ namespace Masar.Application.Features.Trains.Commands.UpdateTrain
 
             var updatedTrainResult = Train.Update(
 
-                request.Code,
+                code,
                 request.Name,
                 request.TrainType,
                 request.MaxSpeedKmh);
