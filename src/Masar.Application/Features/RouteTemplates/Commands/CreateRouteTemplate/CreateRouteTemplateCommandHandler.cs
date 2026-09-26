@@ -114,7 +114,7 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
 
 
 
-            var CreateRouteTemplateResult = RouteTemplate.Create(Guid.NewGuid(), command.TemplateName, command.StartStationId, command.EndStationId, routeTemplateStops);
+            var CreateRouteTemplateResult = RouteTemplate.Create(Guid.NewGuid(), command.TemplateName.Trim(), command.StartStationId, command.EndStationId, routeTemplateStops);
             if (CreateRouteTemplateResult.IsError)
             {
                 return CreateRouteTemplateResult.Errors;
