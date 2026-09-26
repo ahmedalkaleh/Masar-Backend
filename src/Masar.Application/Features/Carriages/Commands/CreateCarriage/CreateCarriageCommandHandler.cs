@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace Masar.Application.Features.Carriages.Commands.CreateCarriage
@@ -19,13 +20,13 @@ namespace Masar.Application.Features.Carriages.Commands.CreateCarriage
 
         public async Task<Result<CarriageDto>> Handle(CreateCarriageCommand command, CancellationToken cancellationToken)
         {
-            if(_context.Carriages.Any(x => x.CarriageNumber == command.CarriageNumber))
+            if(await _context.Carriages.AnyAsync(x => x.CarriageNumber == command.CarriageNumber && x.TrainId == command.TrainId, cancellationToken))
             {
-                _logger.LogWarning("Carriage Creation aborted.Carriage with number {CarriageNumber} already exists.", command.CarriageNumber);
+                _logger.LogWarning("Carriage Creation aborted.Carriage with number {CarriageNumber} already exists for Tran {TrainId}.", command.CarriageNumber, command.TrainId);
                 return CarriageErrors.CarriageNumberAlreadyExists;
             }
 
-            if(!_context.Trains.Any(x => x.Id == command.TrainId))
+            if(! await _context.Trains.AnyAsync(x => x.Id == command.TrainId, cancellationToken))
             {
                 _logger.LogWarning("Carriage Creation aborted.Train with id {TrainId} not found.", command.TrainId);
                 return CarriageErrors.TrainNotFound;
