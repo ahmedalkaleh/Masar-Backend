@@ -35,6 +35,7 @@ namespace Masar.Domain.RouteTemplates
             TemplateName = templateName;
             StartStationId = startStationId;
             EndStationId = endStationId;
+            RouteTemplateStops = routeTemplateStops;
         }
 
         public static Result<RouteTemplate> Create(

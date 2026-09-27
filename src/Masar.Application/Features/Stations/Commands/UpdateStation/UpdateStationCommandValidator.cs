@@ -21,6 +21,10 @@ namespace Masar.Application.Features.Stations.Commands.UpdateStation
                 .MaximumLength(100)
                 .WithMessage("English station name must not exceed 100 characters.");
 
+            RuleFor(x => x.Type)
+                .IsInEnum()
+                .WithMessage("Station type is invalid.");
+
             RuleFor(x => x.Latitude)
                 .InclusiveBetween(-90, 90)
                 .WithMessage("Latitude must be between -90 and 90.");

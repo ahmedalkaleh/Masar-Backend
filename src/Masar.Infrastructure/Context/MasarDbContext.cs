@@ -128,6 +128,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasForeignKey(d => d.TripId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Bookings__TripID__6E01572D");
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<Carriage>(entity =>
@@ -148,6 +152,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.HasOne(d => d.Train).WithMany(p => p.Carriages)
                 .HasForeignKey(d => d.TrainId)
                 .HasConstraintName("FK__Carriages__Train__49C3F6B7");
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<Passenger>(entity =>
@@ -226,6 +234,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasForeignKey(d => d.SecondStationId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__RouteSegm__ToSta__3D5E1FD2");
+
+                        // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
         modelBuilder.Entity<RouteTemplate>(entity =>
         {
@@ -337,6 +349,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Stations__CreatedAt__45F365D3");
 
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Stations__IsDelete__45F365D3");
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<SystemAuditLog>(entity =>
@@ -362,6 +378,8 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__SystemAuditLogs__CreatedAt__45F365D3");
 
             entity.Property(e => e.UserId).HasColumnName("UserID");
+
+
         });
 
         modelBuilder.Entity<Ticket>(entity =>
@@ -400,6 +418,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasForeignKey(d => d.SeatId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Tickets__SeatID__75A278F5");
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<Train>(entity =>
@@ -432,6 +454,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.HasOne(d => d.CurrentStation).WithMany(e => e.Trains)
             .HasForeignKey(d => d.CurrentStationId)
             .HasConstraintName("FK__Trains__Curre__5EB337D6").IsRequired(false);
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<TrainLiveLocation>(entity =>
@@ -463,6 +489,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasForeignKey(d => d.TripId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__TrainLive__TripI__5FB337D6");
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<Trip>(entity =>
@@ -500,6 +530,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasForeignKey(d => d.TrainId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK__Trips__TrainID__52593CB8");
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<TripStop>(entity =>
@@ -523,6 +557,11 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.HasOne(d => d.Trip).WithMany(p => p.TripStops)
                 .HasForeignKey(d => d.TripId)
                 .HasConstraintName("FK__TripStops__TripI__5AEE82B9");
+
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
+
         });
 
         modelBuilder.Entity<User>(entity =>
@@ -545,6 +584,10 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasForeignKey(d => d.PersonId)
                 .OnDelete(DeleteBehavior.ClientSetNull)
                 .HasConstraintName("FK_Users_Persons");
+
+
+            // Global query filter to exclude soft-deleted entities
+            entity.HasQueryFilter(x => x.IsDelete == false);
         });
 
         OnModelCreatingPartial(modelBuilder);

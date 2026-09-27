@@ -27,6 +27,9 @@ namespace Masar.Domain.Stations
                 "Station.InvalidNameEn",
                 "English station name must not exceed 100 characters.");
 
+        public static Error InvalidStationType =>
+            Error.Validation("Seat.InvalidStationType", "Station type is invalid.");
+
         public static Error InvalidLatitude =>
             Error.Validation(
                 "Station.InvalidLatitude",

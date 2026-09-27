@@ -4,6 +4,7 @@ using Masar.Domain.Common.Results;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.RouteTemplates;
 using Masar.Domain.RouteTemplateStops;
+using Masar.Domain.Seats;
 using Masar.Domain.Trains;
 using Masar.Domain.Trips;
 using Masar.Domain.TripStops;
@@ -110,6 +111,11 @@ public partial class Station : AuditableEntity
             errorsList.Add(StationErrors.InvalidNameEn);
         }
 
+        if (!Enum.IsDefined(typeof(StationType), type))
+        {
+            errorsList.Add(StationErrors.InvalidStationType);
+        }
+
         if (latitude < -90 || latitude > 90)
         {
             errorsList.Add(StationErrors.InvalidLatitude);
@@ -173,6 +179,11 @@ public partial class Station : AuditableEntity
         if (nameEn.Count() > 100)
         {
             errorsList.Add(StationErrors.InvalidNameEn);
+        }
+
+        if (!Enum.IsDefined(typeof(StationType), type))
+        {
+            errorsList.Add(StationErrors.InvalidStationType);
         }
 
         if (latitude < -90 || latitude > 90)

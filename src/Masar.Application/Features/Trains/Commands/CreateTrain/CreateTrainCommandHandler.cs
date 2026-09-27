@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Text;
 using Masar.Domain.Trains;
 using Microsoft.Extensions.Logging;
+using Microsoft.EntityFrameworkCore;
 
 namespace Masar.Application.Features.Trains.Commands.CreateTrain
 {
@@ -19,20 +20,27 @@ namespace Masar.Application.Features.Trains.Commands.CreateTrain
 
         public async Task<Result<TrainDto>> Handle(CreateTrainCommand command, CancellationToken cancellationToken)
         {
+            if (! await _context.Stations.AnyAsync(x => x.Id == command.CurrentStationId, cancellationToken))
+            {
+                _logger.LogWarning("Train Creation aborted. Train with Current Station Id {CurrentStationId} not found.", command.CurrentStationId);
+                return TrainErrors.CurrentStationNotFound;
+            }
 
-            if(_context.Trains.Any(x => x.Code == command.Code))
+            var code = command.Code.Trim();
+
+            if (await _context.Trains.AnyAsync(x => x.Code == code, cancellationToken))
             {
                 _logger.LogWarning("Train Creation aborted. Train with code {TrainCode} already exists.", command.Code);
                 return TrainErrors.CodeAlreadyExists;
             }
 
-            var createTrainResult = Masar.Domain.Trains.Train.Create(Guid.NewGuid(), command.Code.Trim(), command.Name.Trim(), command.TrainType.Trim(), command.MaxSpeedKmh,command.CurrentStationId);
+            var createTrainResult = Masar.Domain.Trains.Train.Create(Guid.NewGuid(), code, command.Name.Trim(), command.TrainType.Trim(), command.MaxSpeedKmh,command.CurrentStationId);
             if (createTrainResult.IsError)
             {
                 return createTrainResult.Errors;
             }
 
-            _context.Trains.Add(createTrainResult.Value);
+            await _context.Trains.AddAsync(createTrainResult.Value, cancellationToken);
 
             await _context.SaveChangesAsync(cancellationToken);
 
