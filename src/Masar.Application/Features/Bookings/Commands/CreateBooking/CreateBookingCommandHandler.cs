@@ -79,6 +79,7 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
             Guid prevStationId = Guid.Empty;
             Guid currentStationId = Guid.Empty;
 
+
             var allStationIDs = sortedStops.Select(x => x.StationId);
 
             var routSegments = await _context.RouteSegments.Where(x => allStationIDs.Contains(x.FirstStationId) && allStationIDs.Contains(x.SecondStationId)).ToArrayAsync(cancellationToken);
@@ -87,10 +88,9 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
             {
                 prevStationId = (i - 1) == -1 ? command.BoardingStationId : sortedStops[i - 1].StationId;
                 
+
                 currentStationId = sortedStops[i].StationId;
 
-                if(i == endStop)
-                    currentStationId = (endStop > sortedStops.Count()) ? command.AlightingStationId : currentStationId = sortedStops[i].StationId;
 
                 var existRoutSegment = routSegments.FirstOrDefault(x =>
                     (prevStationId == x.FirstStationId && currentStationId == x.SecondStationId) ||
