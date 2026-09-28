@@ -1,29 +1,47 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <ItemGroup>
-    <PackageReference Include="FluentValidation" Version="12.1.1" />
-    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
-    <PackageReference Include="MediatR" Version="14.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.12" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
-  </ItemGroup>
+	<PropertyGroup>
+		<TargetFramework>net10.0</TargetFramework>
+		<ImplicitUsings>enable</ImplicitUsings>
+		<Nullable>enable</Nullable>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Masar.Domain\Masar.Domain.csproj" />
-  </ItemGroup>
+		<!-- Generate XML documentation for Swagger/OpenAPI -->
+		<GenerateDocumentationFile>true</GenerateDocumentationFile>
+		<NoWarn>$(NoWarn);1591</NoWarn>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <None Include="Features\RouteTemplates\Commands\CreateRouteTemplate\CreateRouteTemplateCommandHandler.cs" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="FluentValidation" Version="12.1.1" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.1.1" />
+		<PackageReference Include="MediatR" Version="14.2.0" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.3.12" />
+		<PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.11" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Features\Trips\Mappers\" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Masar.Domain\Masar.Domain.csproj" />
+	</ItemGroup>
 
-  <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
+	<ItemGroup>
+		<None Include="Features\RouteTemplates\Commands\CreateRouteTemplate\CreateRouteTemplateCommandHandler.cs" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Features\Trips\Mappers\" />
+	</ItemGroup>
+
+	<!--
+    Copy Application XML documentation to the API output directory
+    so that Swagger can read it.
+  -->
+	<Target Name="CopyApplicationXmlDocumentationToApi"
+			AfterTargets="Build">
+
+		<Copy
+		  SourceFiles="$(OutputPath)$(AssemblyName).xml"
+		  DestinationFolder="$(MSBuildProjectDirectory)\..\Masar.API\bin\$(Configuration)\$(TargetFramework)\"
+		  SkipUnchangedFiles="true" />
+
+	</Target>
 
 </Project>

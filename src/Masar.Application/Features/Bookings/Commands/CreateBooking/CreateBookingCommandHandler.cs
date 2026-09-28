@@ -91,14 +91,14 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
             Guid prevStationId = Guid.Empty;
             Guid currentStationId = Guid.Empty;
 
-            for(int i = startStop + 1; i <= endStop; i++)
+            for(int i = startStop ; i <= endStop; i++)
             {
-                prevStationId = (i - 1) == 0 ? command.BoardingStationId : sortedStops[i - 1].StationId;
-                
+                prevStationId = (i - 1) == -1 ? command.BoardingStationId : sortedStops[i - 1].StationId;
+                if (i == endStop)
+                    currentStationId = (endStop > sortedStops.Count()) ? command.AlightingStationId : currentStationId = sortedStops[i].StationId;
+                else
                 currentStationId = sortedStops[i].StationId;
 
-                if(i == endStop)
-                    currentStationId = (endStop > sortedStops.Count()) ? command.AlightingStationId : currentStationId = sortedStops[i].StationId;
 
                 var existRoutSegment = await _context.RouteSegments.FirstOrDefaultAsync(x =>
                     (prevStationId == x.FirstStationId && currentStationId == x.SecondStationId) ||
