@@ -21,7 +21,7 @@ namespace Masar.API.Controllers
         {
             var RouteTemplateStops = request.RouteTemplateStops.ConvertAll(v => new CreateRouteTemplateStopCommand(v.StationId, v.StopOrder));
             var result = await sender.Send(new CreateRouteTemplateCommand(request.TemplateName, request.StartStationId, request.EndStationId, RouteTemplateStops), cancellationToken);
-            return result.Match(response => CreatedAtRoute(routeName: "GetRouteTemplateById", routeValues: new { id = response.RouteTemplateId }, value: response), Problem);
+            return result.Match(response => StatusCode(StatusCodes.Status201Created, response), Problem);
 
         }
     }

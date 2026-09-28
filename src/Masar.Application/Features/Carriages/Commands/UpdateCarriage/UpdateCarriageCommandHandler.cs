@@ -4,10 +4,11 @@ using Masar.Domain.Common.Results;
 using Masar.Domain.Trains;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Microsoft.Extensions.Logging;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Database;
 
 namespace Masar.Application.Features.Carriages.Commands.UpdateCarriage
 {
@@ -25,15 +26,15 @@ namespace Masar.Application.Features.Carriages.Commands.UpdateCarriage
                 return CarriageErrors.CarriageNotFound;
             }
 
-            if (!_context.Trains.Any(x => x.Id == request.TrainId))
+            if (! await _context.Trains.AnyAsync(x => x.Id == request.TrainId, cancellationToken))
             {
                 _logger.LogWarning("Carriage update aborted. Train with id {TrainId} not found.", request.TrainId);
                 return CarriageErrors.TrainNotFound;
             }
             
-            if (_context.Carriages.Any(x => x.CarriageNumber == request.CarriageNumber && carriage.CarriageNumber != request.CarriageNumber))
+            if (await _context.Carriages.AnyAsync(x => x.CarriageNumber == request.CarriageNumber && x.TrainId == request.TrainId && carriage.CarriageNumber != request.CarriageNumber, cancellationToken ))
             {
-                _logger.LogWarning("Carriage update aborted. Carriage number {CarriageNumber} already exists.", request.CarriageNumber);
+                _logger.LogWarning("Carriage update aborted. Carriage number {CarriageNumber} already exists for Tran {TrainId}.", request.CarriageNumber, request.TrainId);
                 return CarriageErrors.CarriageNumberAlreadyExists;
             }
 

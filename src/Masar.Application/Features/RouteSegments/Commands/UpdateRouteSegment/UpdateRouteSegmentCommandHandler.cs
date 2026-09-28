@@ -45,7 +45,9 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
                 return RouteSegmentErrors.RouteSegmentAlreadyExists;
             }
 
-            if (await _context.RouteSegments.AnyAsync(x => x.CorridorName == request.CorridorName && x.Id != routeSegment.Id, cancellationToken))
+            var corridorName = request.CorridorName.Trim();
+
+            if (await _context.RouteSegments.AnyAsync(x => x.CorridorName == corridorName && x.Id != routeSegment.Id, cancellationToken))
             {
                 _logger.LogWarning("RouteSegment update aborted.Carriage with CorridorName {CorridorName} already exists.", request.CorridorName);
                 return RouteSegmentErrors.CorridorNameAlreadyExists;
@@ -57,7 +59,7 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
                 request.TrackType,
                 request.DistanceKm,
                 request.EstPassengerTimeMin,
-                request.CorridorName);
+                corridorName);
 
             if (updateRouteSegmentResult.IsError)
             {

@@ -27,7 +27,8 @@ namespace Masar.Application.Features.Seats.Commands.CreateSeat
                 return SeatErrors.CarriageNotFound;
             }
 
-            if (await _context.Seats.AnyAsync(x => x.CarriageId == command.CarriageId && x.RowNumber == command.RowNumber
+            var rowNumber = command.RowNumber.Trim();
+            if (await _context.Seats.AnyAsync(x => x.CarriageId == command.CarriageId && x.RowNumber == rowNumber
             && x.ColumnNumber == command.ColumnNumber))
             {
                 _logger.LogWarning(
@@ -40,7 +41,7 @@ namespace Masar.Application.Features.Seats.Commands.CreateSeat
             }
 
             var createSeatResult = Masar.Domain.Seats.Seat.Create(Guid.NewGuid(), command.CarriageId,
-                command.RowNumber, command.ColumnNumber, command.SeatType);
+                rowNumber, command.ColumnNumber, command.SeatType);
 
             if(createSeatResult.IsError)
             {

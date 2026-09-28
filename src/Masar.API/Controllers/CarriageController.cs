@@ -19,7 +19,7 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> CreateCarriage([FromBody] CreateCarriageCommand request, CancellationToken cancellationToken)
         {
             var result = await sender.Send(request, cancellationToken);
-            return result.Match(response => CreatedAtRoute("GetCarriageById", new { id = response.CarriageId }, response), Problem);
+            return result.Match(response => StatusCode(StatusCodes.Status201Created, response), Problem);
         }
 
         [HttpPut("{id:guid}")]

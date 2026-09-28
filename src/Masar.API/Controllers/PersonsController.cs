@@ -29,7 +29,7 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> CreatePerson([FromBody] CreatePersonCommand request, CancellationToken cancellationToken)
         {
             var result = await sender.Send(request, cancellationToken);
-            return result.Match(response=>CreatedAtRoute("GetPersonById", new { id = response.PersonID }, response), Problem);
+            return result.Match(response => StatusCode(StatusCodes.Status201Created,response), Problem);
         }
 
         [HttpPut("{id:guid}")]

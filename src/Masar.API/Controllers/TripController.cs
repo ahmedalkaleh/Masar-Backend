@@ -19,7 +19,7 @@ namespace Masar.API.Controllers
         {
             
             var result = await sender.Send(request, cancellationToken);
-            return result.Match(Response =>CreatedAtRoute("GetTripById", new { id = Response.TripId }, Response),Problem);
+            return result.Match(response => StatusCode(StatusCodes.Status201Created, response),Problem);
         }
     }
 }

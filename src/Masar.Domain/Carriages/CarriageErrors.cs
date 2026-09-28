@@ -41,7 +41,7 @@ namespace Masar.Domain.Carriages
         public static Error CarriageNumberAlreadyExists =>
             Error.Conflict(
                 "Carriage.CarriageNumberAlreadyExists",
-                "A carriage with this number already exists.");
+                "A carriage with this number already exists for this train.");
 
     }
 }
