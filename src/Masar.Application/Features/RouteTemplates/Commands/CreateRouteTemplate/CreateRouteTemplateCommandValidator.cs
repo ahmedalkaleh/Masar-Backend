@@ -8,7 +8,8 @@ namespace Masar.Application.Features.RouteTemplates.Commands.CreateRouteTemplate
     {
         public CreateRouteTemplateCommandValidator()
         {
-            RuleFor(x => x.TemplateName).NotEmpty().WithMessage("TemplateName is required.");
+            RuleFor(x => x.TemplateName).NotEmpty().WithMessage("TemplateName is required.")
+                .MaximumLength(100).WithMessage("Template name must not exceed 100 characters.");
             RuleFor(x => x.StartStationId).NotEmpty().WithMessage("StartStationId is required.");
             RuleFor(x => x.EndStationId).NotEmpty().WithMessage("EndStationId is required.");
             RuleFor(x => x.RouteTemplateStops).NotEmpty().WithMessage("RouteTemplateStops are required.");

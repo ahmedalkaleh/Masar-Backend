@@ -26,8 +26,8 @@ namespace Masar.Application.Features.Carriages.Commands.CreateCarriage
                 .WithMessage("Class type must not exceed 50 characters.");
 
             RuleFor(x => x.TotalSeats)
-                .GreaterThan(0)
-                .WithMessage("Total seats must be greater than 0.");
+                .InclusiveBetween((short)1, (short)500)
+                .WithMessage("Total seats must be between 1 and 500.");
         }
     }
 }

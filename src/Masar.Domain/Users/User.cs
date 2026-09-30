@@ -29,16 +29,15 @@ public partial class User : AuditableEntity
     Guid id,
     Guid personId,
     string username,
-    Role role,
-    bool isDelete)
+    Role role)
         :base(id)
     {
         PersonId = personId;
         Username = username;
         Role = role;
-        IsDelete = isDelete;
+        IsDelete = false;
     }
-    public static Result<User> Create(Guid id, Guid personId, string username, Role role, bool isDelete)
+    public static Result<User> Create(Guid id, Guid personId, string username, Role role)
     {
         if (id == Guid.Empty)
         {
@@ -52,9 +51,9 @@ public partial class User : AuditableEntity
         {
             return UserError.UsernameRequired;
         }
-        return new User(id, personId, username, role, isDelete);
+        return new User(id, personId, username, role);
     }
-    public  Result<Updated> Update(Guid personId, string username, Role role, bool isDelete)
+    public  Result<Updated> Update(Guid personId, string username, Role role)
     {
         if (personId == Guid.Empty)
         {

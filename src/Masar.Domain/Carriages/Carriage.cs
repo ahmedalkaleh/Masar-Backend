@@ -15,7 +15,7 @@ public partial class Carriage : AuditableEntity
 
     public string ClassType { get; private set; } = null!;
 
-    public int TotalSeats { get; private set; }
+    public short TotalSeats { get; private set; }
 
     public bool IsDelete { get; private set; }
 
