@@ -87,9 +87,12 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
             for (int i = startStop; i <= endStop; i++)
             {
                 prevStationId = (i - 1) == -1 ? command.BoardingStationId : sortedStops[i - 1].StationId;
-                
 
-                currentStationId = sortedStops[i].StationId;
+
+                if (i == endStop)
+                    currentStationId = (endStop > sortedStops.Count()) ? command.AlightingStationId : currentStationId = sortedStops[i].StationId;
+                else
+                    currentStationId = sortedStops[i].StationId;
 
 
                 var existRoutSegment = routSegments.FirstOrDefault(x =>

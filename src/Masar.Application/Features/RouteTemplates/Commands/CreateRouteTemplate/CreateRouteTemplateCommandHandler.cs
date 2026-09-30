@@ -111,6 +111,16 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
                 }
 
             }
+            else
+            {
+                if (!await _context.RouteSegments.AnyAsync(rs => rs.FirstStationId == command.StartStationId && rs.SecondStationId == command.EndStationId ||
+                         rs.FirstStationId == command.EndStationId && rs.SecondStationId == command.StartStationId, ct))
+                {
+                    _logger.LogWarning("RouteTemplate creation aborted: Route segment from station ID '{StartStationId}' to station ID '{EndStationId}' does not exist.", command.StartStationId, command.EndStationId);
+                    return RouteTemplateStopErrors.RouteSegmentNotFound;
+                }
+
+            }
 
 
 
