@@ -37,10 +37,11 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> UpdatePassenger(Guid id, [FromBody] UpdatePassengerCommand request, CancellationToken cancellationToken)
         {
 
-            var command = new UpdatePassengerCommand(
-             id,
-             request.Person
-             );
+            var command = new UpdatePassengerCommand {
+             PassengerID =  id,
+             Person = request.Person
+             };
+
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }

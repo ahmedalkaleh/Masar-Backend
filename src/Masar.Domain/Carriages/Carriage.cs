@@ -13,7 +13,7 @@ public partial class Carriage : AuditableEntity
 
     public int CarriageNumber { get; private set; }
 
-    public string ClassType { get; private set; } = null!;
+    public ClassType ClassType { get; private set; }
 
     public short TotalSeats { get; private set; }
 
@@ -30,8 +30,8 @@ public partial class Carriage : AuditableEntity
     Guid id,
     Guid trainId,
     int carriageNumber,
-    string classType,
-    int totalSeats)
+    ClassType classType,
+    short totalSeats)
         :base(id)
     {
         TrainId = trainId;
@@ -46,8 +46,8 @@ public partial class Carriage : AuditableEntity
     Guid id,
     Guid trainId,
     int carriageNumber,
-    string classType,
-    int totalSeats)
+    ClassType classType,
+    short totalSeats)
     {
         if(trainId == Guid.Empty)
         {
@@ -59,9 +59,9 @@ public partial class Carriage : AuditableEntity
             return CarriageErrors.InvalidCarriageNumber;
         }
 
-        if(string.IsNullOrEmpty(classType))
+        if (!Enum.IsDefined(typeof(ClassType), classType))
         {
-            return CarriageErrors.ClassTypeRequired;
+            return CarriageErrors.InvalidClassType;
         }
 
         if (totalSeats <= 0)
@@ -75,7 +75,7 @@ public partial class Carriage : AuditableEntity
     }
 
 
-    public Result<Updated> Update(Guid trainId,int carriageNumber,string classType,int totalSeats)
+    public Result<Updated> Update(Guid trainId,int carriageNumber,ClassType classType,short totalSeats)
     {
         if (trainId == Guid.Empty)
         {
@@ -87,9 +87,9 @@ public partial class Carriage : AuditableEntity
             return CarriageErrors.InvalidCarriageNumber;
         }
 
-        if (string.IsNullOrEmpty(classType))
+        if (!Enum.IsDefined(typeof(ClassType), classType))
         {
-            return CarriageErrors.ClassTypeRequired;
+            return CarriageErrors.InvalidClassType;
         }
 
         if (totalSeats <= 0)

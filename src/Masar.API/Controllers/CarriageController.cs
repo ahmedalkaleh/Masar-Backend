@@ -32,8 +32,8 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> UpdateCarriage(Guid id, [FromBody] UpdateCarriageCommand request, CancellationToken cancellationToken)
         {
 
-            var command = new UpdateCarriageCommand(id, request.TrainId, request.CarriageNumber,
-                request.ClassType, request.TotalSeats);
+            var command = new UpdateCarriageCommand{CarriageID = id, TrainId = request.TrainId, CarriageNumber = request.CarriageNumber,
+                ClassType = request.ClassType, TotalSeats = request.TotalSeats };
 
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);

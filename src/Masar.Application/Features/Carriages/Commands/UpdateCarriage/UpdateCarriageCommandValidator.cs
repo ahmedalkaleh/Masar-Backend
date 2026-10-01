@@ -23,12 +23,8 @@ namespace Masar.Application.Features.Carriages.Commands.UpdateCarriage
                 .WithMessage("Carriage number must be greater than 0.");
 
             RuleFor(x => x.ClassType)
-                .NotEmpty()
-                .WithMessage("Class type is required.")
-                .MinimumLength(2)
-                .WithMessage("Class type must be at least 2 characters.")
-                .MaximumLength(50)
-                .WithMessage("Class type must not exceed 50 characters.");
+                .IsInEnum()
+                .WithMessage("Seat type is invalid.");
 
             RuleFor(x => x.TotalSeats)
                 .InclusiveBetween((short)1, (short)500)

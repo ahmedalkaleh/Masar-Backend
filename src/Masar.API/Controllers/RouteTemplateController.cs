@@ -20,7 +20,7 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> CreateRouteTemplate([FromBody] CreateRouteTemplateCommand request, CancellationToken cancellationToken)
         {
             var RouteTemplateStops = request.RouteTemplateStops.ConvertAll(v => new CreateRouteTemplateStopCommand(v.StationId, v.StopOrder));
-            var result = await sender.Send(new CreateRouteTemplateCommand(request.TemplateName, request.StartStationId, request.EndStationId, RouteTemplateStops), cancellationToken);
+            var result = await sender.Send(request, cancellationToken);
             return result.Match(response => StatusCode(StatusCodes.Status201Created, response), Problem);
 
         }

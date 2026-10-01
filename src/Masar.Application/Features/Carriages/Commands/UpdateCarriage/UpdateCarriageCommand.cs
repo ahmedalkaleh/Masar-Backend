@@ -1,4 +1,5 @@
 ﻿using Masar.Application.Features.Carriages.Dtos;
+using Masar.Domain.Carriages;
 using Masar.Domain.Common.Results;
 using MediatR;
 using System;
@@ -29,7 +30,7 @@ namespace Masar.Application.Features.Carriages.Commands.UpdateCarriage
         /// The class type of the carriage.
         /// Length: Between 2 and 50.
         /// </summary>
-        public string ClassType { get; init; } = null!;
+        public ClassType ClassType { get; init; }
 
         /// <summary>
         /// The total number of seats available in the carriage.

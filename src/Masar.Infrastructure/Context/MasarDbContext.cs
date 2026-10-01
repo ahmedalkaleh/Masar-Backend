@@ -146,12 +146,25 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
                 .HasMaxLength(20)
                 .IsUnicode(false);
             entity.Property(e => e.TrainId).HasColumnName("TrainID");
+            entity.Property(e => e.TotalSeats).HasColumnType("SMALLINT");
+
+            entity.Property(e => e.ClassType).HasConversion<string>()
+                .HasMaxLength(15)
+                .IsUnicode(false)
+                .HasDefaultValue(ClassType.Economy);
+
+
             entity.Property(e => e.CreatedAt).HasDefaultValueSql("(getutcdate())", "DF__Carriages__CreatedAt__45F365D3");
             entity.Property(e => e.IsDelete).HasDefaultValue(0, "DF__Carriages__IsDelete__45F365D3");
 
             entity.HasOne(d => d.Train).WithMany(p => p.Carriages)
                 .HasForeignKey(d => d.TrainId)
                 .HasConstraintName("FK__Carriages__Train__49C3F6B7");
+
+            entity.ToTable(t => t.HasCheckConstraint("CK_Carriages_CarriageNumber", "[CarriageNumber] > 0"));
+            entity.ToTable(t => t.HasCheckConstraint("CK_Carriages_TotalSeats", "[TotalSeats] Between 1 and 500"));
+            entity.ToTable(t => t.HasCheckConstraint("CK_Carriages_ClassType", "[ClassType] IN ('Economy', 'VIP')"));
+
 
             // Global query filter to exclude soft-deleted entities
             entity.HasQueryFilter(x => x.IsDelete == false);

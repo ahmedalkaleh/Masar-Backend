@@ -36,10 +36,10 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> UpdateRouteSegment(Guid id, [FromBody] UpdateRouteSegmentCommand request, CancellationToken cancellationToken)
         {
 
-            var command = new UpdateRouteSegmentCommand(
-             id,
-             request.FirstStationId, request.SecondStationId, request.TrackType, request.DistanceKm,
-             request.EstPassengerTimeMin, request.CorridorName);
+            var command = new UpdateRouteSegmentCommand{
+             RouteSegmentID = id,
+             FirstStationId = request.FirstStationId, SecondStationId = request.SecondStationId, TrackType = request.TrackType, DistanceKm = request.DistanceKm,
+             EstPassengerTimeMin = request.EstPassengerTimeMin, CorridorName = request.CorridorName };
 
 
             var result = await sender.Send(command, cancellationToken);

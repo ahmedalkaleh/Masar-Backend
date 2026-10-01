@@ -1,6 +1,7 @@
 ﻿using Masar.Application.Features.Seats.Commands.CreateSeat;
 using Masar.Application.Features.Seats.Commands.UpdateSeat;
 using Masar.Application.Features.Seats.Dtos;
+using Masar.Domain.Seats;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -34,9 +35,9 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> UpdateSeat(Guid id, [FromBody] UpdateSeatCommand request, CancellationToken cancellationToken)
         {
 
-            var command = new UpdateSeatCommand(
-             id,
-             request.RowNumber, request.ColumnNumber, request.SeatType, request.isActive);
+            var command = new UpdateSeatCommand{
+             SeatID = id,
+             RowNumber = request.RowNumber, ColumnNumber = request.ColumnNumber, SeatType = request.SeatType, isActive = request.isActive };
 
 
             var result = await sender.Send(command, cancellationToken);
