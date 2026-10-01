@@ -43,12 +43,12 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> UpdatePerson( Guid id, [FromBody] UpdatePersonCommand request, CancellationToken cancellationToken)
         {
           
-            var command = new UpdatePersonCommand(
-             id,
-             request.FullName,
-             request.Email,
-             request.PhoneNumber
-             );
+            var command = new UpdatePersonCommand{
+             PersonID =  id,
+             FullName = request.FullName,
+             Email = request.Email,
+             PhoneNumber = request.PhoneNumber
+             };
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }

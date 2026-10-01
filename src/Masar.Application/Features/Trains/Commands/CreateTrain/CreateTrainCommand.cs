@@ -7,12 +7,35 @@ using System.Text;
 
 namespace Masar.Application.Features.Trains.Commands.CreateTrain
 {
-    public sealed record CreateTrainCommand(
-        string Code,
-        string Name,
-        string TrainType,
-        int MaxSpeedKmh,
-        Guid CurrentStationId) : IRequest<Result<TrainDto>>
+    public sealed record CreateTrainCommand : IRequest<Result<TrainDto>>
     {
+        /// <summary>
+        /// The unique code assigned to the train.
+        /// Length: between 2 and 20 characters.
+        /// </summary>
+        public string Code { get; init; } = null!;
+
+        /// <summary>
+        /// The name of the train.
+        /// Length: between 2 and 100 characters.
+        /// </summary>
+        public string Name { get; init; } = null!;
+
+        /// <summary>
+        /// The type of the train.
+        /// Length: between 2 and 50 characters.
+        /// </summary>
+        public string TrainType { get; init; } = null!;
+
+        /// <summary>
+        /// The maximum speed of the train in kilometers per hour.
+        /// Must be between 1 and 500.
+        /// </summary>
+        public int MaxSpeedKmh { get; init; }
+
+        /// <summary>
+        /// The current station where the train is located.
+        /// </summary>
+        public Guid CurrentStationId { get; init; }
     }
 }

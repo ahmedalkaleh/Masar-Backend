@@ -9,6 +9,11 @@ namespace Masar.Application.Features.Trains.Commands.UpdateTrain
     {
         public UpdateTrainCommandValidator()
         {
+            RuleFor(x => x.TrainID)
+            .NotEmpty()
+            .WithMessage("Train ID is required.");
+
+
             RuleFor(x => x.Code)
             .NotEmpty().WithMessage("Code is required.")
             .MinimumLength(2).WithMessage("Train code must be at least 2 characters.")
@@ -23,6 +28,10 @@ namespace Masar.Application.Features.Trains.Commands.UpdateTrain
             .NotEmpty().WithMessage("Train type is required.")
             .MinimumLength(2).WithMessage("Train type must be at least 2 characters.")
             .MaximumLength(50).WithMessage("Train type must not exceed 50 characters.");
+
+            RuleFor(x => x.MaxSpeedKmh)
+            .InclusiveBetween(1, 500)
+            .WithMessage("Maximum speed must be between 1 and 500 km/h.");
 
         }
     }

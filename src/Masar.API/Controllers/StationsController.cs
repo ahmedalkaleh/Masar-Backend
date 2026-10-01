@@ -34,10 +34,15 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> UpdateStation(Guid id, [FromBody] UpdateStationCommand request, CancellationToken cancellationToken)
         {
 
-            var command = new UpdateStationCommand(
-             id,
-             request.NameAr,request.NameEn,request.Type,request.Latitude,
-             request.Longitude,request.Governorate,request.CustomsDelayMinutes);
+            var command = new UpdateStationCommand{
+                StationID = id,
+                NameAr = request.NameAr,
+                NameEn = request.NameEn,
+                Type = request.Type,
+                Latitude = request.Latitude,
+                Longitude = request.Longitude,
+                Governorate = request.Governorate,
+                CustomsDelayMinutes = request.CustomsDelayMinutes };
 
 
             var result = await sender.Send(command, cancellationToken);

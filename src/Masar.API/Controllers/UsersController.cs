@@ -34,14 +34,13 @@ namespace Masar.API.Controllers
         [EndpointName("UpdateUser")]
         public async Task<IActionResult> UpdateUser(Guid id, [FromBody] UpdateUserCommand request, CancellationToken cancellationToken)
         {
-            var command = new UpdateUserCommand(
-                id,
-                request.PersonId,
-                request.Username,
-                request.NewPassword,
-                request.Role,
-                request.IsDelete
-            );
+            var command = new UpdateUserCommand{
+                Id = id,
+                PersonId = request.PersonId,
+                Username = request.Username,
+                NewPassword = request.NewPassword,
+                Role = request.Role
+            };
 
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);

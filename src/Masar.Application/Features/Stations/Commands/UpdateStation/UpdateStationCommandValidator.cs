@@ -9,6 +9,11 @@ namespace Masar.Application.Features.Stations.Commands.UpdateStation
     {
         public UpdateStationCommandValidator() 
         {
+            RuleFor(x => x.StationID)
+            .NotEmpty()
+            .WithMessage("Station ID is required.");
+
+
             RuleFor(x => x.NameAr)
             .NotEmpty()
             .WithMessage("Arabic station name is required.")

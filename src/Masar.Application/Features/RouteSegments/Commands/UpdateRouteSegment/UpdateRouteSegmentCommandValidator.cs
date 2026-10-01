@@ -9,6 +9,10 @@ namespace Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment
     {
         public UpdateRouteSegmentCommandValidator() 
         {
+            RuleFor(x => x.RouteSegmentID)
+                .NotEmpty()
+                .WithMessage("Route Segment ID is required.");
+
             RuleFor(x => x.FirstStationId)
                 .NotEmpty()
                 .WithMessage("FirstStationId is required.");

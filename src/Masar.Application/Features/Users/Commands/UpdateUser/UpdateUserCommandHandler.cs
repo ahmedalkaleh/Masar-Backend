@@ -57,8 +57,7 @@ namespace Masar.Application.Features.Users.Commands.UpdateUser
             var updateUserResult = user.Update(
                 command.PersonId,
                 command.Username.Trim(),
-                command.Role,
-                command.IsDelete
+                command.Role
             );
 
             if (updateUserResult.IsError)

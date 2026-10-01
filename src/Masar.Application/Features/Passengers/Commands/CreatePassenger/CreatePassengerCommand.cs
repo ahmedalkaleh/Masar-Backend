@@ -8,8 +8,11 @@ using System.Text;
 
 namespace Masar.Application.Features.Passengers.Commands.CreatePassenger
 {
-    public sealed record CreatePassengerCommand
-        (CreatePersonCommand Person) : IRequest<Result<PassengerDto>>
+    public sealed record CreatePassengerCommand : IRequest<Result<PassengerDto>>
     {
+        /// <summary>
+        /// The personal information of the passenger.
+        /// </summary>
+        public CreatePersonCommand Person { get; init; } = null!;
     }
 }

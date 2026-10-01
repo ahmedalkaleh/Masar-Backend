@@ -32,8 +32,9 @@ namespace Masar.API.Controllers
         public async Task<IActionResult> UpdateTrain(Guid id, [FromBody] UpdateTrainCommand request, CancellationToken cancellationToken)
         {
 
-            var command = new UpdateTrainCommand(id,request.Code,request.Name,
-                request.TrainType,request.MaxSpeedKmh);
+            var command = new UpdateTrainCommand{
+                TrainID = id, Code = request.Code,Name = request.Name,
+                TrainType = request.TrainType,MaxSpeedKmh = request.MaxSpeedKmh };
 
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);

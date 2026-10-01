@@ -11,6 +11,11 @@ namespace Masar.Application.Features.Passengers.Commands.UpdatePassenger
     {
         public UpdatePassengerCommandValidator(IValidator<CreatePersonCommand> personValidator)
         {
+            RuleFor(x => x.PassengerID)
+            .NotEmpty()
+            .WithMessage("Passenger ID is required.");
+
+
             RuleFor(x => x.Person)
             .NotNull()
             .SetValidator(personValidator);

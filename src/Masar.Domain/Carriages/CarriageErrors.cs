@@ -18,10 +18,8 @@ namespace Masar.Domain.Carriages
                 "Carriage.InvalidCarriageNumber",
                 "Carriage number cannot be negative.");
 
-        public static Error ClassTypeRequired =>
-            Error.Validation(
-                "Carriage.ClassTypeRequired",
-                "Carriage class type is required.");
+        public static Error InvalidClassType =>
+            Error.Validation("Seat.InvalidClassType", "Class type is invalid.");
 
         public static Error InvalidTotalSeats =>
             Error.Validation(

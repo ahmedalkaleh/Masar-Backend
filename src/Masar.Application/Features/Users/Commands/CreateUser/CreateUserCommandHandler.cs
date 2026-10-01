@@ -45,8 +45,7 @@ namespace Masar.Application.Features.Users.Commands.CreateUser
                 newGuid,
                 command.PersonId,
                 command.Username.Trim(),
-                command.Role,
-                false
+                command.Role
             );
 
             if (createUserResult.IsError)

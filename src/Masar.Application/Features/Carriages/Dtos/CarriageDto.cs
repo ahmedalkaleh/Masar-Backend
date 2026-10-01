@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Masar.Domain.Carriages;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -12,8 +13,8 @@ namespace Masar.Application.Features.Carriages.Dtos
 
         public int CarriageNumber { get; set; }
 
-        public string ClassType { get; set; } = string.Empty;
+        public ClassType ClassType { get; set; }
 
-        public int TotalSeats { get; set; }
+        public short TotalSeats { get; set; }
     }
 }
