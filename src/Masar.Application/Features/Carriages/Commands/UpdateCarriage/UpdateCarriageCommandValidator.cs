@@ -6,17 +6,21 @@ using System.Text;
 
 namespace Masar.Application.Features.Carriages.Commands.UpdateCarriage
 {
-    public sealed class UpdateCarriageCommandValidator : AbstractValidator<CreateCarriageCommand>
+    public sealed class UpdateCarriageCommandValidator : AbstractValidator<UpdateCarriageCommand>
     {
         public UpdateCarriageCommandValidator()
         {
+            RuleFor(x => x.CarriageID)
+            .NotEmpty()
+            .WithMessage("Carriage ID is required.");
+
             RuleFor(x => x.TrainId)
             .NotEmpty()
             .WithMessage("Train ID is required.");
 
             RuleFor(x => x.CarriageNumber)
-                .GreaterThanOrEqualTo(0)
-                .WithMessage("Carriage number cannot be negative.");
+                .GreaterThan(0)
+                .WithMessage("Carriage number must be greater than 0.");
 
             RuleFor(x => x.ClassType)
                 .NotEmpty()
@@ -27,8 +31,8 @@ namespace Masar.Application.Features.Carriages.Commands.UpdateCarriage
                 .WithMessage("Class type must not exceed 50 characters.");
 
             RuleFor(x => x.TotalSeats)
-                .GreaterThan(0)
-                .WithMessage("Total seats must be greater than 0.");
+                .InclusiveBetween((short)1, (short)500)
+                .WithMessage("Total seats must be between 1 and 500.");
         }
     }
 }

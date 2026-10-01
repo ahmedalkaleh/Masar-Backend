@@ -9,10 +9,16 @@ using System.Text;
 
 namespace Masar.Application.Features.Passengers.Commands.UpdatePassenger
 {
-    public sealed record UpdatePassengerCommand(
-        Guid PassengerID,
-        CreatePersonCommand Person
-        ) : IRequest<Result<Updated>>
+    public sealed record UpdatePassengerCommand : IRequest<Result<Updated>>
     {
+        /// <summary>
+        /// The passenger to be updated.
+        /// </summary>
+        public Guid PassengerID { get; init; }
+
+        /// <summary>
+        /// The personal information of the passenger.
+        /// </summary>
+        public CreatePersonCommand Person { get; init; } = null!;
     }
 }

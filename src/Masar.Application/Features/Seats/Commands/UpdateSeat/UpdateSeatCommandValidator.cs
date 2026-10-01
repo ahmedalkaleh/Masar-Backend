@@ -9,6 +9,10 @@ namespace Masar.Application.Features.Seats.Commands.UpdateSeat
     {
         public UpdateSeatCommandValidator() 
         {
+            RuleFor(x => x.SeatID)
+                .NotEmpty()
+                .WithMessage("Seat ID is required.");
+
             RuleFor(x => x.RowNumber)
                 .NotEmpty()
                 .WithMessage("Row number is required.")

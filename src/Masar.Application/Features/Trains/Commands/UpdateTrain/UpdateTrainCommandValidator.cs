@@ -9,6 +9,11 @@ namespace Masar.Application.Features.Trains.Commands.UpdateTrain
     {
         public UpdateTrainCommandValidator()
         {
+            RuleFor(x => x.TrainID)
+            .NotEmpty()
+            .WithMessage("Train ID is required.");
+
+
             RuleFor(x => x.Code)
             .NotEmpty().WithMessage("Code is required.")
             .MinimumLength(2).WithMessage("Train code must be at least 2 characters.")
