@@ -42,7 +42,7 @@ public partial class Trip : AuditableEntity
 
     public virtual ICollection<TrainLiveLocation> TrainLiveLocations { get; private set; } = new List<TrainLiveLocation>();
 
-    public virtual ICollection<TripStop> TripStops { get; private set; } = new List<TripStop>();
+    public virtual ICollection<TripStop>? TripStops { get; private set; } = new List<TripStop>();
 
     private Trip() { }
 
@@ -54,7 +54,7 @@ public partial class Trip : AuditableEntity
     Guid destinationStationId,
     DateTime departureTime,
     DateTime estimatedArrivalTime,
-    List<TripStop> tripStops)
+    List<TripStop>? tripStops)
         :base(id)
     {
         TrainId = trainId;
@@ -64,6 +64,8 @@ public partial class Trip : AuditableEntity
         EstimatedArrivalTime = estimatedArrivalTime;
         ActualArrivalTime = null;
         Status = TripStatus.Scheduled;
+        TripStops = tripStops;
+
         IsDelete = false;
     }
 
@@ -75,7 +77,7 @@ public partial class Trip : AuditableEntity
     Guid destinationStationId,
     DateTime departureTime,
     DateTime estimatedArrivalTime,
-    List<TripStop> tripStops)
+    List<TripStop>? tripStops)
     {
         if (trainId == Guid.Empty)
         {

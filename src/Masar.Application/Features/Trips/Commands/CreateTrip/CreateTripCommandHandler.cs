@@ -1,5 +1,6 @@
 ﻿using Masar.Application.Common.Interfaces;
 using Masar.Application.Features.Trips.Dtos;
+using Masar.Application.Features.Trips.Mappers;
 using Masar.Domain.Common.Results;
 using Masar.Domain.RouteTemplateStops;
 using Masar.Domain.Trips;
@@ -175,7 +176,7 @@ namespace Masar.Application.Features.Trips.Commands.CreateTrip
             await _context.SaveChangesAsync(ct);
             var trip= CreateTripResult.Value;
             _logger.LogInformation("Trip created successfully with ID '{TripId}' for Train ID '{TrainId}'.", trip.Id, trip.TrainId);
-            return CreateTripResult.Errors;
+            return trip.ToDto();
         }
 
     }
