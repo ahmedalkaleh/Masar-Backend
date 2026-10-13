@@ -26,21 +26,13 @@
 		<None Include="Features\RouteTemplates\Commands\CreateRouteTemplate\CreateRouteTemplateCommandHandler.cs" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Features\Trips\Mappers\" />
-	</ItemGroup>
-
 	<!--
     Copy Application XML documentation to the API output directory
     so that Swagger can read it.
   -->
-	<Target Name="CopyApplicationXmlDocumentationToApi"
-			AfterTargets="Build">
+	<Target Name="CopyApplicationXmlDocumentationToApi" AfterTargets="Build">
 
-		<Copy
-		  SourceFiles="$(OutputPath)$(AssemblyName).xml"
-		  DestinationFolder="$(MSBuildProjectDirectory)\..\Masar.API\bin\$(Configuration)\$(TargetFramework)\"
-		  SkipUnchangedFiles="true" />
+		<Copy SourceFiles="$(OutputPath)$(AssemblyName).xml" DestinationFolder="$(MSBuildProjectDirectory)\..\Masar.API\bin\$(Configuration)\$(TargetFramework)\" SkipUnchangedFiles="true" />
 
 	</Target>
 

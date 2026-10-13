@@ -12,10 +12,6 @@ namespace Masar.Application.Features.Trips.Dtos
 
         public DateTime DepartureTime { get; set; }
         public DateTime EstimatedArrivalTime { get; set; }
-
-        public DateTime ActualArrivalTime { get; set; }
-
-        public string status { get; set; } = String.Empty;
-        public List<TripStopDto> TripStops { get; set; } = new List<TripStopDto>();
+        public List<TripStopDto>? TripStops { get; set; } = new List<TripStopDto>();
     }
 }
