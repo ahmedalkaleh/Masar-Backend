@@ -34,7 +34,11 @@ namespace Masar.Application.Features.RouteSegments.Commands.CreateRouteSegment
                 return RouteSegmentErrors.SecondStationIdNotFound;
             }
 
-            if (await _context.RouteSegments.AnyAsync(x => x.FirstStationId == command.FirstStationId && x.SecondStationId == command.SecondStationId, cancellationToken))
+            if (await _context.RouteSegments.AnyAsync(
+                x => 
+                (x.FirstStationId == command.FirstStationId && x.SecondStationId == command.SecondStationId) ||
+                (x.FirstStationId == command.SecondStationId && x.SecondStationId == command.FirstStationId)
+                , cancellationToken))
             {
                 _logger.LogWarning("RouteSegment Creation aborted.RouteSegment with FirstStationId {FirstStationId} and SecondStationId {SecondStationId} already exists.", command.FirstStationId , command.SecondStationId);
                 return RouteSegmentErrors.RouteSegmentAlreadyExists;
