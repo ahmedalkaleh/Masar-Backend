@@ -12,8 +12,10 @@ namespace Masar.Application.Features.RouteTemplates.Commands.CreateRouteTemplate
                 .MaximumLength(100).WithMessage("Template name must not exceed 100 characters.");
             RuleFor(x => x.StartStationId).NotEmpty().WithMessage("StartStationId is required.");
             RuleFor(x => x.EndStationId).NotEmpty().WithMessage("EndStationId is required.");
-            RuleFor(x => x.RouteTemplateStops).NotEmpty().WithMessage("RouteTemplateStops are required.");
-            RuleForEach(x => x.RouteTemplateStops).SetValidator(new CreateRouteTemplateStopCommandValidator());
+
+            RuleForEach(x => x.RouteTemplateStops)
+                .SetValidator(new CreateRouteTemplateStopCommandValidator())
+                .When(x => x.RouteTemplateStops != null);
 
         }
     }

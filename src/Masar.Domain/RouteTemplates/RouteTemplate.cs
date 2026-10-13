@@ -19,7 +19,7 @@ namespace Masar.Domain.RouteTemplates
 
         public Station EndStation { get; private set; } = null!;
 
-        public virtual ICollection<RouteTemplateStop> RouteTemplateStops { get; private set; } = new List<RouteTemplateStop>();
+        public virtual ICollection<RouteTemplateStop>? RouteTemplateStops { get; private set; } = new List<RouteTemplateStop>();
 
         public RouteTemplate() { }
 
@@ -28,7 +28,7 @@ namespace Masar.Domain.RouteTemplates
             string templateName,
             Guid startStationId,
             Guid endStationId,
-            List<RouteTemplateStop> routeTemplateStops
+            List<RouteTemplateStop>? routeTemplateStops
             )
             : base(id)
         {
@@ -43,7 +43,7 @@ namespace Masar.Domain.RouteTemplates
             string templateName,
             Guid startStationId,
             Guid endStationId,
-            List<RouteTemplateStop> routeTemplateStops
+            List<RouteTemplateStop>? routeTemplateStops
             )
         {
             if (string.IsNullOrEmpty(templateName))

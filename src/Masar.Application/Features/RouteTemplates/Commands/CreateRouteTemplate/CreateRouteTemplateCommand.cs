@@ -28,6 +28,6 @@ namespace Masar.Application.Features.RouteTemplates.Commands.CreateRouteTemplate
         /// <summary>
         /// The stops included in the route template.
         /// </summary>
-        public List<CreateRouteTemplateStopCommand> RouteTemplateStops { get; init; } = [];
+        public List<CreateRouteTemplateStopCommand>? RouteTemplateStops { get; init; } = [];
     }
 }
