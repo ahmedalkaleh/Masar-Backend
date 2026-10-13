@@ -222,8 +222,8 @@ public partial class MasarDbContext : IdentityDbContext<AppUser>, IAppDbContext
             entity.Property(e => e.DistanceKm)
                 .HasColumnType("decimal(6, 2)")
                 .HasColumnName("DistanceKM");
-            entity.Property(e => e.FirstStationId).HasColumnName("FromStationID");
-            entity.Property(e => e.SecondStationId).HasColumnName("ToStationID");
+            entity.Property(e => e.FirstStationId);
+            entity.Property(e => e.SecondStationId);
             entity.Property(e => e.TrackType).HasConversion<string>()
                 .HasDefaultValue(TrackType.Single, "DF__RouteSegments__TrackType__47FF419A")
                 .HasMaxLength(15);

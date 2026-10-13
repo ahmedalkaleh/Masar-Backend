@@ -309,8 +309,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<Guid>("FirstStationId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("FromStationID");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<bool>("IsDelete")
                         .ValueGeneratedOnAdd()
@@ -324,8 +323,7 @@ namespace Masar.Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid>("SecondStationId")
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("ToStationID");
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("TrackType")
                         .IsRequired()
