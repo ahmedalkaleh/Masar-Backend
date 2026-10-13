@@ -1,6 +1,7 @@
 ﻿using Masar.Application.Common.Interfaces;
 using Masar.Application.Features.RouteTemplates.Commands.CreateRouteTemplate;
 using Masar.Application.Features.RouteTemplates.Dtos;
+using Masar.Application.Features.RouteTemplates.Mappers;
 using Masar.Domain.Common.Results;
 using Masar.Domain.RouteSegments;
 using Masar.Domain.RouteTemplates;
@@ -27,7 +28,7 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
         {
             var taplateName = command.TemplateName.Trim().ToLower();
 
-            if (!await _context.RouteTemplates.AnyAsync(rt => rt.TemplateName.ToLower() == taplateName, ct))
+            if (await _context.RouteTemplates.AnyAsync(rt => rt.TemplateName.ToLower() == taplateName, ct))
             {
                   _logger.LogWarning("RouteTemplate creation aborted: Template with name '{TemplateName}' already exists.", command.TemplateName);
                 return RouteTemplateErrors.RouteTemplateExists; 
@@ -124,7 +125,7 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
             await _context.SaveChangesAsync(ct);
             var routeTemplate = CreateRouteTemplateResult.Value;
             _logger.LogInformation("RouteTemplate with ID '{RouteTemplateId}' created successfully.", routeTemplate.Id);
-            return CreateRouteTemplateResult.Errors;
+            return routeTemplate.ToDto();
         } 
     }
 }

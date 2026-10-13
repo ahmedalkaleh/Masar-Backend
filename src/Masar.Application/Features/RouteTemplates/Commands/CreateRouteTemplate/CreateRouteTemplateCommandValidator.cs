@@ -11,8 +11,10 @@ namespace Masar.Application.Features.RouteTemplates.Commands.CreateRouteTemplate
             RuleFor(x => x.TemplateName).NotEmpty().WithMessage("TemplateName is required.");
             RuleFor(x => x.StartStationId).NotEmpty().WithMessage("StartStationId is required.");
             RuleFor(x => x.EndStationId).NotEmpty().WithMessage("EndStationId is required.");
-            RuleFor(x => x.RouteTemplateStops).NotEmpty().WithMessage("RouteTemplateStops are required.");
-            RuleForEach(x => x.RouteTemplateStops).SetValidator(new CreateRouteTemplateStopCommandValidator());
+
+            RuleForEach(x => x.RouteTemplateStops)
+                .SetValidator(new CreateRouteTemplateStopCommandValidator())
+                .When(x => x.RouteTemplateStops != null);
 
         }
     }
