@@ -4,7 +4,7 @@ using Masar.Application.Features.Stations.Dtos;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-
+using Masar.Application.Features.Stations.Queries.GetAllStations;
 namespace Masar.API.Controllers
 {
     [Route("api/stations")]
@@ -48,7 +48,27 @@ namespace Masar.API.Controllers
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }
+        /// <summary>
+        /// Retrieves all active railway stations.
+        /// </summary>
+        [HttpGet]
+        [AllowAnonymous]
+        [ProducesResponseType(
+            typeof(List<StationDto>),
+            StatusCodes.Status200OK)]
+        [EndpointSummary("Gets all active stations.")]
+        [EndpointDescription(
+            "Returns all active railway stations, ordered by governorate and Arabic name.")]
+        [EndpointName("GetAllStations")]
+        public async Task<IActionResult> GetAllStations(
+            CancellationToken cancellationToken)
+        {
+            var stations = await sender.Send(
+                new GetAllStationsQuery(),
+                cancellationToken);
 
+            return Ok(stations);
+        }
 
     }
 }
