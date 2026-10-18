@@ -12,6 +12,7 @@ namespace Masar.Application.Features.Stations.Mappers
         {
             return new StationDto
             {
+                StationID = station.Id,
                 NameAr = station.NameAr,
                 NameEn = station.NameEn,
                 Type = station.Type,
@@ -19,7 +20,6 @@ namespace Masar.Application.Features.Stations.Mappers
                 Longitude = station.Longitude,
                 Governorate = station.Governorate,
                 CustomsDelayMinutes = station.CustomsDelayMinutes
-
             };
         }
 
