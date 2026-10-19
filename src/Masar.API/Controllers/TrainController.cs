@@ -1,4 +1,5 @@
 ﻿using Masar.Application.Features.Trains.Commands.CreateTrain;
+using Masar.Application.Features.Trains.Commands.CreateTrainWithComposition;
 using Masar.Application.Features.Trains.Commands.UpdateTrain;
 using Masar.Application.Features.Trains.Dtos;
 using MediatR;
@@ -9,6 +10,28 @@ namespace Masar.API.Controllers
     [Route("api/trains")]
     public class TrainController(ISender sender) : ApiController
     {
+
+        [HttpPost("with-composition")]
+        [ProducesResponseType(typeof(TrainDto), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [EndpointSummary("Creates a new Train with composition.")]
+        [EndpointDescription("Adds a new Train to the system with all carriages and seats.")]
+        [EndpointName("CreateTrainWithComposition")]
+        public async Task<IActionResult> CreateTrainWithComposition(
+        [FromBody] CreateTrainWithCompositionCommand command,
+        CancellationToken cancellationToken)
+        {
+            var result = await sender.Send(command, cancellationToken);
+
+            if (result.IsError)
+                return BadRequest(result.Errors);
+
+            return Ok(result.Value);
+        }
+
+
+
         [HttpPost]
         [ProducesResponseType(typeof(TrainDto), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
@@ -39,7 +62,9 @@ namespace Masar.API.Controllers
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }
+        
 
-    }
+
+}
 }
 
