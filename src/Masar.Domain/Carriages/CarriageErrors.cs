@@ -24,7 +24,7 @@ namespace Masar.Domain.Carriages
         public static Error InvalidTotalSeats =>
             Error.Validation(
                 "Carriage.InvalidTotalSeats",
-                "Total seats must be greater than 0.");
+                "Total seats must be between 0 and 500.");
 
         public static Error CarriageNotFound =>
             Error.NotFound(

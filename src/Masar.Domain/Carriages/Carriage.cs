@@ -63,12 +63,10 @@ public partial class Carriage : AuditableEntity
         {
             return CarriageErrors.InvalidClassType;
         }
-
-        if (totalSeats <= 0)
+        if (totalSeats < 0 || totalSeats > 500)
         {
             return CarriageErrors.InvalidTotalSeats;
         }
-
 
         return new Carriage(id, trainId, carriageNumber, classType, totalSeats);
 
