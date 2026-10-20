@@ -4,6 +4,13 @@ using System.Text;
 
 namespace Masar.Application.Features.Trips.Dtos
 {
-    public sealed record TripStopDto(Guid TripStopId, Guid StationId, int StopOrder, DateTime ScheduledArrival, DateTime ScheduledDeparture, int DwellTimeMinutes);
-    
+    public class TripStopDto
+    { 
+        public Guid TripStopId { get; set; }
+        public Guid StationId { get; set; }
+        public int StopOrder { get; set; }
+        public DateTime ScheduledDeparture { get; set; }
+        public DateTime ScheduledArrival { get; set; }
+        public int DwellTimeMinutes { get; set; }
+    }
 }
