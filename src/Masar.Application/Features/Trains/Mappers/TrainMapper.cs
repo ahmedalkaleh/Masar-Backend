@@ -19,7 +19,9 @@ namespace Masar.Application.Features.Trains.Mappers
                 TrainID = train.Id,
                 Code = train.Code,
                 Name = train.Name,
-                TrainType = train.TrainType
+                TrainType = train.TrainType,
+                MaxSpeedKmh = train.MaxSpeedKmh,
+                CurrentStationId = train.CurrentStationId
             };
         }
 
