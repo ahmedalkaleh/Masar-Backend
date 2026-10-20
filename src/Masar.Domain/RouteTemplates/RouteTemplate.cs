@@ -19,7 +19,7 @@ namespace Masar.Domain.RouteTemplates
 
         public Station EndStation { get; private set; } = null!;
 
-        public virtual ICollection<RouteTemplateStop>? RouteTemplateStops { get; private set; } = new List<RouteTemplateStop>();
+        public virtual ICollection<RouteTemplateStop> RouteTemplateStops { get; private set; } = new List<RouteTemplateStop>();
 
         public RouteTemplate() { }
 
