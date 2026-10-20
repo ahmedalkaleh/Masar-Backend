@@ -21,5 +21,10 @@ namespace Masar.Domain.RouteTemplates
 
         public static Error EndStationEqualStartStation => Error.Conflict("RouteTemplate.EndStationEqualStartStation","End Station must be different from Start Station");
 
+        public static Error RouteTemplateNotFound =>
+        Error.NotFound(
+        "RouteTemplate.NotFound",
+        "RouteTemplate with the specified ID was not found.");
+
     }
 }

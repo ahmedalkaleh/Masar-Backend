@@ -1,5 +1,6 @@
 ﻿using System;
 using Masar.Application.Features.Stations.Dtos;
+using Masar.Domain.Common.Results;
 using MediatR;
 
 namespace Masar.Application.Features.Stations.Queries.GetAllStations;
@@ -8,4 +9,4 @@ namespace Masar.Application.Features.Stations.Queries.GetAllStations;
 /// Retrieves all active railway stations.
 /// </summary>
 public sealed record GetAllStationsQuery
-    : IRequest<List<StationDto>>;
+    : IRequest<Result<List<StationSummaryDto>>>;

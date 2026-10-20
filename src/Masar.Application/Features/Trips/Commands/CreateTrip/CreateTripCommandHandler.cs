@@ -29,7 +29,7 @@ namespace Masar.Application.Features.Trips.Commands.CreateTrip
             if (existingTrain == null || existingTrain.IsDelete)
             {
                 _logger.LogWarning("Trip creation aborted: Train with ID '{TrainId}' not found.", command.TrainId);
-                return TripErrors.TrainNotFound;
+                return TripErrors.TripNotFound;
             }
 
             var routeTemplate = await _context.RouteTemplates

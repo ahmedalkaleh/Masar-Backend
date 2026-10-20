@@ -47,15 +47,21 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
                 return BookingErrors.TripNotFound;
             }
 
+            if(DateTime.UtcNow > trip.DepartureTime)
+            {
+                _logger.LogWarning("Booking creation aborted: Trip has already departed.");
+                return BookingErrors.TripHasDeparted;
+            }
+
             if(!trip.TripStops.Any(x => x.Id == command.BoardingStationId) && command.BoardingStationId != trip.OriginStationId)
             {
-                _logger.LogWarning("The selected boarding station ID '{BoardingStationId}' is not part of the specified trip with the specified ID '{TripId}'.", command.BoardingStationId, command.TripId);
+                _logger.LogWarning("Booking creation aborted: The selected boarding station ID '{BoardingStationId}' is not part of the specified trip with the specified ID '{TripId}'.", command.BoardingStationId, command.TripId);
                 return BookingErrors.BoardingStationNotInTrip;
             }
 
             if (!trip.TripStops.Any(x => x.Id == command.AlightingStationId && command.AlightingStationId != trip.DestinationStationId))
             {
-                _logger.LogWarning("The selected alighting station ID '{AlightingStationId}' is not part of the specified trip with the specified ID '{TripId}'.", command.AlightingStationId, command.TripId);
+                _logger.LogWarning("Booking creation aborted: The selected alighting station ID '{AlightingStationId}' is not part of the specified trip with the specified ID '{TripId}'.", command.AlightingStationId, command.TripId);
                 return BookingErrors.AlightingStationIdNotInTrip;
             }
 
@@ -71,6 +77,12 @@ namespace Masar.Application.Features.Bookings.Commands.CreateBooking
 
 
             var sortedStops = trip.TripStops.OrderBy(x => x.StopOrder).ToList();
+
+            if(endStop <= startStop)
+            {
+                _logger.LogWarning("Booking creation aborted: Invalid station sequence. Boarding sttation {BoardingId} is after or same as alighting station {AlightingId}.", command.BoardingStationId, command.AlightingStationId);
+                return BookingErrors.InvalidRouteStationsSequence;
+            }
 
             decimal priceOf1KM = 1000m; // Changable
 

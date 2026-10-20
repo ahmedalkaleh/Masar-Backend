@@ -18,7 +18,7 @@ namespace Masar.Application.Features.Trips.Mappers
                 DepartureTime = trip.DepartureTime,
                 DestinationStationId = trip.DestinationStationId,
                 EstimatedArrivalTime = trip.EstimatedArrivalTime,
-                originStationId = trip.OriginStationId,
+                OriginStationId = trip.OriginStationId,
                 TripStops = trip.TripStops?.Select(ts => new TripStopDto
                 (
                    ts.Id,

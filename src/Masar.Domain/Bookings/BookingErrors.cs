@@ -130,6 +130,15 @@ namespace Masar.Domain.Bookings
                 "Booking.AlightingStationIdNotInTrip",
                 "The selected alighting station is not part of the specified trip.");
 
+        public static Error TripHasDeparted =>
+            Error.Validation(
+                "Booking.TripHasDeparted",
+                "The selected trip has already departed.");
+
+        public static Error InvalidRouteStationsSequence =>
+            Error.Validation(
+                "Booking.InvalidRouteStationsSequence",
+                "The alighting station must occure after or same as boarding station along the trip route.");
     }
 
 }

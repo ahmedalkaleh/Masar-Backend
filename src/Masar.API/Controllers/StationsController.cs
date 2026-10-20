@@ -1,10 +1,14 @@
-﻿using Masar.Application.Features.Stations.Commands.CreateStation;
+﻿using Masar.Application.Features.RouteSegments.Dtos;
+using Masar.Application.Features.RouteSegments.Queries.GetAll;
+using Masar.Application.Features.RouteSegments.Queries.GetById;
+using Masar.Application.Features.Stations.Commands.CreateStation;
 using Masar.Application.Features.Stations.Commands.UpdateStation;
 using Masar.Application.Features.Stations.Dtos;
+using Masar.Application.Features.Stations.Queries.GetAllStations;
+using Masar.Application.Features.Stations.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Masar.Application.Features.Stations.Queries.GetAllStations;
 namespace Masar.API.Controllers
 {
     [Route("api/stations")]
@@ -48,26 +52,36 @@ namespace Masar.API.Controllers
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }
-        /// <summary>
-        /// Retrieves all active railway stations.
-        /// </summary>
-        [HttpGet]
-        [AllowAnonymous]
-        [ProducesResponseType(
-            typeof(List<StationDto>),
-            StatusCodes.Status200OK)]
-        [EndpointSummary("Gets all active stations.")]
-        [EndpointDescription(
-            "Returns all active railway stations, ordered by governorate and Arabic name.")]
-        [EndpointName("GetAllStations")]
-        public async Task<IActionResult> GetAllStations(
-            CancellationToken cancellationToken)
-        {
-            var stations = await sender.Send(
-                new GetAllStationsQuery(),
-                cancellationToken);
 
-            return Ok(stations);
+
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(StationDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [EndpointSummary("Retrive station by Id.")]
+        [EndpointDescription("Fetches detailed information for a specific station using its unique identifier.")]
+        [EndpointName("GetStationById")]
+        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetStationByIdQuery(id);
+            var result = await sender.Send(query, cancellationToken);
+            return result.Match(response => Ok(response), Problem);
+        }
+
+
+        [HttpGet()]
+        [ProducesResponseType(typeof(StationSummaryDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [EndpointSummary("Retrivea all stations")]
+        [EndpointDescription("Retrivea list of all stations registered in the system.")]
+        [EndpointName("GetAllRouteSegments")]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        {
+            var query = new GetAllStationsQuery();
+            var result = await sender.Send(query, cancellationToken);
+            return result.Match(response => Ok(response), Problem);
         }
 
     }
