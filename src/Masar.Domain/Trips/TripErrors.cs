@@ -29,10 +29,10 @@ namespace Masar.Domain.Trips
                 "Trip.DestinationStationIdRequired",
                 "DestinationStationID is required.");
 
-        public static Error TrainNotFound =>
+        public static Error TipNotFound =>
             Error.NotFound(
                 "Trip.TrainNotFound",
-                "Train with the specified ID was not found.");
+                "Trip with the specified ID was not found.");
 
         public static Error OriginStationNotFound =>
             Error.NotFound(

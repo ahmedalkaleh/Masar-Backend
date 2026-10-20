@@ -42,7 +42,7 @@ public partial class Trip : AuditableEntity
 
     public virtual ICollection<TrainLiveLocation> TrainLiveLocations { get; private set; } = new List<TrainLiveLocation>();
 
-    public virtual ICollection<TripStop>? TripStops { get; private set; } = new List<TripStop>();
+    public virtual ICollection<TripStop> TripStops { get; private set; } = new List<TripStop>();
 
     private Trip() { }
 

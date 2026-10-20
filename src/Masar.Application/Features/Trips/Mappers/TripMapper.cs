@@ -18,16 +18,16 @@ namespace Masar.Application.Features.Trips.Mappers
                 DepartureTime = trip.DepartureTime,
                 DestinationStationId = trip.DestinationStationId,
                 EstimatedArrivalTime = trip.EstimatedArrivalTime,
-                originStationId = trip.OriginStationId,
-                TripStops = trip.TripStops?.Select(ts => new TripStopDto
-                (
-                   ts.Id,
-                   ts.StationId,
-                   ts.StopOrder,
-                   ts.ScheduledArrival,
-                   ts.ScheduledDeparture,
-                   ts.DwellTimeMinutes
-                )).ToList()
+                OriginStationId = trip.OriginStationId,
+                TripStops = trip.TripStops.Select(ts => new TripStopDto
+                {
+                   TripStopId = ts.Id,
+                   StationId = ts.StationId,
+                   StopOrder = ts.StopOrder,
+                   ScheduledArrival = ts.ScheduledArrival,
+                   ScheduledDeparture = ts.ScheduledDeparture,
+                   DwellTimeMinutes = ts.DwellTimeMinutes
+                }).ToList()
             };
         }
 
