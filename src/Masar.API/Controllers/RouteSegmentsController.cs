@@ -1,6 +1,8 @@
 ﻿using Masar.Application.Features.RouteSegments.Commands.CreateRouteSegment;
 using Masar.Application.Features.RouteSegments.Commands.UpdateRouteSegment;
 using Masar.Application.Features.RouteSegments.Dtos;
+using Masar.Application.Features.RouteSegments.Queries.GetAll;
+using Masar.Application.Features.RouteSegments.Queries.GetById;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -29,6 +31,7 @@ namespace Masar.API.Controllers
         [HttpPut("{id:guid}")]
         [ProducesResponseType(typeof(RouteSegmentDto), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [EndpointSummary("Updates an existing RouteSegment.")]
         [EndpointDescription("Updates the details of an existing RouteSegment in the system.")]
@@ -45,5 +48,36 @@ namespace Masar.API.Controllers
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }
+
+        [HttpGet("{id:guid}")]
+        [ProducesResponseType(typeof(RouteSegmentDetailsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [EndpointSummary("Retrive route segment by Id.")]
+        [EndpointDescription("Fetches detailed information for a specific route segment using its unique identifier.")]
+        [EndpointName("GetRouteSegmentById")]
+        public async Task<IActionResult> GetById(Guid id, CancellationToken cancellationToken)
+        {
+            var query = new GetRouteSegmentByIdQuery(id);
+            var result = await sender.Send(query, cancellationToken);
+            return result.Match(response => Ok(response), Problem);
+        }
+
+
+        [HttpGet()]
+        [ProducesResponseType(typeof(RouteSegmentDetailsDto), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
+        [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
+        [EndpointSummary("Retrivea all route segments")]
+        [EndpointDescription("Retrivea list of all route segments registered in the system.")]
+        [EndpointName("GetAllRouteSegments")]
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
+        {
+            var query = new GetAllRouteSegmentsQuery(); 
+            var result = await sender.Send(query, cancellationToken);
+            return result.Match(response => Ok(response), Problem);
+        }
+
     }
 }
