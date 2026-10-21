@@ -53,7 +53,7 @@ namespace Masar.API.Controllers
         [EndpointSummary("Retrivea all route templates")]
         [EndpointDescription("Retrivea list of all route templates registered in the system.")]
         [EndpointName("GetAllRouteTemplates")]
-        public async Task<IActionResult> GetById(CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var query = new GetAllRouteTemplatesQuery();
             var result = await sender.Send(query, cancellationToken);

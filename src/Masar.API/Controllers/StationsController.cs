@@ -76,7 +76,7 @@ namespace Masar.API.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         [EndpointSummary("Retrivea all stations")]
         [EndpointDescription("Retrivea list of all stations registered in the system.")]
-        [EndpointName("GetAllRouteSegments")]
+        [EndpointName("GetAllStations")]
         public async Task<IActionResult> GetAll(CancellationToken cancellationToken)
         {
             var query = new GetAllStationsQuery();
