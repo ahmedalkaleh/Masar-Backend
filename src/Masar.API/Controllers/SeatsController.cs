@@ -1,6 +1,7 @@
 ﻿using Masar.Application.Features.Seats.Commands.CreateSeat;
 using Masar.Application.Features.Seats.Commands.UpdateSeat;
 using Masar.Application.Features.Seats.Dtos;
+using Masar.Application.Features.Seats.Queries.GetAvailableSeats;
 using Masar.Domain.Seats;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -43,6 +44,26 @@ namespace Masar.API.Controllers
             var result = await sender.Send(command, cancellationToken);
             return result.Match(response => Ok(response), Problem);
         }
+        /// <summary>
+        /// Gets the seats available for a trip between two stations.
+        /// </summary>
+        [HttpGet]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status400BadRequest)]
+        public async Task<IActionResult> GetAvailableSeats(
+            [FromRoute] Guid tripId,
+            [FromQuery] Guid boardingStationId,
+            [FromQuery] Guid alightingStationId,
+            CancellationToken cancellationToken)
+        {
+            var query = new GetAvailableSeatsQuery(
+                tripId,
+                boardingStationId,
+                alightingStationId);
 
+            var seats = await sender.Send(query, cancellationToken);
+
+            return Ok(seats);
+        }
     }
 }

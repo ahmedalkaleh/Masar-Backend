@@ -139,6 +139,18 @@ namespace Masar.Domain.Bookings
             Error.Validation(
                 "Booking.InvalidRouteStationsSequence",
                 "The alighting station must occure after or same as boarding station along the trip route.");
+        public static Error NoTicketsProvided =>
+            Error.Validation(
+                "Booking.NoTicketsProvided",
+                "At least one ticket must be provided for the booking.");
+        public static Error DuplicateSeat =>
+            Error.Validation(
+                "Booking.DuplicateSeat",
+                "Duplicate seat found in the booking tickets.");
+        public static Error SeatNotAvailable =>
+            Error.Validation(
+                "Booking.SeatNotAvailable",
+                "One or more seats in the booking tickets are not available.");
     }
 
 }

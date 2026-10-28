@@ -79,10 +79,11 @@ builder.Services.AddScoped<IUser, CurrentUser>();
 
 
 // ============================================================
-// 8. Trip Collision Checker
+// 8. Trip Collision Checker and Seat Availability Service
 // ============================================================
 
 builder.Services.AddScoped<ITripCollisionChecker, TripCollisionChecker>();
+builder.Services.AddScoped<ISeatAvailabilityService, SeatAvailabilityService>();
 
 
 // ============================================================
