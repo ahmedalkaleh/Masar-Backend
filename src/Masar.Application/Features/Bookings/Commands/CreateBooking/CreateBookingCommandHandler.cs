@@ -88,6 +88,19 @@ public class CreateBookingCommandHandler(
             return BookingErrors.TripHasDeparted;
         }
 
+        if (!trip.TripStops.Any(x => x.Id == command.BoardingStationId) && command.BoardingStationId != trip.OriginStationId)
+        {
+            _logger.LogWarning("Booking creation aborted: The selected boarding station ID '{BoardingStationId}' is not part of the specified trip with the specified ID '{TripId}'.", command.BoardingStationId, command.TripId);
+            return BookingErrors.BoardingStationNotInTrip;
+        }
+
+        
+        if (!trip.TripStops.Any(x => x.Id == command.AlightingStationId) && command.AlightingStationId != trip.DestinationStationId)
+        {
+            _logger.LogWarning("Booking creation aborted: The selected alighting station ID '{AlightingStationId}' is not part of the specified trip with the specified ID '{TripId}'.", command.AlightingStationId, command.TripId);
+            return BookingErrors.AlightingStationIdNotInTrip;
+        }
+
         // 5. Build the complete route using active stops only.
         var sortedStops = trip.TripStops
             .Where(x => !x.IsDelete)

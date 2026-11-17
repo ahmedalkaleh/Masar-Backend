@@ -18,8 +18,12 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString =
     builder.Configuration.GetConnectionString("DefaultConnection");
 
+
 builder.Services.AddDbContext<MasarDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    {
+        options.UseSqlServer(connectionString);
+        options.LogTo(Console.WriteLine, LogLevel.Information);
+        });
 
 builder.Services.AddScoped<IAppDbContext>(provider =>
     provider.GetRequiredService<MasarDbContext>());
@@ -150,6 +154,15 @@ builder.Services.AddSwaggerGen(options =>
 
 
 
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend",
+        policy => policy.WithOrigins("http://localhost:5173")
+                         .AllowAnyHeader()
+                         .AllowAnyMethod());
+});
+
+
 // ============================================================
 // 11. Build Application
 // ============================================================
@@ -169,6 +182,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
+// ============================================================
+// 13. CORS
+// ============================================================
+app.UseCors("AllowFrontend");
 
 // ============================================================
 // 13. HTTPS
