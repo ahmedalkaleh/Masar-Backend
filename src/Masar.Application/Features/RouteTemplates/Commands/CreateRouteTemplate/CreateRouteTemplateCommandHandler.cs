@@ -59,18 +59,7 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
             if (command.RouteTemplateStops != null)
             {
 
-                List<RouteSegment> routSegments = new List<RouteSegment>();
-
-                if (command.RouteTemplateStops.Count > 0)
-                {
-                    var allStationIDs = command.RouteTemplateStops.Select(x => x.StationId).ToList();
-                    allStationIDs.Add(command.StartStationId);
-                    allStationIDs.Add(command.EndStationId);
-                    routSegments = await _context.RouteSegments.Where(x => allStationIDs.Contains(x.FirstStationId) && allStationIDs.Contains(x.SecondStationId)).ToListAsync(ct);
-                }
-
                 var RouteTemplateStopsSorted = command.RouteTemplateStops.OrderBy(x => x.StopOrder).ToList(); ;
-
 
                 if (RouteTemplateStopsSorted.Count > 0 && RouteTemplateStopsSorted.Count != RouteTemplateStopsSorted.Last().StopOrder)
                 {
@@ -82,11 +71,14 @@ namespace Masar.Application.Features.RoutTemplates.Commands.CreateRoutTemplate
                 fullPathIds.AddRange(RouteTemplateStopsSorted.Select(x => x.StationId));
                 fullPathIds.Add(command.EndStationId);
 
+                var routSegments = await _context.RouteSegments.Where(x => fullPathIds.Contains(x.FirstStationId) && fullPathIds.Contains(x.SecondStationId)).ToListAsync(ct);
+
+
                 for (int i = 0; i < fullPathIds.Count - 1; i++)
                 {
 
-                    if (!routSegments.Any(rs => rs.FirstStationId == RouteTemplateStopsSorted[i].StationId && rs.SecondStationId == RouteTemplateStopsSorted[i + 1].StationId ||
-                                             rs.FirstStationId == RouteTemplateStopsSorted[i + 1].StationId && rs.SecondStationId == RouteTemplateStopsSorted[i].StationId))
+                    if (!routSegments.Any(rs => rs.FirstStationId == fullPathIds[i] && rs.SecondStationId == fullPathIds[i + 1] ||
+                                             rs.FirstStationId == fullPathIds[i + 1] && rs.SecondStationId == fullPathIds[i]))
                     {
                         _logger.LogWarning("RouteTemplate creation aborted: Route segment from station ID '{FirstStationId}' to station ID '{SecondStationId}' does not exist.", RouteTemplateStopsSorted[i].StationId, RouteTemplateStopsSorted[i + 1].StationId);
                         return RouteTemplateStopErrors.RouteSegmentNotFound;
